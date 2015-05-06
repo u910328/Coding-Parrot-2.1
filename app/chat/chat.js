@@ -18,7 +18,7 @@
   }]);
 
   app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/chat', {
+    $routeProvider.whenAuthenticated('/chat', {
       templateUrl: 'chat/chat.html',
       controller: 'ChatCtrl'
     });

@@ -7,7 +7,15 @@ angular.module('myApp', [
     'myApp.home',
     'myApp.account',
     'myApp.chat',
-    'myApp.login'
+    'myApp.login',
+    'core.snippet',
+    'core.viewLogic',
+    'core.model',
+    'core.localFb',
+    'core.binder',
+    'core.driver',
+    'core.action',
+    'core.init'
   ])
 
   .run(['$rootScope', 'Auth', function($rootScope, Auth) {
