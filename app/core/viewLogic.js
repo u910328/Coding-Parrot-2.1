@@ -1,5 +1,5 @@
 angular.module('core.viewLogic', ['firebase', 'myApp.config'])
-    .factory('viewLogic', function (config, $q){
+    .factory('viewLogic', function (config, $q, model){
         console.log("viewLogicLoaded");
         var viewLogic={
             ruleMatrix: config.viewLogic,
@@ -9,35 +9,123 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         var temp={};
         temp.allElement={colCount:0};
 
+        var allElement={};
+        for(var i= 0; i<viewLogic.ruleMatrix[0].length; i++){
+            if(viewLogic.ruleMatrix[0][i]==='result') break;
+            allElement[viewLogic.ruleMatrix[0][i]]=i
+        }
+
 
         var ruleMatrix=config.viewLogic,
             rowNum=ruleMatrix.length,
             colNum=ruleMatrix[0].length;
 
-        function compilePartialRule(partialRule, name){
-            var firstRow=partialRule[0],
+        function checkRow(i, pathCol, partialRule) {
+            var rule=partialRule||viewLogic["ruleMatrix"];
+            var ithRow = rule[i],
+                pathRow = rule[0],
+                match = true,
+                changedModelObj=new model.ModelObj(pathRow[pathCol]),
+                changedVal=changedModelObj.val();
+            if (!eval("changedVal"+ithRow[pathCol])) {   //先檢查改變的以加快檢查速度
+                return false;
+            }
+            for (var j = 0; j < pathRow.length; j++) {
+                if (pathRow[j]==='result') break;
+                if (ithRow[j] && j!= pathCol) {
+                    var modelObj=new model.ModelObj(pathRow[j]),
+                        val=modelObj.val();
+                    if (!eval("val" + ithRow[j])) {
+                        match = false;
+                        break;
+                    }
+                }
+            }
+            return match;
+        }
+
+//分成兩部分 1.先計算所有變動 preProcessView 2.將變動套用到view上 updateView
+        function preProcessView(modelPath, allElement, partialRule){
+            var rule=partialRule||viewLogic["ruleMatrix"],
+                colNum=rule[0].length,
+                mPath=modelPath.split("|")[0],
+                index=allElement[mPath][1],
+                finalResult={};
+            if(index===undefined) return finalResult;
+            for(var i=1; i<index.length; i++){            //第0個元素為該path所在行數
+                var resultArr=rule[index[i]][colNum-1].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
+                if(checkRow(index[i], index[0])){
+                    for(var j=0;j<resultArr.length;j++){
+                        finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
+                    }
+                } else {
+                    for(var k=0;k<resultArr.length;k++){
+                        finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
+                    }
+                }//TODO:加入不通過時default的處理
+            }
+            console.log(JSON.stringify(finalResult));
+            return finalResult
+        }
+
+        function updateVL(modelPath, allElement) {
+            var toBeUpdated=preProcessView(modelPath);
+            for (var key in toBeUpdated) {
+                snippet.evalAssignment([model, key.split(".")], [toBeUpdated[key]]);
+            }
+        }
+
+        function watchEle(eleName, scope, allElement){
+            scope.$watch(eleName, function(nval, oval){
+                updateVL(eleName, allElement);
+            })
+        }
+
+        function addPartialRule(partialRule, isLocal, scope){
+            var partialFirstRow=partialRule[0],
                 elePosArr=[];
-            for(var i=0; i<firstRow.length; i++){
-                if(firstRow[i]==="result") break;
-                if(temp.allElement[firstRow[i]]===undefined){
+            if(isLocal){
+                for(var l=1; l<partialRule.length; l++){
+                    var localElement={};
+                    for(var m=0; m<partialFirstRow.length; m++){
+                        if(partialFirstRow[m]!=='result') break;
+                        if(l===1){
+                            localElement[partialFirstRow[m]]=[-1,[]];
+                            watchEle(partialFirstRow[m], scope, localElement);
+                        }
+                        if(partialRule[l][m]!==undefined) {
+                            localElement[partialFirstRow[m]][1].push(l)
+                        }
+                    }
+                }
+                return localElement
+            }
+
+            for(var i=0; i<partialFirstRow.length; i++){
+                if(partialFirstRow[i]==="result") break;
+                watchEle(partialFirstRow[m], scope, allElement);
+                if(allElement[partialFirstRow[i]]===undefined){
                     var colNum=viewLogic.ruleMatrix[0].length;
-                    viewLogic.ruleMatrix[0][colNum]=firstRow[i];
-                    temp.allElement[firstRow[i]]=colNum;
+                    viewLogic.ruleMatrix[0][colNum]=partialFirstRow[i];
+                    allElement[partialFirstRow[i]]=[colNum,[]];
                     elePosArr.push(colNum);
                 } else{
-                    elePosArr.push(temp.allElement[firstRow[i]]);
+                    elePosArr.push(allElement[partialFirstRow[i]][0]);
                 }
             }
             for(var j=1; j<partialRule.length; j++){
-                viewLogic.ruleMatrix.push([]);
-                var rowNum=viewLogic.ruleMatrix.length-1;
-                if(name){
-                    viewLogic.subRule[name]=[rowNum, partialRule.length]
+                var newRow=[];
+                var rowNum=viewLogic.ruleMatrix.length;
+                for(var k=0; k<partialFirstRow.length; k++){
+                    if(partialRule[j][k]!==undefined) {
+                        newRow[elePosArr[k]]=partialRule[j][k];
+                        var ele=viewLogic.ruleMatrix[0][elePosArr[k]];
+                        allElement[ele][1].push(rowNum+j-1)
+                    }
                 }
-                for(var k=0; k<firstRow.length; k++){
-                    viewLogic.ruleMatrix[rowNum][elePosArr[k]]=partialRule[j][k]
-                }
+                viewLogic.ruleMatrix.push(newRow);
             }
+            return allElement
         }
 
         function compileRule(){
