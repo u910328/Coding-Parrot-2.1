@@ -8,6 +8,7 @@ angular.module('myApp', [
     'myApp.account',
     'myApp.chat',
     'myApp.login',
+    'myApp.test',
     'core.snippet',
     'core.viewLogic',
     'core.model',

@@ -20,10 +20,6 @@ angular.module('myApp.config', [])
             ["", "", "==2", "", "view.class3=success3|"],
             ["==2", "", "", "", "view.class4=success4|"]
         ],
-        fbModelMap: {
-            pjList: {},
-            pjDetail: {}
-        },
         paths: {},
         debug:'debug'
     })

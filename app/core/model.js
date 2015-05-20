@@ -2,7 +2,6 @@ angular.module('core.model', ['firebase', 'myApp.config'])
     .factory('model', function (config, fbutil, $q, snippet) {
         var model={
             update:update,
-            updateView:updateView,
             ModelObj:ModelObj,
             db:{online:{}},
             action:{},
