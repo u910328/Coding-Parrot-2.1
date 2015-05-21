@@ -3,15 +3,18 @@
 
   var app = angular.module('myApp.test', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-  app.controller('TestCtrl', function ($scope, viewLogic) {
+  app.controller('TestCtrl', function ($scope, viewLogic, model) {
     var rule=[
-      ["path.path5", "path.path6", "path.path7", "path.path8", "result"],
-      [">1", ">3", "==2", "==1", "view.class1=success1|"],
-      ["", "", "", "==3", "view.class2=success2|"],
-      ["", "", "==2", "", "view.class3=success3|"],
-      ["==2", "", "", "", "view.class4=success4|"]
+      ["result", "test.path1", "test.path2", "test.path3", "test.path4"],
+      ["view.class1=success1|", ">1", ">3", "==2", "==1"],
+      ["view.class2=success2|", "", "", "", "==3"],
+      ["view.class3=success3|", "", "", "==2", ""],
+      ["view.class4=success4|", "==2", "", "", ""]
     ];
-    viewLogic.addPartialRule(rule)
+    model.test={};
+    $scope.test=model.test;
+    $scope.view=model.view;
+    viewLogic.addPartialRule(rule, $scope, true);
   });
 
   app.config(['$routeProvider', function ($routeProvider) {
