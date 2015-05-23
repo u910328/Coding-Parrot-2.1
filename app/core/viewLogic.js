@@ -3,38 +3,50 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         console.log("viewLogicLoaded");
         var viewLogic={
             rule:[[0]],
-            result:[0],
             addPartialRule:addPartialRule,
             preProcessView:preProcessView,
             updateVL:updateVL,
             watchEle:watchEle
         };
-        //var temp={};
-        //temp.allElement={colCount:0};
 
-        //起始，將config.viewLogic裡的元素註冊到allElement
+        //allElement記錄所有元素在第一列所在行數及所有出現的列數
         var allElement={};
-        //for(var i= 0; i<viewLogic.rule[0].length; i++){
-        //    if(viewLogic.rule[0][i]==='result') break;
-        //    allElement[viewLogic.rule[0][i]]=[i,[]]
-        //}
-
-
 
         function checkRow(ithRow, pathCol, pathRow) {
             var changedModelObj=new model.ModelObj(pathRow[pathCol]),
                 newVal=changedModelObj.val();
             //console.log(JSON.stringify(newVal));
 
-            if (!eval("newVal"+ithRow[pathCol])) {   //先檢查改變的以加快檢查速度
-                return false;
+            switch(typeof ithRow[pathCol]){             //先檢查改變的以加快檢查速度
+                case 'function':
+                    if(!ithRow[pathCol].apply(null,[newVal])){
+                        return false
+                    }
+                    break;
+                case 'string':
+                    if (!eval("newVal"+ithRow[pathCol])) {
+                        return false;
+                    }
+                    break;
             }
+
+
             for (var j = 1; j < pathRow.length; j++) {
                 if (ithRow[j] && j!= pathCol) {
                     var modelObj=new model.ModelObj(pathRow[j]),
                         val=modelObj.val();
-                    if (!eval("val" + ithRow[j])) {
-                        return false
+
+                    switch(typeof ithRow[j]){
+                        case 'function':
+                            if(!ithRow[j].apply(null,[val])){
+                                return false
+                            }
+                            break;
+                        case 'string':
+                            if (!eval("val" + ithRow[j])) {
+                                return false
+                            }
+                            break;
                     }
                 }
             }
@@ -49,18 +61,29 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                 elemArr=elements[mPath]||[],
                 index=elemArr[1],
                 pathCol=elemArr[0],
-                finalResult={};
+                finalResult={_toBeEvaluated:[]};
             if(index===undefined) return finalResult;
             for(var i=0; i<index.length; i++){
-                var resultArr=rule[index[i]][0].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
-                if(checkRow(rule[index[i]], pathCol, rule[0])){
-                    for(var j=0;j<resultArr.length;j++){
-                        finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
-                    }
-                } else {
-                    for(var k=0;k<resultArr.length;k++){
-                        finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
-                    }
+                switch (typeof rule[index[i]][0]){
+                    case 'function':
+                        if(checkRow(rule[index[i]], pathCol, rule[0])){
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],true]);
+                        } else {
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],false]);
+                        }
+                        break;
+                    case 'string':
+                        var resultArr=rule[index[i]][0].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
+                        if(checkRow(rule[index[i]], pathCol, rule[0])){
+                            for(var j=0;j<resultArr.length;j++){
+                                finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
+                            }
+                        } else {
+                            for(var k=0;k<resultArr.length;k++){
+                                finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
+                            }
+                        }
+                        break;
                 }
             }
             console.log(JSON.stringify(finalResult));
@@ -70,7 +93,11 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         function updateVL(modelPath, localElement, partialRule) {
             var toBeUpdated=preProcessView(modelPath, localElement, partialRule);
             for (var key in toBeUpdated) {
+                if(key==="_toBeEvaluated") continue;
                 snippet.evalAssignment([model, key.split(".")], [toBeUpdated[key]]);
+            }
+            for(var i=0; i<toBeUpdated["_toBeEvaluated"].length; i++){
+                toBeUpdated["_toBeEvaluated"][i][0].apply(null, [toBeUpdated["_toBeEvaluated"][i][1]]);
             }
         }
 
@@ -87,15 +114,16 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                 evalStr="";
             if(isLocal){
                 var localElement={};
-                for(var l=1; l<partialRule.length; l++){
+                for(var l=0; l<partialRule.length; l++){
                     for(var m=1; m<partialFirstRow.length; m++){
-                        if(l===1){
+                        if(l===0){
                             localElement[partialFirstRow[m]]=[m,[]];
                             evalStr=evalStr+"watchEle('"+partialFirstRow[m]+"', scope, localElement, partialRule);";
                             //watchEle(partialFirstRow[m], scope, localElement);
-                        }
-                        if(!!partialRule[l][m]) {
-                            localElement[partialFirstRow[m]][1].push(l)
+                        } else {
+                            if(!!partialRule[l][m]) {
+                                localElement[partialFirstRow[m]][1].push(l)
+                            }
                         }
                     }
                 }

@@ -6,7 +6,6 @@ angular.module('core.model', ['firebase', 'myApp.config'])
             db:{online:{}},
             action:{},
             view:{},
-            path:{},
             error:{},
             debug:'debug'
         };
