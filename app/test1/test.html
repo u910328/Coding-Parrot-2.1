@@ -1,22 +1,23 @@
 <h2>test1</h2>
 
 <h3>local</h3>
+view1.class1: {{view1.class1}}<br>
+view1.class2: {{view1.class2}}<br>
+view1.class3: {{view1.class3}}<br>
+condition: {{view1.condition}}
+<br>
+test1.path1:<input ng-model="test1.path1"> <br>
+test1.path2:<input ng-model="test1.path2"> <br>
+test1.path3:<input ng-model="test1.path3"> <br>
+test1.path4:<input ng-model="test1.path4"> <br>
+
+<h3>global</h3>
 view.class1: {{view.class1}}<br>
 view.class2: {{view.class2}}<br>
 view.class3: {{view.class3}}<br>
 view.class4: {{view.class4}}<br>
-condition: {{view.condition}}
-<br>
-test.path1:<input ng-model="test.path1"> <br>
-test.path2:<input ng-model="test.path2"> <br>
-test.path3:<input ng-model="test.path3"> <br>
-test.path4:<input ng-model="test.path4"> <br>
-
-<h3>global</h3>
 view.class5: {{view.class5}}<br>
 view.class6: {{view.class6}}<br>
-view.class7: {{view.class7}}<br>
-view.class8: {{view.class8}}<br>
 <br>
 path.path1:<input ng-model="path.path1"> <br>
 path.path2:<input ng-model="path.path2"> <br>
@@ -27,12 +28,3 @@ path.path6:<input ng-model="path.path6"> <br>
 path.path7:<input ng-model="path.path7"> <br>
 path.path8:<input ng-model="path.path8"> <br>
 <br>
-
-<h3>select test</h3>
-<label>Main Options:
-    <select ng-model="test.selectedOption" ng-options="option.name for option in test.options"></select>
-</label>
-<br>
-<label>Sub Options:
-    <select ng-model="test.selectedSubOption" ng-options="option.name for option in test.subOptions"></select>
-</label>

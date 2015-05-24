@@ -18,8 +18,7 @@
             ["result", "test.path1", "test.path2", "test.path3", "test.path4"],
             ["view.class1=success1|;view.condition=1|", ">1", ">3", "==2", "==1"],
             ["view.class2=success2|;view.condition=2|", "", "", "", "==3"],
-            ["view.class3=success3|;view.condition=3|", "", "", testfn2, ""],
-            ["view.class4=success4|;view.condition=4|", "==2", "", "", ""]
+            ["view.class3=success3|;view.condition=3|", "", "", testfn2, ""]
         ];
 
         var rule1 = [
@@ -33,34 +32,14 @@
         var rule3 = [
             ["result", "path.path5", "path.path6", "path.path7", "path.path8"],
             ["view.class5=success5|", ">1", ">3", "==2", "==1"],
-            ["view.class6=success6|", "", "", "", "==3"],
-            ["view.class7=success7|", "", "==7", "", ""],
-            ["view.class8=success8|", "==model.path.path8", "==model.path.path5", "==model.path.path6", "==model.path.path7"]
+            ["view.class8=success6|", "==model.path.path8", "==model.path.path5", "==model.path.path6", "==model.path.path7"]
         ];
-        var selectRule=[
-            ["result", "test.selectedOption.name"],
-            ["test.subOptions=subOption1", "=='main1'"],
-            ["test.subOptions=subOption2", "=='main2'"]
-        ];
+
         model.test = model.test||{};
         model.path = model.path||{};
         $scope.test = model.test;
         $scope.path = model.path;
         $scope.view = model.view;
-
-        $scope.test.options=[
-            {name: 'main1'},
-            {name: 'main2'}
-        ];
-        var subOption1=[
-            {name: 'sub1-1'},
-            {name: 'sub1-2'}
-        ];
-        var subOption2=[
-            {name: 'sub2-1'},
-            {name: 'sub2-2'}
-        ];
-        $scope.test.selectedOption=$scope.test.options[0];
 
 
         var vlObj= new viewLogic.VLObj($scope);
