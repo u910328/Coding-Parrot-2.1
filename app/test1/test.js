@@ -1,9 +1,9 @@
 (function (angular) {
     "use strict";
 
-    var app = angular.module('myApp.test', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module('myApp.test1', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-    app.controller('TestCtrl', function ($scope, viewLogic, model) {
+    app.controller('Test1Ctrl', function ($scope, viewLogic, model) {
         var testfn = function (valid, arg) {
             if(valid){
                 $scope.view.class1 = valid;
@@ -37,21 +37,14 @@
             ["view.class7=success7|", "", "==7", "", ""],
             ["view.class8=success8|", "==model.path.path8", "==model.path.path5", "==model.path.path6", "==model.path.path7"]
         ];
-        var selectRule=[
-            ["result", "test.selectedOption.name"],
-            ["test.subOptions=subOption1", "=='main1'"],
-            ["test.subOptions=subOption2", "=='main2'"]
-        ];
-        model.test = model.test||{};
-        model.path = model.path||{};
-        $scope.test = model.test;
-        $scope.path = model.path;
-        $scope.view = model.view;
 
-        $scope.test.options=[
-            {name: 'main1'},
-            {name: 'main2'}
-        ];
+        var setSubOpt= function(validity, subOption){
+            if(!validity) return;
+            console.log(model.test.selectedOption.name);
+            $scope.test.subOptions=subOption;
+            console.log(JSON.stringify(subOption))
+        };
+
         var subOption1=[
             {name: 'sub1-1'},
             {name: 'sub1-2'}
@@ -60,18 +53,38 @@
             {name: 'sub2-1'},
             {name: 'sub2-2'}
         ];
+
+        var selectRule=[
+            ["result", "test.selectedOption.name"],
+            [[setSubOpt, subOption1], "=='main1'"],
+            [[setSubOpt, subOption2], "=='main2'"]
+        ];
+        model.test = model.test||{};
+        model.path = model.path||{};
+        $scope.test = model.test;
+        $scope.path = model.path;
+        $scope.view = model.view;
+
+
+
+
+        $scope.test.options=[
+            {name: 'main1'},
+            {name: 'main2'}
+        ];
+
         $scope.test.selectedOption=$scope.test.options[0];
 
 
         var vlObj= new viewLogic.VLObj($scope);
-        vlObj.add([rule, rule1],true);
+        vlObj.add([rule, rule1,selectRule],true);
         vlObj.add([rule2,rule3]);
     });
 
     app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/test', {
-            templateUrl: 'test/test.html',
-            controller: 'TestCtrl'
+        $routeProvider.when('/test1', {
+            templateUrl: 'test1/test.html',
+            controller: 'Test1Ctrl'
             //resolve: {
             //  // forces the page to wait for this promise to resolve before controller is loaded
             //  // the controller can then inject `user` as a dependency. This could also be done

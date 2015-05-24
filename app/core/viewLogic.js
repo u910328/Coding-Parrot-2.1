@@ -1,16 +1,14 @@
 angular.module('core.viewLogic', ['firebase', 'myApp.config'])
     .factory('viewLogic', function (config, $q, model, snippet){
-        console.log("viewLogicLoaded");
-        var viewLogic={
-            rule:[[0]],
-            addPartialRule:addPartialRule,
-            preProcessView:preProcessView,
-            updateVL:updateVL,
-            watchEle:watchEle
-        };
 
         //allElement記錄所有元素在第一列所在行數及所有出現的列數
         var allElement={};
+
+        var viewLogic={
+            rule:[[0]],
+            allElement: allElement,
+            VLObj:VLObj
+        };
 
         function checkRow(ithRow, pathCol, pathRow) {
             var changedModelObj=new model.ModelObj(pathRow[pathCol]),
@@ -54,9 +52,9 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         }
 
 //分成兩部分 1.先計算所有變動 preProcessView 2.將變動套用到view上 updateView
-        function preProcessView(modelPath, localElement, partialRule){
+        function preProcessView(modelPath, localElement, nRule){
             var elements=localElement||allElement;
-            var rule=partialRule||viewLogic["rule"],
+            var rule=nRule||viewLogic["rule"],
                 mPath=modelPath.split("|")[0],
                 elemArr=elements[mPath]||[],
                 index=elemArr[1],
@@ -67,9 +65,9 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                 switch (typeof rule[index[i]][0]){
                     case 'function':
                         if(checkRow(rule[index[i]], pathCol, rule[0])){
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],true]);
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],[true]]);
                         } else {
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],false]);
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],[false]]);
                         }
                         break;
                     case 'string':
@@ -84,87 +82,112 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                             }
                         }
                         break;
+                    case 'object':
+                        if(checkRow(rule[index[i]], pathCol, rule[0])){
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0][0],[true,rule[index[i]][0][1]]]);
+                        } else {
+                            finalResult['_toBeEvaluated'].push([rule[index[i]][0][0],[false,rule[index[i]][0][1]]]);
+                        }
+                        break;
                 }
             }
-            console.log(JSON.stringify(finalResult));
+            //console.log(JSON.stringify(finalResult));
             return finalResult
         }
 
-        function updateVL(modelPath, localElement, partialRule) {
-            var toBeUpdated=preProcessView(modelPath, localElement, partialRule);
+        function updateVL(modelPath, localElement, nRule) {
+            var toBeUpdated=preProcessView(modelPath, localElement, nRule);
             for (var key in toBeUpdated) {
                 if(key==="_toBeEvaluated") continue;
                 snippet.evalAssignment([model, key.split(".")], [toBeUpdated[key]]);
             }
             for(var i=0; i<toBeUpdated["_toBeEvaluated"].length; i++){
-                toBeUpdated["_toBeEvaluated"][i][0].apply(null, [toBeUpdated["_toBeEvaluated"][i][1]]);
+                toBeUpdated["_toBeEvaluated"][i][0].apply(null, toBeUpdated["_toBeEvaluated"][i][1]);
             }
         }
 
-        function watchEle(eleName, scope, localElement, partialRule){
+        function watchEle(eleName, scope, localElement, nRule){
             scope.$watch(eleName, function(nval, oval){
-                console.log(eleName, nval,oval);
-                updateVL(eleName, localElement, partialRule);
+                //console.log(eleName, nval,oval);
+                updateVL(eleName, localElement, nRule);
             })
         }
 
-        function addPartialRule(partialRule, scope, isLocal){
+        function addPartialRule(partialRule, scope, rule, element, watched, isLocal){
             var partialFirstRow=partialRule[0],
                 elePosArr=[],
                 evalStr="";
-            if(isLocal){
-                var localElement={};
-                for(var l=0; l<partialRule.length; l++){
-                    for(var m=1; m<partialFirstRow.length; m++){
-                        if(l===0){
-                            localElement[partialFirstRow[m]]=[m,[]];
-                            evalStr=evalStr+"watchEle('"+partialFirstRow[m]+"', scope, localElement, partialRule);";
-                            //watchEle(partialFirstRow[m], scope, localElement);
-                        } else {
-                            if(!!partialRule[l][m]) {
-                                localElement[partialFirstRow[m]][1].push(l)
-                            }
-                        }
-                    }
-                }
-                //console.log(JSON.stringify(localElement));
-
-                eval(evalStr);
-                return localElement
-            }
+            //if(isLocal){
+            //    scope._localVLEle=scope._localVLEle? scope._localVLEle:{};
+            //    for(var l=0; l<partialRule.length; l++){
+            //        for(var m=1; m<partialFirstRow.length; m++){
+            //            if(l===0){
+            //                scope._localVLEle[partialFirstRow[m]]=[m,[]];
+            //                evalStr=evalStr+"watchEle('"+partialFirstRow[m]+"', scope, scope._localVLEle, partialRule);";
+            //            } else {
+            //                if(!!partialRule[l][m]) {
+            //                    scope._localVLEle[partialFirstRow[m]][1].push(l)
+            //                }
+            //            }
+            //        }
+            //    }
+            //
+            //    eval(evalStr);
+            //    console.log(JSON.stringify(scope._localVLEle));
+            //
+            //    return scope._localVLEle;
+            //
+            //}
 
             for(var i=1; i<partialFirstRow.length; i++){
-                evalStr=evalStr+"watchEle('"+partialFirstRow[i]+"', scope);";
-                if(allElement[partialFirstRow[i]]===undefined){
-                    var colNum=viewLogic.rule[0].length;
-                    viewLogic.rule[0][colNum]=partialFirstRow[i];
-                    allElement[partialFirstRow[i]]=[colNum,[]];
+                var extraArg=isLocal? ", element, rule":"", watch=false;
+                if(watched){
+                    var eleWatched=watched[partialFirstRow[i]];
+                } else {
+                    var eleWatched=3
+                }
+                switch(eleWatched){
+                    case undefined:
+                        watched[partialFirstRow[i]]=isLocal? 1:2; watch=true;
+                        break;
+                    case 1:
+                        if((isLocal? 1:2)==2) {watched[partialFirstRow[i]]=3; watch=true;}
+                        break;
+                    case 2:
+                        if((isLocal? 1:2)==1) {watched[partialFirstRow[i]]=3; watch=true;}
+                        break;
+                }
+                if(watch){
+                    evalStr=evalStr+"watchEle('"+partialFirstRow[i]+"', scope"+extraArg+");";
+                }
+
+                if(element[partialFirstRow[i]]===undefined){
+                    var colNum=rule[0].length;
+                    rule[0][colNum]=partialFirstRow[i];
+                    element[partialFirstRow[i]]=[colNum,[]];
                     elePosArr.push(colNum);
                 } else{
-                    elePosArr.push(allElement[partialFirstRow[i]][0]);
+                    elePosArr.push(element[partialFirstRow[i]][0]);
                 }
             }
 
 
-
-            var rowNum=viewLogic.rule.length;
+            var rowNum=rule.length;
             for(var j=1; j<partialRule.length; j++){
                 var newRow=[partialRule[j][0]];
                 for(var k=1; k<partialFirstRow.length; k++){
                     if(!!partialRule[j][k]) {
                         newRow[elePosArr[k-1]]=partialRule[j][k];
-                        allElement[viewLogic.rule[0][elePosArr[k-1]]][1].push(rowNum+j-1);
+                        element[rule[0][elePosArr[k-1]]][1].push(rowNum+j-1);
                     }
                 }
-                viewLogic.rule.push(newRow);
+                rule.push(newRow);
                 //viewLogic.result.push(partialRule[j][partialFirstRow.length-1]);
             }
-
+            //console.log(JSON.stringify(rule));
+            //console.log(JSON.stringify(element));
             if(scope) eval(evalStr);
-            //console.log(JSON.stringify(viewLogic.rule));
-            //console.log(JSON.stringify(allElement));
-
-            return allElement
+            console.log(evalStr);
         }
 
         //
@@ -211,6 +234,34 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         //    }
         //}
 
-        addPartialRule(config.viewLogic);
+
+        function VLObj(scope){
+            var that=this;
+            this.localElement={};
+            this.localRule=[[0]];
+            this.watched={};
+            this.add=function(partialRule, isLocal){
+                if(typeof partialRule[0][0]==='object'){
+                    for(var i=0;i<partialRule.length;i++){
+                        if(isLocal){
+                            addPartialRule(partialRule[i], scope, that.localRule, that.localElement, that.watched, true);
+
+                        } else {
+                            addPartialRule(partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched);
+                        }
+                    }
+                } else {
+                    if(isLocal){
+                        addPartialRule(partialRule, scope, that.localRule, that.localElement, that.watched, true);
+
+                    } else {
+                        addPartialRule(partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched);
+                    }
+                }
+            }
+        }
+
+        addPartialRule(config.viewLogic,false, viewLogic.rule, viewLogic.allElement);
+        console.log("global viewLogic loaded");
         return viewLogic
     });
