@@ -17,12 +17,12 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
 
             switch(typeof ithRow[pathCol]){             //先檢查改變的以加快檢查速度
                 case 'function':
-                    if(!ithRow[pathCol].apply(null,[newVal])){
+                    if(ithRow[pathCol]&&!ithRow[pathCol].apply(null,[newVal])){
                         return false
                     }
                     break;
                 case 'string':
-                    if (!eval("newVal"+ithRow[pathCol])) {
+                    if (ithRow[pathCol]&&!eval("newVal"+ithRow[pathCol])) {
                         return false;
                     }
                     break;
@@ -59,44 +59,86 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                 elemArr=elements[mPath]||[],
                 index=elemArr[1],
                 pathCol=elemArr[0],
-                finalResult={_toBeEvaluated:[]};
+                finalResult={_toBeEvaluated:[]},
+                stop=false;
             if(index===undefined) return finalResult;
-            for(var i=0; i<index.length; i++){
-                switch (typeof rule[index[i]][0]){
-                    case 'function':
-                        if(checkRow(rule[index[i]], pathCol, rule[0])){
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],[true]]);
-                        } else {
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0],[false]]);
+            for(var block=0; block<index.length; block++){
+                for(var i=0; i<index[block].length; i++){
+                    if(index[block][i]===true) {stop=true; continue;}
+                    var currentRow=rule[index[block][i]];
+
+                    if(checkRow(currentRow, pathCol, rule[0])){
+                        switch (typeof currentRow[0]){
+                            case 'function':
+                                finalResult['_toBeEvaluated'].push([currentRow[0],[true]]);
+                                break;
+                            case 'string':
+                                var resultArr=currentRow[0].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
+                                for(var j=0;j<resultArr.length;j++){
+                                    finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
+                                }
+                                break;
+                            case 'object':
+                                finalResult['_toBeEvaluated'].push([currentRow[0][0],[true,currentRow[0][1]]]);
+                                break;
                         }
-                        break;
-                    case 'string':
-                        var resultArr=rule[index[i]][0].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
-                        if(checkRow(rule[index[i]], pathCol, rule[0])){
-                            for(var j=0;j<resultArr.length;j++){
-                                finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
-                            }
-                        } else {
-                            for(var k=0;k<resultArr.length;k++){
-                                finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
-                            }
+                        if(stop) break;
+                    } else {
+                        switch (typeof currentRow[0]){
+                            case 'function':
+                                finalResult['_toBeEvaluated'].push([currentRow[0],[false]]);
+                                break;
+                            case 'string':
+                                var resultArr=currentRow[0].split(";");
+                                for(var k=0;k<resultArr.length;k++){
+                                    finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
+                                }
+                                break;
+                            case 'object':
+                                finalResult['_toBeEvaluated'].push([currentRow[0][0],[false,currentRow[0][1]]]);
+                                break;
                         }
-                        break;
-                    case 'object':
-                        if(checkRow(rule[index[i]], pathCol, rule[0])){
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0][0],[true,rule[index[i]][0][1]]]);
-                        } else {
-                            finalResult['_toBeEvaluated'].push([rule[index[i]][0][0],[false,rule[index[i]][0][1]]]);
-                        }
-                        break;
+                    }
+
+                    //switch (typeof currentRow[0]){
+                    //    case 'function':
+                    //        if(checkRow(currentRow, pathCol, rule[0])){
+                    //            finalResult['_toBeEvaluated'].push([currentRow[0],[true]]);
+                    //        } else {
+                    //            finalResult['_toBeEvaluated'].push([currentRow[0],[false]]);
+                    //        }
+                    //        break;
+                    //    case 'string':
+                    //        var resultArr=currentRow[0].split(";"); //rule 的最後一行看起來像 "showAAA=class1;showBBB=class2"
+                    //        if(checkRow(currentRow, pathCol, rule[0])){
+                    //            for(var j=0;j<resultArr.length;j++){
+                    //                finalResult[resultArr[j].split("=")[0]]=resultArr[j].split("=")[1].split("|")[0]
+                    //            }
+                    //        } else {
+                    //            for(var k=0;k<resultArr.length;k++){
+                    //                finalResult[resultArr[k].split("=")[0]]=resultArr[k].split("=")[1].split("|")[1]
+                    //            }
+                    //        }
+                    //        break;
+                    //    case 'object':
+                    //        if(checkRow(currentRow, pathCol, rule[0])){
+                    //            finalResult['_toBeEvaluated'].push([currentRow[0][0],[true,currentRow[0][1]]]);
+                    //        } else {
+                    //            finalResult['_toBeEvaluated'].push([currentRow[0][0],[false,currentRow[0][1]]]);
+                    //        }
+                    //        break;
+                    //}
+                    //if(stop&&checkRow(currentRow, pathCol, rule[0])) break;
                 }
+
             }
-            //console.log(JSON.stringify(finalResult));
+            //console.log(modelPath,JSON.stringify(finalResult));
             return finalResult
         }
 
-        function updateVL(modelPath, localElement, nRule) {
+        function updateVL(modelPath, localElement, nRule, defaultFn) {
             var toBeUpdated=preProcessView(modelPath, localElement, nRule);
+            if(defaultFn) defaultFn.apply(null);
             for (var key in toBeUpdated) {
                 if(key==="_toBeEvaluated") continue;
                 snippet.evalAssignment([model, key.split(".")], [toBeUpdated[key]]);
@@ -106,41 +148,21 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
             }
         }
 
-        function watchEle(eleName, scope, localElement, nRule){
+        function watchEle(eleName, scope, localElement, nRule, defaultFn){
             scope.$watch(eleName, function(nval, oval){
                 //console.log(eleName, nval,oval);
-                updateVL(eleName, localElement, nRule);
+                updateVL(eleName, localElement, nRule, defaultFn);
             })
         }
 
-        function addPartialRule(partialRule, scope, rule, element, watched, isLocal){
+        function addPartialRule(partialRule, scope, rule, element, watched, isLocal, type, defaultFn){
             var partialFirstRow=partialRule[0],
                 elePosArr=[],
-                evalStr="";
-            //if(isLocal){
-            //    scope._localVLEle=scope._localVLEle? scope._localVLEle:{};
-            //    for(var l=0; l<partialRule.length; l++){
-            //        for(var m=1; m<partialFirstRow.length; m++){
-            //            if(l===0){
-            //                scope._localVLEle[partialFirstRow[m]]=[m,[]];
-            //                evalStr=evalStr+"watchEle('"+partialFirstRow[m]+"', scope, scope._localVLEle, partialRule);";
-            //            } else {
-            //                if(!!partialRule[l][m]) {
-            //                    scope._localVLEle[partialFirstRow[m]][1].push(l)
-            //                }
-            //            }
-            //        }
-            //    }
-            //
-            //    eval(evalStr);
-            //    console.log(JSON.stringify(scope._localVLEle));
-            //
-            //    return scope._localVLEle;
-            //
-            //}
+                evalStr="",
+                blockElement={};
 
             for(var i=1; i<partialFirstRow.length; i++){
-                var extraArg=isLocal? ", element, rule":"", watch=false;
+                var extraArg=isLocal? ", element, rule, defaultFn":"", watch=false;
                 if(watched){
                     var eleWatched=watched[partialFirstRow[i]];
                 } else {
@@ -169,6 +191,12 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                 } else{
                     elePosArr.push(element[partialFirstRow[i]][0]);
                 }
+
+                if(type==='break') {
+                    blockElement[partialFirstRow[i]]=[true];
+                } else {
+                    blockElement[partialFirstRow[i]]=[];
+                }
             }
 
 
@@ -176,18 +204,23 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
             for(var j=1; j<partialRule.length; j++){
                 var newRow=[partialRule[j][0]];
                 for(var k=1; k<partialFirstRow.length; k++){
-                    if(!!partialRule[j][k]) {
+                    var currentElement=rule[0][elePosArr[k-1]];
+                    if(!!partialRule[j][k]||type==='all') {
                         newRow[elePosArr[k-1]]=partialRule[j][k];
-                        element[rule[0][elePosArr[k-1]]][1].push(rowNum+j-1);
+                        blockElement[currentElement].push(rowNum+j-1);
                     }
                 }
                 rule.push(newRow);
-                //viewLogic.result.push(partialRule[j][partialFirstRow.length-1]);
+            }
+
+            for(var key in blockElement){
+                if(blockElement[key].length===0) continue;
+                element[key][1].push(blockElement[key]);
             }
             //console.log(JSON.stringify(rule));
             //console.log(JSON.stringify(element));
             if(scope) eval(evalStr);
-            console.log(evalStr);
+            //console.log(evalStr);
         }
 
         //
@@ -240,28 +273,27 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
             this.localElement={};
             this.localRule=[[0]];
             this.watched={};
-            this.add=function(partialRule, isLocal){
+            this.add=function(partialRule, isLocal, type, defaultFn){
                 if(typeof partialRule[0][0]==='object'){
                     for(var i=0;i<partialRule.length;i++){
                         if(isLocal){
-                            addPartialRule(partialRule[i], scope, that.localRule, that.localElement, that.watched, true);
-
+                            addPartialRule(partialRule[i], scope, that.localRule, that.localElement, that.watched, true, type, defaultFn);
                         } else {
-                            addPartialRule(partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched);
+                            addPartialRule(partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
                         }
                     }
                 } else {
                     if(isLocal){
-                        addPartialRule(partialRule, scope, that.localRule, that.localElement, that.watched, true);
+                        addPartialRule(partialRule, scope, that.localRule, that.localElement, that.watched, true, type, defaultFn);
 
                     } else {
-                        addPartialRule(partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched);
+                        addPartialRule(partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
                     }
                 }
             }
         }
 
-        addPartialRule(config.viewLogic,false, viewLogic.rule, viewLogic.allElement);
+        addPartialRule(config.viewLogic.rule,false, viewLogic.rule, viewLogic.allElement, undefined, false, config.viewLogic.type);
         console.log("global viewLogic loaded");
         return viewLogic
     });

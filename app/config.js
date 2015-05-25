@@ -13,14 +13,16 @@ angular.module('myApp.config', [])
     // your Firebase data URL goes here, no trailing slash
     .constant('FBURL', 'https://cpmain.firebaseio.com')
     .constant('config', {
-        viewLogic: [
-            ["result","path.path1", "path.path2", "path.path3", "path.path4"],
-            ["view.class1=success1|", ">1", ">3", "==2", "==1"],
-            ["view.class2=success2|", "", "", "", "==3"],
-            ["view.class3=success3|", "", "", "==2", ""],
-            ["view.class4=success4|", "==2", "", "", ""]
-        ],
-        paths: {},
+        viewLogic: {
+            rule:[
+                ["result","path.path1", "path.path2", "path.path3", "path.path4"],
+                ["view.class1=success1|", "==1", "==2", "==3", "==4"],
+                ["view.class2=success2|", "", "", "", ">4"],
+                ["view.class3=success3|", "", "", "<2", ""],
+                ["view.class4=success4|", "", "", "", "==4"]
+            ],
+            type: ''
+        },
         debug:'debug'
     })
 

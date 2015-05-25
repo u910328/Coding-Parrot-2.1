@@ -6,19 +6,18 @@
     app.controller('TestCtrl', function ($scope, viewLogic, model) {
         var testfn = function (valid, arg) {
             if(valid){
-                $scope.view.class1 = valid;
+                $scope.test.class1 = valid;
                 console.log(arg);
             }
         };
         var testfn2= function (val){
-            console.log(val, val==2);
-            return val==2
+            return val==3
         };
         var rule = [
-            ["result", "test.path1", "test.path2", "test.path3", "test.path4"],
-            ["view.class1=success1|;view.condition=1|", ">1", ">3", "==2", "==1"],
-            ["view.class2=success2|;view.condition=2|", "", "", "", "==3"],
-            ["view.class3=success3|;view.condition=3|", "", "", testfn2, ""]
+            ["result", "test.path1", "test.path2", "test.path3"],
+            ["test.class1=success1|", "==1", "", ""],
+            ["test.class2=success2|", "==1", "==2", ""],
+            ["test.class3=success3|", "==1", "==2", testfn2]
         ];
 
         var rule1 = [
@@ -32,7 +31,7 @@
         var rule3 = [
             ["result", "path.path5", "path.path6", "path.path7", "path.path8"],
             ["view.class5=success5|", ">1", ">3", "==2", "==1"],
-            ["view.class8=success6|", "==model.path.path8", "==model.path.path5", "==model.path.path6", "==model.path.path7"]
+            ["view.class6=success6|", "==model.path.path8", "==model.path.path5", "==model.path.path6", "==model.path.path7"]
         ];
 
         model.test = model.test||{};
@@ -43,8 +42,8 @@
 
 
         var vlObj= new viewLogic.VLObj($scope);
-        vlObj.add([rule, rule1],true);
-        vlObj.add([rule2,rule3]);
+        vlObj.add([rule, rule1],true, 'all');
+        vlObj.add([rule2,rule3],false, 'all');
     });
 
     app.config(['$routeProvider', function ($routeProvider) {

@@ -7,7 +7,6 @@
 
         model.test2 = {};
         $scope.test2 = model.test2;
-        $scope.view = model.view;
 
         $scope.test2.options=[
             {name: 'main1'},

@@ -15,10 +15,10 @@
             return val==2
         };
         var rule = [
-            ["result", "test1.path1", "test1.path2", "test1.path3", "test1.path4"],
-            ["view1.class1=success1|;view1.condition=1|", ">1", ">3", "==2", "==1"],
-            ["view1.class2=success2|;view1.condition=2|", "", "", "", "==3"],
-            ["view1.class3=success3|;view1.condition=3|", "", "", testfn2, ""]
+            ["result", "test1.path1", "test1.path2", "test1.path3"],
+            ["test1.class1=success1|;test1.condition=1|", ">1", ">3", "==2"],
+            ["test1.class2=success2|;test1.condition=2|", "", "==2", ""],
+            ["test1.class3=success3|;test1.condition=3|", "", "", testfn2]
         ];
 
         var rule1 = [
