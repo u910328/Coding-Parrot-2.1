@@ -47,7 +47,7 @@
 
 
         var vlObj= new viewLogic.VLObj($scope);
-        vlObj.add([rule, rule1],true);
+        vlObj.add([rule, rule1],true, all);
         vlObj.add([rule2,rule3]);
     });
 
