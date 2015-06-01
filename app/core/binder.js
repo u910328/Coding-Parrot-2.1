@@ -1,5 +1,5 @@
 angular.module('core.binder', ['firebase', 'myApp.config'])
-    .factory('binder', function (config, $q, localFb, model, ROUTES, $location, snippet, $routeParams) {
+    .factory('binder', ['config', '$q', 'localFb', 'model', 'ROUTES', '$location', 'snippet', '$routeParams',function (config, $q, localFb, model, ROUTES, $location, snippet, $routeParams) {
         //function bind(scope, modelPath){
         //    var modelPathArr=("model."+modelPath).split("."),
         //        key=modelPathArr[modelPathArr.length-1];
@@ -166,4 +166,4 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
             getRule:getRule,
             BinderObj:BinderObj
         };
-    });
+    }]);

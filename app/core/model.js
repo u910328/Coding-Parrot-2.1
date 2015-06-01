@@ -1,8 +1,9 @@
 angular.module('core.model', ['firebase', 'myApp.config'])
-    .factory('model', function (config, fbutil, $q, snippet) {
+    .factory('model', ['config','fbutil','$q','snippet',function (config, fbutil, $q, snippet) {
         var model={
             update:update,
             ModelObj:ModelObj,
+            init:init,
             db:{online:{}},
             action:{},
             view:{},
@@ -33,6 +34,13 @@ angular.module('core.model', ['firebase', 'myApp.config'])
             }
         }
 
+        function init(scope, keyArr, refresh){
+            for(var i=0; i<keyArr.length; i++){
+                model[keyArr[i]]=refresh? {}:model[keyArr[i]]||{};
+                scope[keyArr[i]]=model[keyArr[i]]
+            }
+        }
+
         function update(path, value, valuePathArr) {
             var pathArr=path.split(".");
             if(valuePathArr!=undefined) {
@@ -44,4 +52,4 @@ angular.module('core.model', ['firebase', 'myApp.config'])
         }
 
         return model
-    });
+    }]);

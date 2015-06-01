@@ -1,5 +1,5 @@
 angular.module('core.driver', ['firebase', 'myApp.config'])
-    .factory('driver', function (config, $q, action, localFb, model, snippet) {
+    .factory('driver', ['config','$q','action','localFb','model','snippet',function (config, $q, action, localFb, model, snippet) {
 
         function addActivity(info) {
             var def = $q.defer();
@@ -187,4 +187,4 @@ angular.module('core.driver', ['firebase', 'myApp.config'])
                 .then(function(){def.resolve()});
             return def.promise
         }
-    });
+    }]);

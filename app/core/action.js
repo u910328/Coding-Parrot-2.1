@@ -1,5 +1,5 @@
 angular.module('core.action', ['firebase', 'myApp.config'])
-    .factory('action', function (config, custom) {
+    .factory('action', ['config','custom',function (config, custom) {
         return {
             createPj:{
                 preProcess:{
@@ -31,4 +31,4 @@ angular.module('core.action', ['firebase', 'myApp.config'])
                 }
             }
         }
-    });
+    }]);

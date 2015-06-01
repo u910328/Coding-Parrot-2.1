@@ -1,8 +1,9 @@
 angular.module('core.viewLogic', ['firebase', 'myApp.config'])
-    .factory('viewLogic', function (config, $q, model, snippet){
+    .factory('viewLogic', ['config','model','snippet',function (config, model, snippet){
 
         //allElement記錄所有元素在第一列所在行數及所有出現的列數
-        var allElement={};
+        var allElement={},
+            loadedRule={};
 
         var viewLogic={
             rule:[[0]],
@@ -79,7 +80,11 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                                 }
                                 break;
                             case 'object':
-                                finalResult['_toBeEvaluated'].push([currentRow[0][0],[true,currentRow[0][1]]]);
+                                if(angular.isArray(currentRow[0])) {
+                                    finalResult['_toBeEvaluated'].push([currentRow[0][0],[true,currentRow[0][1]]]);
+                                } else {
+                                    console.log('error: currentRow[0] is not an array')
+                                }
                                 break;
                         }
                         if(stop) break;
@@ -95,7 +100,11 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
                                 }
                                 break;
                             case 'object':
-                                finalResult['_toBeEvaluated'].push([currentRow[0][0],[false,currentRow[0][1]]]);
+                                if(angular.isArray(currentRow[0])) {
+                                    finalResult['_toBeEvaluated'].push([currentRow[0][0],[false,currentRow[0][1]]]);
+                                } else {
+                                    console.log('error: currentRow[0] is not an array')
+                                }
                                 break;
                         }
                     }
@@ -274,20 +283,34 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
             this.localRule=[[0]];
             this.watched={};
             this.add=function(partialRule, isLocal, type, defaultFn){
+
+                function checkIfLoaded(partialRule, argArr){
+                    if(!partialRule[0][0]&&loadedRule[partialRule[0][0]]){
+                        for(var i=1; i<partialRule[0].length; i++){
+                            watchEle(partialRule[0][i], scope, viewLogic.allElement, viewLogic.rule, defaultFn)
+                        }
+                        console.log(partialRule[0][0]+' is loaded')
+                    } else {
+                        loadedRule[partialRule[0][0]]=true;
+                        addPartialRule.apply(null, argArr)
+                    }
+                }
+
                 if(typeof partialRule[0][0]==='object'){
                     for(var i=0;i<partialRule.length;i++){
                         if(isLocal){
                             addPartialRule(partialRule[i], scope, that.localRule, that.localElement, that.watched, true, type, defaultFn);
                         } else {
-                            addPartialRule(partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
+                            checkIfLoaded(partialRule[i], [partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn]);
+                            //addPartialRule(partialRule[i], scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
                         }
                     }
                 } else {
                     if(isLocal){
-                        addPartialRule(partialRule, scope, that.localRule, that.localElement, that.watched, true, type, defaultFn);
-
-                    } else {
                         addPartialRule(partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
+                    } else {
+                        checkIfLoaded(partialRule,[partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn]);
+                        //addPartialRule(partialRule, scope, viewLogic.rule, viewLogic.allElement, that.watched, false, type, defaultFn);
                     }
                 }
             }
@@ -296,4 +319,4 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
         addPartialRule(config.viewLogic.rule,false, viewLogic.rule, viewLogic.allElement, undefined, false, config.viewLogic.type);
         console.log("global viewLogic loaded");
         return viewLogic
-    });
+    }]);

@@ -1,5 +1,5 @@
 angular.module('core.localFb', ['firebase', 'myApp.config'])
-    .factory('localFb', function (FBURL, config, fbutil, $q, model, snippet) {
+    .factory('localFb', ['FBURL','config','fbutil','$q','model',function (FBURL, config, fbutil, $q, model) {
         var localFb={
             FbObj:FbObj,
             load:load,
@@ -179,4 +179,4 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
 //TODO: Transaction
 
         return localFb
-    });
+    }]);

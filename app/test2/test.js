@@ -1,9 +1,15 @@
+var newModule='myApp.test2';
+
 (function (angular) {
     "use strict";
 
-    var app = angular.module('myApp.test2', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var route='/test2',
+        ctrlName='Test2Ctrl',
+        templateUrl='test2/test.html';
 
-    app.controller('Test2Ctrl', function ($scope, viewLogic, model) {
+    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+
+    app.controller(ctrlName, function ($scope, viewLogic, model) {
 
         model.test2 = {};
         $scope.test2 = model.test2;
@@ -67,20 +73,12 @@
     });
 
     app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/test2', {
-            templateUrl: 'test2/test.html',
-            controller: 'Test2Ctrl'
-            //resolve: {
-            //  // forces the page to wait for this promise to resolve before controller is loaded
-            //  // the controller can then inject `user` as a dependency. This could also be done
-            //  // in the controller, but this makes things cleaner (controller doesn't need to worry
-            //  // about auth status or timing of accessing data or displaying elements)
-            //  user: ['Auth', function (Auth) {
-            //    return Auth.$waitForAuth();
-            //  }]
-            //}
+        $routeProvider.when(route, {
+            templateUrl: templateUrl,
+            controller: ctrlName
         });
     }]);
 
 })(angular);
 
+appDI.push(newModule);

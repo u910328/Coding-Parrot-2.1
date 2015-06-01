@@ -1,6 +1,6 @@
 (function (angular){
     angular.module('core.init', ['firebase', 'myApp.config'])
-        .factory('init', function(Auth, localFb, $q, model) {
+        .factory('init', ['Auth','localFb','$q','model',function(Auth, localFb, $q, model) {
             function logInMain(){}
             function getDbName(){}
             function getIdentity(){}
@@ -9,7 +9,7 @@
             return {
 
             }
-        })
+        }])
         .run(function($rootScope, $q, Auth, localFb, model, init, snippet){
             var def=$q.defer();
             var WaitUntil=new snippet.WaitUntil(5, function(){

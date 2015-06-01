@@ -1,5 +1,5 @@
 angular.module('core.snippet', ['firebase', 'myApp.config'])
-    .factory('snippet', function (config, $q) {
+    .factory('snippet', ['config','$q',function (config, $q) {
 
         function ReplaceableObj(){
             var that=this;
@@ -160,4 +160,4 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             ReplaceableObj:ReplaceableObj,
             debug:'debug'
         }
-    });
+    }]);
