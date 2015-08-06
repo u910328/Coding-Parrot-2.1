@@ -147,8 +147,8 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                 fbObj.goOffline();
             }
 
+            digest.reset(null, 5000);
             eval(refObj.evalString);
-            digest.reset(null, 5000)
         }
 
         function update(refUrl, modelPath, value, onComplete, actionObj, removePrev){

@@ -1,24 +1,18 @@
 angular.module('core.binder', ['firebase', 'myApp.config'])
-    .factory('binder', ['config', '$q', 'localFb', 'model', 'ROUTES', '$location', 'snippet', '$routeParams',function (config, $q, localFb, model, ROUTES, $location, snippet, $routeParams) {
+    .factory('binder', ['config', '$q', 'localFb', 'model', '$location', 'snippet', '$routeParams',function (config, $q, localFb, model, $location, snippet, $routeParams) {
         //function bind(scope, modelPath){
         //    var modelPathArr=("model."+modelPath).split("."),
         //        key=modelPathArr[modelPathArr.length-1];
         //    snippet.evalAssignment([scope, key], modelPathArr);
         //}
 
-        function getRule(locationPath, params){
-            var path=snippet.getRouteKey(locationPath, params);
-
-            if(snippet.checkIfPropertyExist([ROUTES, [path,'bind']])) {
-                var ruleString=JSON.stringify(ROUTES[path]['bind']);
-            } else {
-                return {};
-            }
-
+        function processRule(rawRule,paramArr){
+            var params=snippet.getUnionOfObj(paramArr),
+                ruleString=JSON.stringify(rawRule);
             for(var key in params){
                 ruleString=ruleString.replace(eval("/\\"+key+"/g"), params[key])
             }
-             return JSON.parse(ruleString);
+            return JSON.parse(ruleString)
         }
 
         function BinderObj(scope, modelPath, fbPath, rule){
@@ -29,21 +23,23 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
                 case 'simplePagination':
                     that.updater=function(nextOrPrev){
 
-                        var info=!!nextOrPrev? (new model.ModelObj(modelPath+"_info")).val():{};
+                        var info=(new model.ModelObj(modelPath+"_info")).val()||{};
                         var currentPage=info.currentPage||1,
                             page=(currentPage+nextOrPrev)||1,
                             isLastPage=info[currentPage]&&info[currentPage].lastPage,
                             isFirstPage=info[currentPage]&&info[currentPage].firstPage;
 
+
                         if(nextOrPrev>0&&isLastPage) return;
                         if(nextOrPrev<0&&isFirstPage) return;
+
 
                         if(!info[page]) {
                             getPage(page)
                         } else {
                             var cachePageArr=(modelPath+"_cache."+page).split(".");
-                            model.update(modelPath, null, [model, cachePageArr]);
-                            //snippet.evalAssignment([model, modelPath.split('.')], [model, cachePageArr]);
+                            //model.update(modelPath, null, [model, cachePageArr]);
+                            snippet.evalAssignment([model, modelPath.split('.')], [model, cachePageArr]);
                             snippet.evalAssignment([model, (modelPath+"_info.currentPage").split('.')], [page]);
                         }
                         function getPage(page){
@@ -69,8 +65,7 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
                                 var cachePath=modelPath+"_cache."+page;
 
                                 snippet.evalAssignment([model, cachePath.split('.')], [cache]);
-                                model.update(modelPath, cache);
-                                //snippet.evalAssignment([model, modelPath.split('.')], [cache]);
+                                snippet.evalAssignment([model, modelPath.split('.')], [cache]);
                                 snippet.evalAssignment([model, (modelPath+"_info.currentPage").split('.')], [page]);
                             })
                         }
@@ -111,7 +106,7 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
                         var lastItem=that.info.lastItem;
                         var startAt=lastItem? ".startAt("+lastItem+")":"",
                             query=orderBy+startAt+".limitToFirst("+itemPerPage+")",
-                            infiniteScrollRule={query:query, eventType:'child_added'};
+                            infiniteScrollRule={query:query, eventType:'child_added', scope:scope};
                         console.log(lastItem, startAt, query);
                         var restItem=rule.itemPerPage;
                         localFb.load(fbPath, modelPath, infiniteScrollRule, function(snap, prevChildName){
@@ -121,7 +116,6 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
                             if(restItem===0){
                                 that.lastItem=snap.key();
                                 that.currentPage++;
-                                scope.$digest();
                             }
                         });
                     };
@@ -130,16 +124,14 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
                     that.updater=function(ruleInput, onComplete){
                         var rule=ruleInput||{};
                         rule.scope=rule.scope||scope;
-                        localFb.load(fbPath, modelPath, rule||{}, onComplete);
+                        localFb.load(fbPath, modelPath, rule, onComplete);
                     };
                     break;
             }
         }
 
-        function bindScope(scope, customParams){
-            var params=snippet.getUnionOfObj([$routeParams,customParams]);
-            var rule=getRule($location.path(), params);
-
+        function bindScope(scope, rawRule, paramArr){
+            var rule=paramArr? processRule(rawRule,paramArr):rawRule;
             for(var categoryName in rule){
                 if(model[categoryName]===undefined) model[categoryName]={};
                 scope[categoryName]=model[categoryName];
@@ -163,7 +155,7 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
 
         return {
             bindScope:bindScope,
-            getRule:getRule,
-            BinderObj:BinderObj
+            BinderObj:BinderObj,
+            processRule:processRule
         };
     }]);

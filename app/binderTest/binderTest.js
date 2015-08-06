@@ -1,27 +1,40 @@
 //Step 1: name the new module.
-var newModule='myApp.pageSeed';
+var newModule='myApp.binderTest';
 
 (function (angular) {
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/pageSeed',
-        ctrlName='PageSeedCtrl',
-        templateUrl='pageSeed/pageSeed.html';
+    var route='/binderTest/:id1/:id2',
+        ctrlName='BinderTestCtrl',
+        templateUrl='binderTest/binderTest.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, viewLogic, model) {
-        $scope.test=function(){
-            var ref=new Firebase('https://cpmain.firebaseio.com/binderTest/123/456');
-            ref.orderByKey().limitToFirst(2).on('child_added', function(snap){
-                console.log(snap.key(), snap.val());
-            }, function(err){
-                console.log(JSON.stringify(err))
-            });
-        }
+    app.controller(ctrlName, function ($scope, viewLogic, model, binder, $routeParams) {
+        var binderRule={
+            cate1:{
+                itemName:{
+                    default:'id2',
+                    fb:{
+                        'binderTest/id1/id2@A':{
+                            type:'simplePagination',
+                            itemPerPage:3
+                        }
+                    }
+                },
+                itemName2:{
+                    default:'id1',
+                    fb:{
+                        'binderTest/id1/789@A':{}
+                    }
+                }
+            }
+        };
+
+        binder.bindScope($scope,binderRule,[$routeParams]);
     });
 
 //Step 5: config providers.
@@ -37,7 +50,7 @@ var newModule='myApp.pageSeed';
             //  user: ['Auth', function (Auth) {
             //    return Auth.$waitForAuth();
             //  }]
-            //}e
+            //}
         });
     }]);
 
