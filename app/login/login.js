@@ -64,7 +64,7 @@ angular.module('myApp.login', ['firebase.utils', 'firebase.auth', 'ngRoute'])
               $location.path('/home');
               return Auth.checkIfAccountExistOnFb(user)
             }, showError)
-            .then(function(user){return Auth.createAccount(user)}, showError)
+            .then(Auth.createAccount, showError)
             .then(function(){}, showError)
       }
   }]);

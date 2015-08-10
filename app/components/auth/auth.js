@@ -1,10 +1,11 @@
 angular.module('firebase.auth', ['firebase', 'firebase.utils'])
-    .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', 'snippet', function ($firebaseAuth, fbutil, $q, FBURL, snippet) {
+    .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', 'snippet', 'localFb', function ($firebaseAuth, fbutil, $q, FBURL, snippet, localFb) {
 
         var Auth= $firebaseAuth(fbutil.ref());
 
         Auth.checkIfAccountExistOnFb=function(authData){
             var def=$q.defer();
+            if(!authData) def.reject('AUTH_NEEDED');
             var ref= fbutil.ref('users', authData.uid, 'createdTime');
             ref.once('value', function(snap){
                 if(snap.val()===null){
@@ -16,14 +17,28 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
             return def.promise
         };
 
-        Auth.createAccount=function(authData){
-            var ref=fbutil.ref('users', authData.uid);
-            return fbutil.handler(function(cb){
-                ref.set(Auth.basicAccountUserData(authData), cb);
-            })
+        Auth.createAccount=function(authData, opt){
+            if(!authData) return;
+            if(opt===undefined||(typeof opt!=='object')) {
+                var ref=fbutil.ref('users', authData.uid);
+                return fbutil.handler(function(cb){
+                    ref.set(Auth.basicAccountUserData(authData, opt), cb);})
+            } else {
+                var def=$q.defer();
+                if(!!opt.structure){
+                    var rawData=snippet.flatten(authData, opt.flattenConfig);
+                    rawData.authData=authData;
+                    var values=snippet.createBatchUpdateValues(rawData, opt.structure);
+                    console.log(JSON.stringify(values));
+                    localFb.batchUpdate(values, opt.isConsecutive).then(function(){def.resolve();},opt.errorHandler);
+                } else {
+                    def.reject('USERDATA_STRUCTURE_NEEDE')
+                }
+                return def.promise
+            }
         };
 
-        Auth.checkThenCreateAccount=function(authData){
+        /*Auth.checkThenCreateAccount=function(authData){
             var def=$q.defer();
             Auth.checkIfAccountExistOnFb(authData).then(
 
@@ -36,45 +51,24 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
                     def.reject(err)
                 });
             return def.promise
-        };
+        };*/
 
         Auth.basicAccountUserData=function(authData){
-            var name, email;
-            switch(authData.provider){
-                case 'password':
-                    name=snippet.firstPartOfEmail(authData.password.email);
-                    email=authData.password.email;
-                    break;
-                case 'facebook':
-                    name=authData.facebook.displayName;
-                    email=authData.facebook.email;
-                    break;
-                case 'twitter':
-                    name=authData.twitter.displayName;
-                    email=null;
-                    break;
-                case 'github':
-                    name=authData.github.displayName;
-                    email=authData.github.email;
-                    break;
-                case 'google':
-                    name=authData.google.displayName;
-                    email=authData.google.email;
-                    break;
-                case 'custom':
-                    name=authData.uid;
-                    email=null;
-                    break;
-                case 'anonymous':
-                    name=authData.uid;
-                    email=null;
-                    break;
-            }
-            return {
+            var provider=authData.provider,
+                name=authData[provider].displayName||authData.uid,
+                email=authData[provider].email||null,
+                profileImageURL=authData[provider].profileImageURL||null;
+            if(provider==='password') name=snippet.firstPartOfEmail(authData.password.email);
+            var basicUserInfo={
                 createdTime:Firebase.ServerValue.TIMESTAMP,
                 name:name,
-                email:email||null
+                email:email,
+                profileImageURL:profileImageURL
             };
+            basicUserInfo[provider]={
+                id:authData[provider].id||null
+            };
+            return basicUserInfo
         };
 
 
