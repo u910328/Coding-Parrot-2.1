@@ -1,8 +1,8 @@
 <h2>products</h2>
 <div ng-repeat="(itemId, value) in productList">
     <a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>
-    list price: USD {{value.listPrice}}<br>
-    price: USD {{value.price}}<br>
+    list price: USD {{value.listPrice|currency : '$' : 2}}<br>
+    price: USD {{value.price|currency : '$' : 2}}<br>
     <hr>
 </div>
 <button ng-click="test()">test</button>

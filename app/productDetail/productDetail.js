@@ -26,6 +26,7 @@ var newModule='myApp.productDetail';
                 itemId:productInfo.itemId,
                 itemName:productInfo.itemName,
                 selectedOption:productInfo.selectedOption,
+                options:productInfo.options,
                 listPrice:productInfo.listPrice,
                 price:productInfo.price||1,
 

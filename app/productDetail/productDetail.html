@@ -1,7 +1,7 @@
 <h2>{{productInfo.itemName}}</h2>
 <form>
-    listPrice:{{productInfo.currency}} {{productInfo.listPrice}}<br>
-    price:{{productInfo.currency}} {{productInfo.price}}<br>
+    listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>
+    price:{{productInfo.price|currency : '$' : 2}}<br>
     quantity:<input ng-model="quantity"><br>
     options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption"></select><br>
     description:{{productInfo.description}}<br>

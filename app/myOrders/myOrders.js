@@ -15,10 +15,6 @@ var newModule='myApp.myOrders';
 //Step 4: construct a controller.
     app.controller(ctrlName, function (user, $scope, $firebaseObject, model, localFb, snippet, $location) {
 
-        localFb.params={
-            '$uid':user.uid
-        };
-
         var fbObj=new localFb.FbObj('users/'+user.uid+'/orderHistory');
         $firebaseObject(fbObj.ref()).$bindTo($scope, 'myOrders');
 

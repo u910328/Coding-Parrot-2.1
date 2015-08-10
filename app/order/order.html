@@ -1,12 +1,16 @@
 <h2>Order</h2>
 
 Item name: {{order.itemName}}<br>
-List price: {{order.listPrice}}<br>
-Price: {{order.price}}<br>
-Sub total:{{order.price*order.quantity}}
-
+options:<select ng-options="option for option in order.options" ng-model="order.selectedOption"></select><br>
+List price: {{order.listPrice|currency : '$' : 2}}<br>
+Price: {{order.price|currency : '$' : 2}}<br>
 <form>
     quantity: <input type="text" ng-model="order.quantity"><br>
     note:  <input type="text" ng-model="order.note"><br>
-    <button ng-click="checkout()">checkout!</button>
 </form>
+Sub total:{{order.price*order.quantity|currency : '$' : 2}}
+<hr>
+
+
+<button ng-click="checkout()">checkout!</button>
+

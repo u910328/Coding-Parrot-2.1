@@ -30,13 +30,12 @@ var newModule='myApp.order';
                     'itemId',
                     'itemName',
                     'quantity',
-                    'listPrice',
                     'price',
                     'createdTime',
                     'payment',
                     'shipment',
                     'orderStatus',
-                    'options',
+                    'selectedOption',
                     'schedule'
                 ],
                 value:{}
@@ -47,13 +46,12 @@ var newModule='myApp.order';
                     'itemId',
                     'itemName',
                     'quantity',
-                    'listPrice',
                     'price',
                     'createdTime',
                     'payment',
                     'shipment',
                     'orderStatus',
-                    'options',
+                    'selectedOption',
                     'schedule'
                 ],
                 value:{}
@@ -61,10 +59,6 @@ var newModule='myApp.order';
         ];
 
         $scope.checkout=function(){
-            if(user===null) {
-                $location.path('/login');
-                return
-            }
 
             $scope.order.clientId=user.uid;
             $scope.order.clientName=user[user.provider].displayName||user[user.provider].email;

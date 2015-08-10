@@ -15,12 +15,34 @@ var newModule='myApp.allOrders';
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
 
-        localFb.params={
-            '$uid':'boss123'
-        };
-
         var fbObj=new localFb.FbObj('orders');
         $firebaseObject(fbObj.ref()).$bindTo($scope, 'allOrders');
+
+        $scope.statusOptions=['received','preparing','ready'];
+
+        $scope.orderStatus={};
+        $scope.$watch('orderStatus', function(){
+
+        });
+        $scope.changeOrderStatus=function(orderId, userId, changedStatus){
+            console.log(orderId,userId, changedStatus);
+            var values=[
+                {
+                    refUrl:'orders/'+orderId+'/orderStatus',
+                    value: changedStatus,
+                    isSet:true
+                },
+                {
+                    refUrl:'users/'+userId+'/orderHistory/'+orderId+'/orderStatus',
+                    value: changedStatus,
+                    isSet:true
+                }];
+            localFb.batchUpdate(values, true).then(function(){}, function(err){
+                console.log(JSON.stringify(err));
+            });
+        };
+
+
 
         $scope.selectOrder=function(orderId){
             $scope.selectedOrder=$scope.allOrders[orderId];
