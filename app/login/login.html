@@ -18,6 +18,9 @@
     <button ng-click="createMode = true" ng-hide="createMode">Register</button>
     <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
     <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+    <hr>
+    <button ng-click="loginWithProvider('facebook')">Log in with Facebook</button>
+    <button ng-click="loginWithProvider('google')">Log in with Google</button>
 
     <p ng-show="err" class="error">{{err}}</p>
 </form>

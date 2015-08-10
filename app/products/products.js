@@ -1,20 +1,26 @@
 //Step 1: name the new module.
-var newModule='myApp.pageSeed';
+var newModule='myApp.products';
 
 (function (angular) {
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/pageSeed',
-        ctrlName='PageSeedCtrl',
-        templateUrl='pageSeed/pageSeed.html';
+    var route='/products',
+        ctrlName='ProductsCtrl',
+        templateUrl='products/products.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, viewLogic, model) {
-        //create your own controller here
+    app.controller(ctrlName, function ($scope, $firebaseObject, $location, viewLogic, model, snippet, localFb) {
+        var fbObj=new localFb.FbObj('products');
+        $scope.productList=$firebaseObject(fbObj.ref());
+
+        $scope.checkDetail=function(itemId){
+            $location.path('/productDetail/'+itemId);
+            localFb.load('products/'+itemId, 'products.'+itemId);
+        }
     });
 
 //Step 5: config providers.

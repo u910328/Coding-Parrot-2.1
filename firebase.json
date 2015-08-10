@@ -1,5 +1,5 @@
 {
-  "firebase": "INSTANCE",
+  "firebase": "lauchbox",
   "public": "app",
   "ignore": [
     "firebase.json",

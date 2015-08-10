@@ -1,40 +1,30 @@
 //Step 1: name the new module.
-var newModule='myApp.binderTest';
+var newModule='myApp.invoice';
 
 (function (angular) {
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/binderTest/:id1/:id2',
-        ctrlName='BinderTestCtrl',
-        templateUrl='binderTest/binderTest.html';
+    var route='/invoice',
+        ctrlName='InvoiceCtrl',
+        templateUrl='invoice/invoice.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, viewLogic, model, binder, $routeParams) {
-        var binderRule={
-            cate1:{
-                itemName:{
-                    default:'id2',
-                    fb:{
-                        'binderTest/id1/id2@A':{
-                            type:'simplePagination',
-                            itemPerPage:3
-                        }
-                    }
-                },
-                itemName2:{
-                    default:'id1',
-                    fb:{
-                        'binderTest/id1/789@A':{}
-                    }
-                }
-            }
-        };
+    app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
 
-        binder.bindScope($scope,binderRule,[$routeParams]);
+        localFb.params={
+            '$uid':'boss123'
+        };
+        $scope.order=model.order;
+
+        $scope.OK=function(){
+            delete model.order;
+            $location.path('/home')
+        }
+
     });
 
 //Step 5: config providers.
@@ -50,7 +40,7 @@ var newModule='myApp.binderTest';
             //  user: ['Auth', function (Auth) {
             //    return Auth.$waitForAuth();
             //  }]
-            //}
+            //}e
         });
     }]);
 

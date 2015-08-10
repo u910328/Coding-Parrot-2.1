@@ -1,31 +1,47 @@
 angular.module('core.localFb', ['firebase', 'myApp.config'])
-    .factory('localFb', ['FBURL','config','fbutil','$q','model',function (FBURL, config, fbutil, $q, model) {
+    .factory('localFb', ['FBURL','config','fbutil','$q','model', 'snippet',function (FBURL, config, fbutil, $q, model, snippet) {
         var localFb={
             FbObj:FbObj,
             load:load,
             update:update,
             set:set,
+            batchUpdate:batchUpdate,
             updateModel:updateModel,
             path:{},
-            debug:'debug'
+            debug:'debug',
+            params:{},
+            databases:{}
         };
 
-        function FbObj(refUrl){
-            var that=this;
-            this.dbName=model.db[refUrl.split("@")[1]]||FBURL.split("//")[1].split(".fi")[0];
+        var activeRefUrl={};
+
+
+        function FbObj(refUrl, opt){
+            var dbOpt=opt||{}, db=localFb.databases[refUrl.split("@")[1]]||{};
+
+            function isDbOnline(){
+                if(dbOpt.keepOnline!==undefined) return !!dbOpt.keepOnline;
+                if(db.keepOnline!==undefined) return !!db.keepOnline;
+                return true
+            }
+
+            this.dbName=db.Name||FBURL.split("//")[1].split(".fi")[0];
             this.dbUrl="https://"+this.dbName+".firebaseio.com";
             this.path=refUrl.split("@")[0];
             this.url= this.dbUrl+"/"+this.path;
-            this.dbType=refUrl.split("@")[1];
             this.t=(new Date).getTime().toString();
-            this.omniKey={};
+            this.params=dbOpt.params||{};
+            this.keepOnline=isDbOnline();
+
+
+            /*var ref= new Firebase(that.dbUrl);
+
             this.ref=function(){
-                var ref= new Firebase(that.dbUrl);
                 var pathArr=that.path.split("/");
                 for(var i=0; i<pathArr.length; i++){
                     if(pathArr[i].charAt(0)==="$"){
                         ref=ref.push();
-                        that.omniKey[pathArr[i]]=ref.key();
+                        that.params[pathArr[i]]=ref.key();
                     } else {
                         ref=ref.child(pathArr[i]);
                     }
@@ -33,39 +49,85 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                 that.url=ref.toString();
                 that.path=that.url.split(".com/")[1];
                 return ref
-            };
+            };*/
 
-            this.goOnline=function(){
-                if(model.db.online[that.dbUrl]===undefined){model.db.online[that.dbUrl]=[]}
-                if(model.db.online[that.dbUrl].length===0){
+           /* this.goOnline=function(){
+                if(dataBase.online[that.dbUrl]===undefined){dataBase.online[that.dbUrl]=[]}
+                if(dataBase.online[that.dbUrl].length===0){
                     Firebase.goOnline(that.dbUrl);
                     console.log(that.dbUrl,"is online", that.t)
                 }
-                model.db.online[that.dbUrl].push(that.t);
+                dataBase.online[that.dbUrl].push(that.t);
+                return that
             };
 
             this.goOffline=function(){
-                if(model.db.online[that.dbUrl]===undefined){model.db.online[that.dbUrl]=[]}
-                if(model.db.online[that.dbUrl].length===1) {
+                if(dataBase.online[that.dbUrl]===undefined){dataBase.online[that.dbUrl]=[]}
+                if(dataBase.online[that.dbUrl].length===1) {
                     Firebase.goOffline(that.dbUrl);
                     console.log(that.dbUrl,"is offline", that.t)
                 }
-                var tPos=model.db.online[that.dbUrl].indexOf(that.t);
+                var tPos=dataBase.online[that.dbUrl].indexOf(that.t);
                 if(tPos!=-1){
-                    model.db.online[that.dbUrl].splice(tPos,1);
+                    dataBase.online[that.dbUrl].splice(tPos,1);
                 }
-            }
+                return that
+            }*/
         }
+
+        FbObj.prototype={
+            ref:function(){
+                var ref= new Firebase(this.dbUrl);
+                var pathArr=this.path.split("/");
+                for(var i=0; i<pathArr.length; i++){
+                    if(pathArr[i].charAt(0)==="$"){
+                        ref=ref.push();
+                        this.params[pathArr[i]]=ref.key();
+                    } else {
+                        ref=ref.child(pathArr[i]);
+                    }
+                }
+                this.url=ref.toString();
+                this.path=this.url.split(".com/")[1];
+                return ref
+            },
+            goOnline: function(){
+                if(activeRefUrl[this.dbUrl]===undefined){activeRefUrl[this.dbUrl]=[]}
+                if(activeRefUrl[this.dbUrl].length===0){
+                    if(!this.keepOnline) {
+                        Firebase.goOnline(this.dbUrl);
+                        console.log(this.dbUrl,"is online", this.t)
+                    }
+                }
+                activeRefUrl[this.dbUrl].push(this.t);
+                return this
+            },
+            goOffline: function(){
+                if(this.keepOnline) return this;
+                if(activeRefUrl[this.dbUrl]===undefined){activeRefUrl[this.dbUrl]=[]}
+                if(activeRefUrl[this.dbUrl].length===1) {
+                    if(!this.keepOnline) {
+                        Firebase.goOffline(this.dbUrl);
+                        console.log(this.dbUrl,"is offline", this.t)
+                    }
+                }
+                var tPos=activeRefUrl[this.dbUrl].indexOf(this.t);
+                if(tPos!=-1){
+                    activeRefUrl[this.dbUrl].splice(tPos,1);
+                }
+                return this
+            }
+        };
 
         function Digest(scope, fbObj, isSync, delay){
             var timeout;
-            this.reset=function(callback, overrideDelay){
+            this.reset=function(callback, customDelay){
                 if(timeout!=undefined) clearTimeout(timeout);
                 timeout=setTimeout(function(){
                     if(callback) callback.apply(null);
                     if(!isSync) fbObj.goOffline();
                     if(scope) scope.$digest();
-                }, overrideDelay||delay);
+                }, customDelay||delay);
             }
         }
 
@@ -92,11 +154,11 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
 
         function load(refUrl, modelPath, rule, extraOnComplete, finalOnComplete){
             var fbObj=new FbObj(refUrl),
-                query=rule["query"]? "."+rule["query"]:"",
-                isSync=rule["isSync"],
-                eventType=rule["eventType"],
-                scope=rule["scope"],
-                delay=rule["delay"]||300;
+                query=rule&&rule["query"]? "."+rule["query"]:"",
+                isSync=rule&&rule["isSync"]||true,
+                eventType=rule&&rule["eventType"]||'value',
+                scope=rule&&rule["scope"],
+                delay=rule&&rule["delay"]||300;
 
             var ref=fbObj.ref(),
                 queryRef=eval("ref"+query);
@@ -110,7 +172,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
 
                 function onComplete1(snap, prevChildName, digestCb){
                     updateModel(modelPath, snap.val(), snap.key(), eventType);
-                    console.log('load complete', snap.val());
+                    if(config.debug) console.log('load complete', JSON.stringify(snap.val()));
 
                     digest.reset(function(){
                         if(typeof digestCb==='function') digestCb.apply(null);
@@ -135,7 +197,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                         that.onComplete=onComplete1
                     }
                 }
-                that.evalString="queryRef."+sync+"('"+(eventType||'value')+"', onComplete, errorCallback)"
+                that.evalString="queryRef."+sync+"('"+eventType+"', onComplete, errorCallback)"
             }
 
             var refObj=new RefObj(isSync, eventType);
@@ -151,19 +213,37 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             eval(refObj.evalString);
         }
 
-        function update(refUrl, modelPath, value, onComplete, actionObj, removePrev){
-            var fbObj=new FbObj(refUrl), ref=fbObj.ref(), type=removePrev? 'set':'update';
+        function update(refUrl, modelPath, value, onComplete, actionObj, removePrev, refUrlParams, defer){
+            var replacedRefUrl=snippet.replaceParamsInString(refUrl, refUrlParams);
+            var fbObj=new FbObj(replacedRefUrl), ref=fbObj.ref(), type=removePrev? 'set':'update';
+
+            //將因push而自動生成的key值放到value內相對應的property中
+            var params=snippet.getUnionOfObj([refUrlParams, fbObj.params]);
+            //console.log(JSON.stringify(params));
+            if(typeof value==='object') {
+                for(var key in params){
+                    var realKey=key.split('$')[1];
+                    if(value[realKey]===undefined) continue;
+                    value[realKey]=params[key];
+                }
+            } else if(typeof value==='string'){
+                for(var key in params){
+                    value.replace(key, params[key]);
+                }
+            }
+
 
             fbObj.goOnline();
 
             if(actionObj){
-                actionObj.lastParam=fbObj.omniKey;
-                actionObj.replace('updateFbArr', fbObj.omniKey);
+                actionObj.lastParam=fbObj.params;
+                actionObj.replace('updateFbArr', fbObj.params);
             }
 
             ref[type](value, function(error){
                 if (error) {
                     console.log("Update failed: "+refUrl);
+                    defer.reject(error);
                 } else {
                     if(config.debug){console.log("Update success: "+refUrl)}
                     if(modelPath) updateModel(modelPath, value);
@@ -171,12 +251,45 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                 }
                 fbObj.goOffline();
             });
+
+            return fbObj
         }
 
-        function set(refUrl, modelPath, value, onComplete, actionObj){
-            update(refUrl, modelPath, value, onComplete, actionObj, true);
+        function set(refUrl, modelPath, value, onComplete, actionObj, refUrlParams, defer){
+            update(refUrl, modelPath, value, onComplete, actionObj, true, refUrlParams, defer);
         }
 //TODO: Transaction
+
+        function batchUpdate(values, isConsecutive){
+            var def=$q.defer();
+            var onCompletes=[], refUrlParams=snippet.cloneObject(localFb.params);
+            function update(i){
+                var ithOnComplete=(isConsecutive)? onCompletes[i]:values[i].onComplete;
+                var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].removePrev, refUrlParams, def).params;
+                refUrlParams=snippet.getUnionOfObj([refUrlParams, params]);
+            }
+            function OnComplete(j, isLast){
+                return function(){
+                    if(values[j]&&values[j].onComplete) values[j].onComplete.apply(null);
+                    if(values[j+1]) {
+                        update(j+1);
+                    }
+                    if(isLast) def.resolve();
+                }
+            }
+
+            if(isConsecutive||isConsecutive===undefined){
+                for(var j= 0; j<values.length; j++){
+                    onCompletes[j]=new OnComplete(j, j===(values.length-1));  //防止最後實際執行onComplete時使用的是跑完loop後的j的值
+                }
+                update(0);
+            } else {
+                for(var i= 0; i<values.length; i++){
+                    update(i);
+                }
+            }
+            return def.promise
+        }
 
         return localFb
     }]);

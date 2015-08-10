@@ -1,0 +1,10 @@
+<h2>{{productInfo.itemName}}</h2>
+<form>
+    listPrice:{{productInfo.currency}} {{productInfo.listPrice}}<br>
+    price:{{productInfo.currency}} {{productInfo.price}}<br>
+    quantity:<input ng-model="quantity"><br>
+    options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption"></select><br>
+    description:{{productInfo.description}}<br>
+</form>
+
+<button ng-click="createOrder()">place order</button>

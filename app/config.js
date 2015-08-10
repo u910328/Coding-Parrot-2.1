@@ -11,19 +11,9 @@ angular.module('myApp.config', [])
     .constant('loginRedirectPath', '/login')
 
     // your Firebase data URL goes here, no trailing slash
-    .constant('FBURL', 'https://cpmain.firebaseio.com')
+    .constant('FBURL', 'https://lauchbox.firebaseio.com')
     .constant('config', {
-        viewLogic: {
-            rule:[
-                ["result","path.path1", "path.path2", "path.path3", "path.path4"],
-                ["view.class1=success1|", "==1", "==2", "==3", "==4"],
-                ["view.class2=success2|", "", "", "", ">4"],
-                ["view.class3=success3|", "", "", "<2", ""],
-                ["view.class4=success4|", "", "", "", "==4"]
-            ],
-            type: ''
-        },
-        debug:'debug'
+        debug:true
     })
 
     // double check that the app has been configured before running it and blowing up space and time

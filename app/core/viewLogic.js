@@ -316,7 +316,10 @@ angular.module('core.viewLogic', ['firebase', 'myApp.config'])
             }
         }
 
-        addPartialRule(config.viewLogic.rule,false, viewLogic.rule, viewLogic.allElement, undefined, false, config.viewLogic.type);
-        console.log("global viewLogic loaded");
+        if(config.viewLogic&&config.viewLogic.rule) {
+            addPartialRule(config.viewLogic.rule, false, viewLogic.rule, viewLogic.allElement, undefined, false, config.viewLogic.type);
+            console.log("global viewLogic loaded");
+        }
+
         return viewLogic
     }]);

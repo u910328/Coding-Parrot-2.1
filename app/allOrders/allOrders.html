@@ -1,0 +1,15 @@
+<h2>My orders</h2>
+OrderId: {{selectedOrder.orderId}}<br>
+Client name: {{value.clientName}}
+Item name: {{selectedOrder.itemName}}<br>
+List price: {{selectedOrder.listPrice}}<br>
+Price: {{selectedOrder.price}}<br>
+Sub total:{{selectedOrder.price*selectedOrder.quantity}}<br>
+Created time: {{selectedOrder.createdTime}}
+<hr>
+<div ng-repeat="(orderId, value) in allOrders">
+    <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
+    date: {{value.createdTime}}<br>
+    client name: {{value.clientName}}<br>
+    <hr>
+</div>

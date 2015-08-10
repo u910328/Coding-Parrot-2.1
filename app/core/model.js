@@ -4,7 +4,6 @@ angular.module('core.model', ['firebase', 'myApp.config'])
             update:update,
             ModelObj:ModelObj,
             init:init,
-            db:{online:{}},
             action:{},
             view:{},
             error:{},
@@ -12,10 +11,9 @@ angular.module('core.model', ['firebase', 'myApp.config'])
         };
 
         function ModelObj(modelPath){
-            var that=this;
             this.modelPathArr=modelPath.split("|");
             this.pathArr=this.modelPathArr[0].split(".");
-            this.val=function(){
+            /*this.val=function(){
                 var value={},
                     modelPath="";
 
@@ -31,13 +29,37 @@ angular.module('core.model', ['firebase', 'myApp.config'])
                 }
 
                 return value
-            }
+            }*/
         }
 
-        function init(scope, keyArr, refresh){
-            for(var i=0; i<keyArr.length; i++){
-                model[keyArr[i]]=refresh? {}:model[keyArr[i]]||{};
-                scope[keyArr[i]]=model[keyArr[i]]
+        ModelObj.prototype={
+            val:function(){
+                var value={},
+                    modelPath="";
+
+                for(var j=0; j<this.pathArr.length; j++){
+                    modelPath=modelPath+"['"+this.pathArr[j]+"']"
+                }
+                for(var i=1; i<this.modelPathArr.length; i++){
+                    value[this.modelPathArr[i]]=eval("model"+modelPath)[this.modelPathArr[i]];
+                }
+
+                if(JSON.stringify(value)==="{}"){
+                    eval("value=model"+modelPath)
+                }
+                return value
+            }
+        };
+
+        function init(scope, keyArrOrStr, refresh){
+            if(typeof keyArrOrStr==='string') {
+                model[keyArrOrStr]=refresh? {}:model[keyArrOrStr]||{};
+                scope[keyArrOrStr]=model[keyArrOrStr];
+                return
+            }
+            for(var i=0; i<keyArrOrStr.length; i++){
+                model[keyArrOrStr[i]]=refresh? {}:model[keyArrOrStr[i]]||{};
+                scope[keyArrOrStr[i]]=model[keyArrOrStr[i]]
             }
         }
 

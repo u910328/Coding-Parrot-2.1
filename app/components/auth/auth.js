@@ -1,39 +1,48 @@
 angular.module('firebase.auth', ['firebase', 'firebase.utils'])
-    .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', function ($firebaseAuth, fbutil, $q, FBURL) {
-        var Auth = {
-            auth: auth
-        };
-        var def = $q.defer();
-        function checkThenRecordUserData(authData) {
-            //註冊登入時間到 mainDb 裡的user/uid
-            // security 限制未創帳號不能寫入
-            var ref = new Firebase((FBURL + 'users/'+authData.uid));   //TODO: 加入對多firebase的支援;
+    .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', 'snippet', function ($firebaseAuth, fbutil, $q, FBURL, snippet) {
 
-            ref.update({lastTimeLoggedIn: Firebase.ServerValue.TIMESTAMP}, function (error) {
-                if (error) {
-                    if (error.code==='PERMISSION_DENIED') {
-                        var updateVal=recordUserData(authData);
-                        ref.update(updateVal, function(error){
-                            if(error){
-                                def.reject(error)
-                            } else {
-                                def.resolve(authData)
-                            }
-                        })
-                    } else {
-                        def.reject(error)
-                    }
-                } else {
+        var Auth= $firebaseAuth(fbutil.ref());
+
+        Auth.checkIfAccountExistOnFb=function(authData){
+            var def=$q.defer();
+            var ref= fbutil.ref('users', authData.uid, 'createdTime');
+            ref.once('value', function(snap){
+                if(snap.val()===null){
                     def.resolve(authData);
                 }
-            })
-        }
+            }, function(err){
+                def.reject(err)
+            });
+            return def.promise
+        };
 
-        function recordUserData(authData){
+        Auth.createAccount=function(authData){
+            var ref=fbutil.ref('users', authData.uid);
+            return fbutil.handler(function(cb){
+                ref.set(Auth.basicAccountUserData(authData), cb);
+            })
+        };
+
+        Auth.checkThenCreateAccount=function(authData){
+            var def=$q.defer();
+            Auth.checkIfAccountExistOnFb(authData).then(
+
+                function(snap){
+                    if(snap===null) Auth.createAccount(authData).then(
+                        function(authData){def.resolve(authData);},
+                        function(err){def.reject(err)}
+                    )},
+                function(err){
+                    def.reject(err)
+                });
+            return def.promise
+        };
+
+        Auth.basicAccountUserData=function(authData){
             var name, email;
             switch(authData.provider){
                 case 'password':
-                    name=authData.password.email.replace(/@.*/, '');
+                    name=snippet.firstPartOfEmail(authData.password.email);
                     email=authData.password.email;
                     break;
                 case 'facebook':
@@ -64,47 +73,35 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
             return {
                 createdTime:Firebase.ServerValue.TIMESTAMP,
                 name:name,
-                email:email,
-                lastTimeLoggedIn:Firebase.ServerValue.TIMESTAMP
+                email:email||null
             };
-        }
+        };
 
 
-        function logIn(config) {
-            var ref = new Firebase(FBURL);   //TODO: 加入對多firebase的支援;
-
-            function authOnComplete(err, authData){
-                if(err){
-                    def.reject(err);
-                } else {
-                    checkThenRecordUserData(authData);
-                }
-            }
-
-            switch(config.provider){
+        Auth.loginWithProvider=function(provider, opt) {
+            switch(provider){
                 case 'password':
-                    ref.authWithPassword(authOnComplete, config);
+                    return Auth.$authWithPassword({ email: opt.email, password: opt.password }, opt);
                     break;
                 case 'custom':
-                    ref.authWithCustomToken(config.customToken, authOnComplete, config);
+                    return Auth.$authWithCustomToken(opt.customToken, opt);
                     break;
                 case 'anonymous':
-                    config.rememberMe='none';
-                    ref.authAnonymously(authOnComplete, config);
+                    opt.rememberMe='none';
+                    return Auth.$authAnonymously(opt);
                     break;
                 default:
-                    if (config.popup) {              //OAuth popup
-                        ref.authWithOAuthPopup(config.provider, authOnComplete, config);
-                    } else {                       //OAuth redirect
-                        ref.authWithOAuthRedirect(config.provider, authOnComplete, config);
+                    if (opt&&opt.popup===false) {
+                        return Auth.$authWithOAuthRedirect(provider, opt);
+                    } else {
+                        return Auth.$authWithOAuthPopup(provider, opt);
                     }
                     break;
             }
-            return def.promise
-        }
+        };
 
-        function removeUserData(authData, extraCallBack){
-            var ref = new Firebase((FBURL + 'users/'+authData.uid));   //TODO: 加入對多firebase的支援;
+        Auth.removeUserData=function(authData, extraCallBack){
+            var ref = new Firebase((FBURL + 'users/'+authData.uid));   //TODO: 𩄍惩撠滚𩄍firebase𩄍𣈲𩄍
 
             ref.remove(function(err){
                 if(err){
@@ -114,7 +111,9 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
 
                 }
             });
-        }
+        };
+
+        //TODO:重寫下面的CODE
 
         function auth(config, onAuthCB, offAuthCB){
             var def=$q.defer();
@@ -139,5 +138,5 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
             return def.promise
         }
 
-        return $firebaseAuth(fbutil.ref());
+        return Auth;
     }]);

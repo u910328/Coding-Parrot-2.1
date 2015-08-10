@@ -6,7 +6,7 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
         //    snippet.evalAssignment([scope, key], modelPathArr);
         //}
 
-        function processRule(rawRule,paramArr){
+        function processRule(rawRule, paramArr){
             var params=snippet.getUnionOfObj(paramArr),
                 ruleString=JSON.stringify(rawRule);
             for(var key in params){

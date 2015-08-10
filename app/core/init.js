@@ -10,11 +10,12 @@
 
             }
         }])
-        .run(function($rootScope, $q, Auth, localFb, model, init, snippet){
+        .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config){
             var def=$q.defer();
             var WaitUntil=new snippet.WaitUntil(5, function(){
                 def.resolve();
             });
+            if(config.debug) console.log('debug mode');
             Auth.$onAuth(function(user) {
                 if(!!user){
                     //get current db
