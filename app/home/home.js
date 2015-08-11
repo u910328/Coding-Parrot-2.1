@@ -6,12 +6,20 @@
     app.controller('HomeCtrl', ['$scope', 'fbutil', 'user', '$firebaseObject', 'FBURL','snippet', function ($scope, fbutil, user, $firebaseObject, FBURL, snippet) {
         $scope.user = user;
         var testraw={
-            '123':'123',
-            '345':'345',
+            '123':{
+                'a':'a',
+                'no':false
+            },
+            '345':{
+                'a':'a',
+                'no':false
+            },
             'obj':{
                 a:1,
+                leave:'no',
                 sub:{
                     sub1:1,
+                    subleave:2,
                     sub2:{
                         a:'a'
                     }
@@ -26,7 +34,9 @@
             ]
         };
         var testfilter={
-            '$uid':'',
+            '$uid':{
+                a:''
+            },
             'obj':{
                 a:'',
                 sub:{

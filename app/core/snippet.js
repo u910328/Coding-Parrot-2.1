@@ -238,15 +238,17 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
                 //both are object
 
                 function goDeeperOrStop(param,filterKey){
+                    var escape=opt&&opt.escapeString? opt.escapeString:'#';
                     var nextLevelFilter=filterModel[param]||filterModel[filterKey];
-                    if(nextLevelFilter===opt.escapeString||typeof nextLevelFilter!=='object') {
+                    if(opt&&nextLevelFilter===escape) return;
+                    if(typeof nextLevelFilter!=='object') {
                         target[param]=cloneObject(rawDataObj[param])
                     } else {
-                        console.log(JSON.stringify(filterModel));
-                        target[param] = isArray(filterModel[filterKey])? []:{};
+                        target[param] = isArray(nextLevelFilter)? []:{};
                         iterate(rawDataObj[param], nextLevelFilter, target[param])
                     }
                 }
+
                 if(typeof filterModel==='object'&& typeof rawDataObj==='object'){
                     for(var filterKey in filterModel) {
                         if (isParam(filterKey, opt)) {
