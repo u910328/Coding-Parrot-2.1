@@ -7,7 +7,7 @@ var newModule='myApp.pageSeed';
 //Step 2: set route, ctrlName and templateUrl.
     var route='/pageSeed',
         ctrlName='PageSeedCtrl',
-        templateUrl='pageSeed/pageSeed.html';
+        templateUrl='pages/pageSeed/pageSeed.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
@@ -19,9 +19,9 @@ var newModule='myApp.pageSeed';
 
 //Step 5: config providers.
     app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+        $routeProvider.when(route, { // user whenAuthenticated instead of when if you need this page can only be seen by logged in user. user who did not log in will be redirected to the default route. (loginRedirectPath in config.js)
             templateUrl: templateUrl,
-            controller: ctrlName/*,
+            controller: ctrlName,
             resolve: {
               // forces the page to wait for this promise to resolve before controller is loaded
               // the controller can then inject `user` as a dependency. This could also be done
@@ -30,7 +30,7 @@ var newModule='myApp.pageSeed';
               user: ['Auth', function (Auth) {
                 return Auth.$waitForAuth();
               }]
-            }*/
+            }
         });
     }]);
 

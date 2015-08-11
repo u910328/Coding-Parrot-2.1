@@ -7,7 +7,7 @@ var newModule='myApp.products';
 //Step 2: set route, ctrlName and templateUrl.
     var route='/products',
         ctrlName='ProductsCtrl',
-        templateUrl='products/products.html';
+        templateUrl='pages/products/products.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
@@ -27,16 +27,7 @@ var newModule='myApp.products';
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when(route, {
             templateUrl: templateUrl,
-            controller: ctrlName/*,
-            resolve: {
-              // forces the page to wait for this promise to resolve before controller is loaded
-              // the controller can then inject `user` as a dependency. This could also be done
-              // in the controller, but this makes things cleaner (controller doesn't need to worry
-              // about auth status or timing of accessing data or displaying elements)
-              user: ['Auth', function (Auth) {
-                return Auth.$waitForAuth();
-              }]
-            }*/
+            controller: ctrlName
         });
     }]);
 

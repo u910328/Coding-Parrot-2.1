@@ -37,6 +37,22 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
                 return def.promise
             }
         };
+        //Example
+        //var opt={
+        //    structure:[
+        //        {
+        //            refUrl:'users/$uid',
+        //            value:'authData' //主要user acc, 將全部authData update 到此refUrl
+        //        },
+        //        {
+        //            refUrl:'userList/$uid', //產生一個只有 name和email 的list item
+        //            value:{
+        //                name:'password.name', //此string 代表authData.password.name
+        //                email:'password.email'
+        //            }
+        //        }
+        //    ]
+        //};
 
         /*Auth.checkThenCreateAccount=function(authData){
             var def=$q.defer();

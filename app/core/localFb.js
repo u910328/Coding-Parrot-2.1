@@ -265,7 +265,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             var onCompletes=[], refUrlParams=snippet.cloneObject(localFb.params);
             function update(i){
                 var ithOnComplete=(isConsecutive)? onCompletes[i]:values[i].onComplete;
-                var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].isSet, refUrlParams, def).params;
+                var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].removePrev, refUrlParams, def).params;
                 refUrlParams=snippet.getUnionOfObj([refUrlParams, params]);
             }
             function OnComplete(j, isLast){

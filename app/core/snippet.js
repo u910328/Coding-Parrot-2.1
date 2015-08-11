@@ -205,12 +205,8 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             return result
         }
 
-        function isBuffer(value) {
-            if (typeof Buffer === 'undefined') return false;
-            return Buffer.isBuffer(value)
-        }
-
         function cloneObject(obj){
+            // return angular.extend({},obj);
             if(obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj) return obj;
             var temp = obj.constructor(); // changed
             for(var key in obj) {
@@ -221,6 +217,50 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
                 }
             }
             return temp;
+        }
+
+        function filterRawData(rawDataObj, filterModel, opt){
+            if(typeof rawDataObj!=='object'|| typeof filterModel!=='object') return rawDataObj===filterModel;
+            var res=isArray(rawDataObj)? []:{};
+            iterate(rawDataObj, filterModel, res);
+            function isParam(key, opt){
+                var paramHeader='$';
+                if(opt&&typeof opt.paramHeader==='string') paramHeader=opt.paramHeader;
+                return key.charAt(0)===paramHeader;
+            }
+            function iterate(rawDataObj, filterModel, target){
+
+                if(typeof filterModel==='object'&& typeof rawDataObj!=='object') {
+                    console.log("error: raw data doesn't fit the filter",'the value of the raw data is '+JSON.stringify(rawDataObj));
+                    return
+                }
+
+                //both are object
+
+                function goDeeperOrStop(param,filterKey){
+                    var nextLevelFilter=filterModel[param]||filterModel[filterKey];
+                    if(nextLevelFilter===opt.escapeString||typeof nextLevelFilter!=='object') {
+                        target[param]=cloneObject(rawDataObj[param])
+                    } else {
+                        console.log(JSON.stringify(filterModel));
+                        target[param] = isArray(filterModel[filterKey])? []:{};
+                        iterate(rawDataObj[param], nextLevelFilter, target[param])
+                    }
+                }
+                if(typeof filterModel==='object'&& typeof rawDataObj==='object'){
+                    for(var filterKey in filterModel) {
+                        if (isParam(filterKey, opt)) {
+                            for (var param in rawDataObj) {
+                                goDeeperOrStop(param, filterKey);
+                            }
+                            break;
+                        } else {
+                            goDeeperOrStop(filterKey, filterKey)
+                        }
+                    }
+                }
+            }
+            return res
         }
 
         function createBatchUpdateValues(rawData, structure){
@@ -355,7 +395,6 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
         return {
             flatten:flatten,
             unflatten:unflatten,
-            isBuffer:isBuffer,
             isArray:isArray,
             cloneObject:cloneObject,
             getRule:getRule,
@@ -368,6 +407,7 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             replaceParamsInObj:replaceParamsInObj,
             replaceParamsInString:replaceParamsInString,
             createBatchUpdateValues:createBatchUpdateValues,
+            filterRawData:filterRawData,
             firstPartOfEmail:firstPartOfEmail,
             errMessage:errMessage,
             ucfirst:ucfirst

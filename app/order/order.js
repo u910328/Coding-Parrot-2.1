@@ -14,10 +14,6 @@ var newModule='myApp.order';
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location) {
-        if(user) localFb.params={
-            '$uid':user.uid
-        };
-
 
         $scope.order=model.order;
 
