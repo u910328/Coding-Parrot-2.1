@@ -20,3 +20,151 @@ Status: {{orderStatus[selectedOrder.orderId]}}
     </select>
     <hr>
 </div>
+
+<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Dashboard</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"> Admin <span class="caret"></span></a>
+                    <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                        <li><a href="#">My Profile</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- /container -->
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <!-- Left column -->
+            <a href="#"><strong>Tools</strong></a>
+
+            <hr>
+
+            <ul class="nav nav-stacked">
+                <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#Menu">訂單</a>
+                    <ul class="nav nav-stacked collapse in" id="Menu">
+                        <li class="active"> <a href="#"> 今天  <span class="badge badge-info">20</span></a></li>
+                        <li><a href="#">明天 <span class="badge badge-info">4</span></a></li>
+                        <li><a href="#">一週內</a></li>
+                    </ul>
+                </li>
+                <hr>
+                <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#userMenu">會員</a>
+                    <ul class="nav nav-stacked collapse in" id="userMenu">
+                        <li class="active"> <a href="#"> VIP</a></li>
+                        <li><a href="#">普通會員 <span class="badge badge-info">5</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <hr>
+
+
+        </div>
+        <!-- /col-3 -->
+        <div class="col-sm-9">
+
+
+            <a href="#"><strong> 訂單</strong></a>
+            <hr>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>顧客</th>
+                        <th>便當數量</th>
+                        <th>狀態</th>
+                        <th>note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  ng-repeat="(orderId, value) in allOrders" ng-init="orderStatus[orderId]=value.orderStatus">
+                        <td><a href ng-click="selectOrder(orderId)">{{orderId}}</a></td>
+                        <td>{{value.clientName}}</td>
+                        <td>ipsum</td>
+                        <td>
+                            <select ng-options="status for status in statusOptions"
+                                    ng-model="orderStatus[orderId]"
+                                    ng-change="changeOrderStatus(orderId, value.clientId, orderStatus[orderId])">
+                            </select>
+                        </td>
+                        <td>sit</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <a href="#"><strong> 會員</strong></a>
+            <hr>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>姓名</th>
+                        <th>便當總數量</th>
+                        <th>目前訂單</th>
+                        <th>note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1,001</td>
+                        <td>Lorem</td>
+                        <td>Lorem</td>
+                        <td>ipsum</td>
+                        <td>sit</td>
+                    </tr>
+                    <tr>
+                        <td>1,002</td>
+                        <td>amet</td>
+                        <td>Lorem</td>
+                        <td>consectetur</td>
+                        <td>elit</td>
+                    </tr>
+                    <tr>
+                        <td>1,003</td>
+                        <td>Integer</td>
+                        <td>Lorem</td>
+                        <td>nec</td>
+                        <td>Praesent</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!--<div class="row">-->
+            <!--<div class="col-md-12">-->
+            <!--<ul class="list-group">-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-flash"></i> <small>(3 mins ago)</small> The 3rd page reports don't contain any links. Does anyone know why..</a></li>-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-flash"></i> <small>(1 hour ago)</small> Hi all, I've just post a report that show the relationship betwe..</a></li>-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-heart"></i> <small>(2 hrs ago)</small> Paul. That document you posted yesterday doesn't seem to contain the over..</a></li>-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-heart-empty"></i> <small>(4 hrs ago)</small> The map service on c243 is down today. I will be fixing the..</a></li>-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-heart"></i> <small>(yesterday)</small> I posted a new document that shows how to install the services layer..</a></li>-->
+            <!--<li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-flash"></i> <small>(yesterday)</small> ..</a></li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+        <!--/col-span-9-->
+    </div>
+</div>
