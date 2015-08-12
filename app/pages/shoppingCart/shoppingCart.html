@@ -1,0 +1,25 @@
+<h2>ShoppingCart</h2>
+
+<div ng-show="cart.notEmpty">
+    <div ng-repeat="(productId, productInfo) in cart.products" ng-init="cart.notEmpty=true">
+        Item name: {{productInfo.itemName}}<br>
+        options:<select ng-options="option for option in productInfo.options" ng-model="cart.products[productId].selectedOption"></select><br>
+        List price: {{productInfo.listPrice|currency : '$' : 2}}<br>
+        Price: {{productInfo.price|currency : '$' : 2}}<br>
+        <form>
+            quantity: <input type="text" ng-model="productInfo.quantity"><br>
+        </form>
+        <hr>
+    </div>
+
+    Sub total:{{order.price*order.quantity|currency : '$' : 2}}
+    <hr>
+
+    <button ng-click="checkout()">checkout!</button>
+</div>
+
+<div ng-hide="cart.notEmpty">
+    your shopping cart is empty
+</div>
+
+

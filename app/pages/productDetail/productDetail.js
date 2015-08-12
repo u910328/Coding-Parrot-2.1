@@ -18,38 +18,17 @@ var newModule='myApp.productDetail';
         $scope.productInfo=model.products[$routeParams.pid];
         $scope.quantity=1;
         //$scope.productInfo.selectedOption = $scope.productInfo.options[1];
-        $scope.createOrder=function(){
-            var productInfo=$scope.productInfo;
-            model.order={
 
-                itemId:productInfo.itemId,
-                itemName:productInfo.itemName,
-                selectedOption:productInfo.selectedOption,
-                options:productInfo.options,
-                listPrice:productInfo.listPrice,
-                price:productInfo.price||1,
-
-                quantity:$scope.quantity
-            };
-            $location.path('/order')
-        };
 
         $scope.addToCart=function(){
+            //shape the data
             var productInfo=angular.extend({},$scope.productInfo);
-            model.cart=model.cart||{};
-            model.cart[productId]=productInfo;
-            model.order={
+            productInfo.quantity=productInfo.quantity||1;
+            //assign the data to the model, so that it can be reached by other controller
+            model.cart=model.cart||{products:{}};
+            model.cart.products[productId]=productInfo;
 
-                itemId:productInfo.itemId,
-                itemName:productInfo.itemName,
-                selectedOption:productInfo.selectedOption,
-                options:productInfo.options,
-                listPrice:productInfo.listPrice,
-                price:productInfo.price||1,
-
-                quantity:$scope.quantity
-            };
-            $location.path('/order')
+            $location.path('/products')
         };
     });
 

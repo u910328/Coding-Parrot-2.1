@@ -19,23 +19,19 @@ var newModule='myApp.allOrders';
         $firebaseObject(fbObj.ref()).$bindTo($scope, 'allOrders');
 
         $scope.statusOptions=['received','preparing','ready'];
-
         $scope.orderStatus={};
-        $scope.$watch('orderStatus', function(){
-
-        });
         $scope.changeOrderStatus=function(orderId, userId, changedStatus){
             console.log(orderId,userId, changedStatus);
             var values=[
                 {
                     refUrl:'orders/'+orderId+'/orderStatus',
                     value: changedStatus,
-                    isSet:true
+                    set:true
                 },
                 {
                     refUrl:'users/'+userId+'/orderHistory/'+orderId+'/orderStatus',
                     value: changedStatus,
-                    isSet:true
+                    set:true
                 }];
             localFb.batchUpdate(values, true).then(function(){}, function(err){
                 console.log(JSON.stringify(err));
@@ -47,6 +43,21 @@ var newModule='myApp.allOrders';
         $scope.selectOrder=function(orderId){
             $scope.selectedOrder=$scope.allOrders[orderId];
             $scope.selectedOrder.orderId=orderId;
+        };
+        $scope.removeOrder=function(orderId, userId){
+            var values=[
+                {
+                    refUrl:'users/'+userId+'/orderHistory/'+orderId,
+                    value:null,
+                    set:true
+                },
+                {
+                    refUrl:'orders/'+orderId,
+                    value:null,
+                    set:true
+                }
+            ];
+            localFb.batchUpdate(values, true)
         }
     });
 

@@ -11,8 +11,19 @@ Status: {{orderStatus[selectedOrder.orderId]}}
 <hr>
 <div ng-repeat="(orderId, value) in allOrders" ng-init="orderStatus[orderId]=value.orderStatus">
     <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
+    <a href ng-click="removeOrder(orderId, value.clientId)">[X]</a><br>
+
     date: {{value.createdTime}}<br>
     client name: {{value.clientName}}<br>
+    client id: {{value.clientId}}<br>
+    ------------------------------------------------------
+    <div ng-repeat="(productId, productInfo) in value.products">
+        Item name: {{productInfo.itemName}}<br>
+        Price: {{productInfo.price}}<br>
+        Quantity: {{productInfo.quantity}}<br>
+    </div>
+    ------------------------------------------------------
+    <br>
     status:
     <select ng-options="status for status in statusOptions"
            ng-model="orderStatus[orderId]"

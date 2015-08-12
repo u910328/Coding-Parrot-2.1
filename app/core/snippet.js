@@ -219,33 +219,48 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             return temp;
         }
 
+        /**
+         *
+         * @param {object} rawDataObj - data that need to be shaped to fit the filter model.
+         * @param {object} filterModel - the structure of the returned value.
+         * @param {object} [opt] - options.
+         * @param {string} opt.paramHeader - if the key value inside the filter model start with this value, every corresponding key in raw data will be reserved.  (ex: $uid)
+         * @param {string} opt.useModelHeader - if the key value inside the filter model start with this value, the model data will be kept at this pos and the first character of the key will be removed
+         * @param {string} opt.escape - if the endpoint === opt.escape inside the filter model, this end point won't be processed (default='"#")
+         */
         function filterRawData(rawDataObj, filterModel, opt){
+            opt=opt||{};
             if(typeof rawDataObj!=='object'|| typeof filterModel!=='object') return rawDataObj===filterModel;
-            var res=isArray(rawDataObj)? []:{};
-            iterate(rawDataObj, filterModel, res);
+            var res=isArray(rawDataObj)? []:{},
+                fail=false;
+            iterate(rawDataObj, filterModel, res, 'none');
             function isParam(key, opt){
                 var paramHeader='$';
-                if(opt&&typeof opt.paramHeader==='string') paramHeader=opt.paramHeader;
+                if(typeof opt.paramHeader==='string') paramHeader=opt.paramHeader;
                 return key.charAt(0)===paramHeader;
             }
-            function iterate(rawDataObj, filterModel, target){
+            function iterate(rawDataObj, filterModel, target, prevKey){
+                var useModelHeader=opt.useModelHeader||'_',
+                    escape=opt.escape||'#';
 
-                if(typeof filterModel==='object'&& typeof rawDataObj!=='object') {
-                    console.log("error: raw data doesn't fit the filter",'the value of the raw data is '+JSON.stringify(rawDataObj));
+                if(useModelHeader&&typeof filterModel==='object'&& typeof rawDataObj!=='object') {
+                    console.log(prevKey);
+                    console.log("error: raw data doesn't fit the filter",'the key of the raw data is '+prevKey);
+                    fail=true;
                     return
                 }
 
-                //both are object
-
                 function goDeeperOrStop(param,filterKey){
-                    var escape=opt&&opt.escapeString? opt.escapeString:'#';
                     var nextLevelFilter=filterModel[param]||filterModel[filterKey];
-                    if(opt&&nextLevelFilter===escape) return;
-                    if(typeof nextLevelFilter!=='object') {
+                    if(nextLevelFilter===escape) return;
+                    if(filterKey.charAt(0)===useModelHeader){
+                        target[filterKey.slice(1)]=filterModel[filterKey];
+                    } else if(typeof nextLevelFilter!=='object') {
+                        if(rawDataObj[param]===undefined&&(opt.removeUndefined===undefined||opt.removeUndefined)) return;
                         target[param]=cloneObject(rawDataObj[param])
                     } else {
                         target[param] = isArray(nextLevelFilter)? []:{};
-                        iterate(rawDataObj[param], nextLevelFilter, target[param])
+                        iterate(rawDataObj[param], nextLevelFilter, target[param], filterKey)
                     }
                 }
 
@@ -262,7 +277,7 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
                     }
                 }
             }
-            return res
+            return fail? false:res
         }
 
         function createBatchUpdateValues(rawData, structure){

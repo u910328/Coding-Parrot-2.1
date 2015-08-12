@@ -213,14 +213,15 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             eval(refObj.evalString);
         }
 
-        function update(refUrl, modelPath, value, onComplete, actionObj, removePrev, refUrlParams, defer){
+        function update(refUrl, modelPath, value, onComplete, actionObj, removePrev, refUrlParams){
+            var def=$q.defer();
             var replacedRefUrl=snippet.replaceParamsInString(refUrl, refUrlParams);
             var fbObj=new FbObj(replacedRefUrl), ref=fbObj.ref(), type=removePrev? 'set':'update';
 
             //將因push而自動生成的key值放到value內相對應的property中
             var params=snippet.getUnionOfObj([refUrlParams, fbObj.params]);
             //console.log(JSON.stringify(params));
-            if(typeof value==='object') {
+            if(typeof value==='object'&&value!=null) {
                 for(var key in params){
                     var realKey=key.split('$')[1];
                     if(value[realKey]===undefined) continue;
@@ -241,40 +242,51 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             }
 
             ref[type](value, function(error){
+                if(onComplete) onComplete.apply(null, [error]);
                 if (error) {
                     console.log("Update failed: "+refUrl);
-                    defer.reject(error);
+                    def.reject(error);
                 } else {
                     if(config.debug){console.log("Update success: "+refUrl)}
                     if(modelPath) updateModel(modelPath, value);
-                    if(onComplete) onComplete.apply(null);
+                    def.resolve();
                 }
                 fbObj.goOffline();
             });
 
-            return fbObj
+            def.promise.params=fbObj.params;
+
+            return def.promise
         }
 
-        function set(refUrl, modelPath, value, onComplete, actionObj, refUrlParams, defer){
-            update(refUrl, modelPath, value, onComplete, actionObj, true, refUrlParams, defer);
+        function set(refUrl, modelPath, value, onComplete, actionObj, refUrlParams){
+            update(refUrl, modelPath, value, onComplete, actionObj, true, refUrlParams);
         }
 //TODO: Transaction
 
         function batchUpdate(values, isConsecutive){
             var def=$q.defer();
             var onCompletes=[], refUrlParams=snippet.cloneObject(localFb.params);
+
             function update(i){
                 var ithOnComplete=(isConsecutive)? onCompletes[i]:values[i].onComplete;
-                var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].removePrev, refUrlParams, def).params;
+                var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].set, refUrlParams).params;
                 refUrlParams=snippet.getUnionOfObj([refUrlParams, params]);
             }
+
             function OnComplete(j, isLast){
-                return function(){
-                    if(values[j]&&values[j].onComplete) values[j].onComplete.apply(null);
-                    if(values[j+1]) {
+                return function(error){
+                    if(values[j]&&values[j].onComplete) values[j].onComplete.apply(null,[error]);
+                    if(error){
+                        def.reject(error);
+                        return
+                    }
+
+                    if(isLast) {
+                        def.resolve();
+                    } else {
                         update(j+1);
                     }
-                    if(isLast) def.resolve();
                 }
             }
 
