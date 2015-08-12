@@ -9,6 +9,7 @@ Status: {{selectedOrder.orderStatus}}
 <div ng-repeat="(orderId, order) in myOrders">
     <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
     Date: {{order.createdTime}}<br>
+    Subtotal:{{}}
     Status: {{order.orderStatus}}
     <hr>
 </div>

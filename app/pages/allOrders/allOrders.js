@@ -20,6 +20,8 @@ var newModule='myApp.allOrders';
 
         $scope.statusOptions=['received','preparing','ready'];
         $scope.orderStatus={};
+        $scope.subTotal={};
+
         $scope.changeOrderStatus=function(orderId, userId, changedStatus){
             console.log(orderId,userId, changedStatus);
             var values=[
@@ -37,7 +39,13 @@ var newModule='myApp.allOrders';
                 console.log(JSON.stringify(err));
             });
         };
-
+        $scope.renewSubTotal=function(orderId, productsInfo){
+            var subTotal=0;
+            for(var productId in productsInfo){
+                subTotal+=productsInfo[productId].price*productsInfo[productId].quantity
+            }
+            $scope.subTotal[orderId]=subTotal
+        };
 
 
         $scope.selectOrder=function(orderId){

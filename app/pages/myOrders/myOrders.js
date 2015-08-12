@@ -18,6 +18,14 @@ var newModule='myApp.myOrders';
         var fbObj=new localFb.FbObj('users/'+user.uid+'/orderHistory');
         $firebaseObject(fbObj.ref()).$bindTo($scope, 'myOrders');
 
+        $scope.subTotal={};
+        $scope.renewSubTotal=function(orderId, productsInfo){
+            var subTotal=0;
+            for(var productId in productsInfo){
+                subTotal+=productsInfo[productId].price*productsInfo[productId].quantity
+            }
+            $scope.subTotal[orderId]=subTotal
+        };
         $scope.selectOrder=function(orderId){
             $scope.selectedOrder=$scope.myOrders[orderId];
             $scope.selectedOrder.orderId=orderId;
