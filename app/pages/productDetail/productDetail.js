@@ -23,7 +23,7 @@ var newModule='myApp.productDetail';
         $scope.addToCart=function(){
             //shape the data
             var productInfo=angular.extend({},$scope.productInfo);
-            productInfo.quantity=productInfo.quantity||1;
+            productInfo.quantity=$scope.quantity||1;
             //assign the data to the model, so that it can be reached by other controller
             model.cart=model.cart||{products:{}};
             model.cart.products[productId]=productInfo;

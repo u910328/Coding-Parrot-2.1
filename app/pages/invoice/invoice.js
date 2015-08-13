@@ -15,10 +15,10 @@ var newModule='myApp.invoice';
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
 
-        $scope.order=model.order;
-
+        $scope.invoice=model.invoice;
+        $scope.subTotal=model.calcSubTotal('', model.invoice.products);
+        $scope.date=new Date();
         $scope.OK=function(){
-            delete model.order;
             $location.path('/home')
         }
 

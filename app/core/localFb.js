@@ -283,7 +283,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                     }
 
                     if(isLast) {
-                        def.resolve();
+                        def.resolve({params:refUrlParams});
                     } else {
                         update(j+1);
                     }

@@ -9,8 +9,8 @@ Created time: {{selectedOrder.createdTime}}<br>
 Status: {{orderStatus[selectedOrder.orderId]}}
 
 <hr>
-<div ng-repeat="(orderId, value) in allOrders" ng-init="orderStatus[orderId]=value.orderStatus; renewSubTotal(orderId, value.products)">
-    <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
+<div ng-repeat="(orderId, value) in allOrders" ng-init="orderStatus[orderId]=value.orderStatus; renewSubTotal(orderId, value.products, this)">
+    <a href ng-click="selectOrder(orderId)">{{orderId}}</a>
     <a href ng-click="removeOrder(orderId, value.clientId)">[X]</a><br>
 
     date: {{value.createdTime}}<br>

@@ -39,13 +39,7 @@ var newModule='myApp.allOrders';
                 console.log(JSON.stringify(err));
             });
         };
-        $scope.renewSubTotal=function(orderId, productsInfo){
-            var subTotal=0;
-            for(var productId in productsInfo){
-                subTotal+=productsInfo[productId].price*productsInfo[productId].quantity
-            }
-            $scope.subTotal[orderId]=subTotal
-        };
+        $scope.renewSubTotal=model.calcSubTotal;
 
 
         $scope.selectOrder=function(orderId){

@@ -1,8 +1,22 @@
 <h2>Thank you!</h2>
-Item name: {{order.itemName}}<br>
-Client name: {{order.clientName}}<br>
-List price: {{order.listPrice}}<br>
-Price: {{order.price}}<br>
-Sub total:{{order.price*order.quantity}}<br>
-<hr>
+
+<div>
+    <a href ng-click="">{{orderId}}</a><br>
+
+    date: {{date}}<br>
+    client name: {{invoice.clientName}}<br>
+    client id: {{invoice.clientId}}<br>
+    ------------------------------------------------------
+    <div ng-repeat="(productId, productInfo) in invoice.products">
+        Item name: {{productInfo.itemName}}<br>
+        Price: {{productInfo.price}}<br>
+        Quantity: {{productInfo.quantity}}<br>
+    </div>
+    ------------------------------------------------------
+    <br>
+    status: received<br>
+    subtotal:{{subTotal}}
+
+    <hr>
+</div>
 <button ng-click="OK()">OK</button>

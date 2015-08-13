@@ -6,13 +6,21 @@
             //function getIdentity(){}
             //function logInOthersAnonymously(){}
             ////compile viewLogic
+
             return {}
         }])
         .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config){
-            var def=$q.defer();
-            var WaitUntil=new snippet.WaitUntil(5, function(){
-                def.resolve();
-            });
+            //custom code
+            model.calcSubTotal=function(orderId, productsInfo, scope){
+                var subTotal=0;
+                for(var productId in productsInfo){
+                    subTotal+=productsInfo[productId].price*productsInfo[productId].quantity
+                }
+                if(scope) scope.subTotal[orderId]=subTotal;
+                return subTotal;
+            };
+
+            //template
             if(config.debug) console.log('debug mode');
             Auth.$onAuth(function(user) { //app.js也有同樣的用法
 

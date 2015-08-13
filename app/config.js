@@ -26,7 +26,10 @@ angular.module('myApp.config', [])
         }
     }]);
 
+
 var appDI=[
+    'ui.bootstrap.carousel',
+
     'myApp.config',
     'myApp.security',
     'myApp.home',
