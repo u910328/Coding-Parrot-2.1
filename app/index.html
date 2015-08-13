@@ -9,12 +9,9 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
   <link rel="stylesheet" href="app.css"/>
-  <link rel="stylesheet" href="css-bootstrap-frontpage/bootstrap.min.css"/>
-  <link rel="stylesheet" href="css-bootstrap-frontpage/styles.css"/>
-  <link rel="stylesheet" href="css-bootstrap-dashboard/bootstrap.min.css"/>
-  <link rel="stylesheet" href="css-bootstrap-dashboard/styles.css"/>
+
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
-</head>
+ </head>
 <body ng-cloak>
 
   <ul class="menu">
@@ -26,6 +23,7 @@
     <li ng-hide="loggedIn"><a href="#/login">login</a></li>
     <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart</a></li>
     <li ng-show="loggedIn"><a href="#/account">account</a></li>
+    <li><a href="#/objectGenerator">objectGenerator</a></li>
   </ul>
 
   <div ng-view></div>
@@ -43,6 +41,9 @@
   <!--<script src="bower_components/firebase/firebase.js"></script>-->
   <script src="bower_components/angularfire/dist/angularfire.js"></script>
 
+  <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
+  <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+
 
 
   <script src="config.js"></script>
@@ -58,6 +59,7 @@
   <script src="pages/myOrders/myOrders.js"></script>
   <script src="pages/allOrders/allOrders.js"></script>
   <script src="pages/invoice/invoice.js"></script>
+  <script src="pages/objectGenerator/objectGenerator.js"></script>
 
   <script src="app.js"></script>
   <script src="components/appversion/appversion-directive.js"></script>

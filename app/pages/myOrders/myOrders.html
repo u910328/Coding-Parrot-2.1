@@ -6,10 +6,16 @@ Sub total:{{selectedOrder.price*selectedOrder.quantity|currency : '$' : 2}}<br>
 Created time: {{selectedOrder.createdTime}}
 Status: {{selectedOrder.orderStatus}}
 <hr>
-<div ng-repeat="(orderId, order) in myOrders">
+<div ng-repeat="(orderId, order) in myOrders" ng-init="renewSubTotal(orderId, order.products)">
     <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
     Date: {{order.createdTime}}<br>
-    Subtotal:{{}}
-    Status: {{order.orderStatus}}
+    subtotal:{{subTotal[orderId]}}<br>
+    Status: {{order.orderStatus}}<br>
+
     <hr>
+</div>
+
+
+<div ng-repeat="(key0, value0) in object">
+
 </div>

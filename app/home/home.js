@@ -62,6 +62,8 @@
                     return Auth.$waitForAuth();
                 }]
             }
+        }).otherwise({
+            redirectTo: 'home'
         });
     }]);
 
