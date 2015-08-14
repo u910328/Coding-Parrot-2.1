@@ -13,10 +13,18 @@ var newModule='myApp.allOrders';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
+    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location) {
 
         var fbObj=new localFb.FbObj('orders');
-        $firebaseObject(fbObj.ref()).$bindTo($scope, 'allOrders');
+
+        $scope.loadOrders=function(n){
+            var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
+            var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
+
+            $scope.allOrders=$firebaseArray(ref);
+        };
+
+        $scope.loadOrders(1);
 
         $scope.statusOptions=['received','preparing','ready'];
         $scope.orderStatus={};
@@ -42,8 +50,8 @@ var newModule='myApp.allOrders';
         $scope.renewSubTotal=model.calcSubTotal;
 
 
-        $scope.selectOrder=function(orderId){
-            $scope.selectedOrder=$scope.allOrders[orderId];
+        $scope.selectOrder=function(orderId, order){
+            $scope.selectedOrder=order;
             $scope.selectedOrder.orderId=orderId;
         };
         $scope.removeOrder=function(orderId, userId){

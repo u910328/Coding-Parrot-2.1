@@ -1,23 +1,28 @@
 <h2>All orders</h2>
-OrderId: {{selectedOrder.orderId}}<br>
-Client name: {{value.clientName}}
+<!--OrderId: {{selectedOrder.orderId}}<br>
+Client name: {{selectedOrder.clientName}}<br>
 Item name: {{selectedOrder.itemName}}<br>
 List price: {{selectedOrder.listPrice}}<br>
 Price: {{selectedOrder.price}}<br>
 Sub total:{{selectedOrder.price*selectedOrder.quantity}}<br>
 Created time: {{selectedOrder.createdTime}}<br>
-Status: {{orderStatus[selectedOrder.orderId]}}
+Status: {{orderStatus[selectedOrder.orderId]}}-->
+<button ng-click="loadOrders(1)">today</button>
+<button ng-click="loadOrders(3)">last 3 days</button>
+<button ng-click="loadOrders(7)">last week</button>
+<button ng-click="loadOrders(65535)">all</button>
+
 
 <hr>
-<div ng-repeat="(orderId, value) in allOrders" ng-init="orderStatus[orderId]=value.orderStatus; renewSubTotal(orderId, value.products, this)">
-    <a href ng-click="selectOrder(orderId)">{{orderId}}</a>
-    <a href ng-click="removeOrder(orderId, value.clientId)">[X]</a><br>
+<div ng-repeat="order in allOrders|reverse" ng-init="orderStatus[order.$id]=order.orderStatus; renewSubTotal(order.$id, order.products, this)">
+    <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
+    <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 
-    date: {{value.createdTime}}<br>
-    client name: {{value.clientName}}<br>
-    client id: {{value.clientId}}<br>
+    date: {{order.createdTime}}<br>
+    client name: {{order.clientName}}<br>
+    client id: {{order.clientId}}<br>
     ------------------------------------------------------
-    <div ng-repeat="(productId, productInfo) in value.products">
+    <div ng-repeat="(productId, productInfo) in order.products">
         Item name: {{productInfo.itemName}}<br>
         Price: {{productInfo.price}}<br>
         Quantity: {{productInfo.quantity}}<br>
@@ -26,10 +31,10 @@ Status: {{orderStatus[selectedOrder.orderId]}}
     <br>
     status:
     <select ng-options="status for status in statusOptions"
-           ng-model="orderStatus[orderId]"
-           ng-change="changeOrderStatus(orderId, value.clientId, orderStatus[orderId])">
+           ng-model="orderStatus[order.$id]"
+           ng-change="changeOrderStatus(order.$id, order.clientId, orderStatus[order.$id])">
     </select><br>
-    subtotal:{{subTotal[orderId]}}
+    subtotal:{{subTotal[order.$id]}}
     <hr>
 </div>
 
