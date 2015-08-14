@@ -3,54 +3,33 @@
 
     var app = angular.module('myApp.home', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-    app.controller('HomeCtrl', ['$scope', 'fbutil', 'user', '$firebaseObject', 'FBURL','snippet', function ($scope, fbutil, user, $firebaseObject, FBURL, snippet) {
+    app.controller('HomeCtrl', ['$scope', 'fbutil', 'user', '$firebaseObject', 'FBURL','snippet','$filter', function ($scope, fbutil, user, $firebaseObject, FBURL, snippet,$filter) {
         $scope.user = user;
-        var testraw={
-            '123':{
-                'a':'a',
-                'no':false
+        $scope.source=[
+            {
+                name:'boss',
+                email:'uuuu',
+                gender:'male'
             },
-            '345':{
-                'a':'a',
-                'no':false
+            {
+                name:'boss',
+                email:'bbbb',
+                gender:'female'
             },
-            'obj':{
-                a:1,
-                leave:'no',
-                sub:{
-                    sub1:1,
-                    subleave:2,
-                    sub2:{
-                        a:'a'
-                    }
-                }
-            },
-            arr:[
-                'a',
-                'b',
-                {
-                    a:'1'
-                }
-            ]
+            {
+                name:'cat',
+                email:'uuuu',
+                gender:'female'
+            }
+        ];
+        var delayedFilter=new snippet.DelayedFilter($scope, 'source', 'updatedView', 'filterKeys',500);
+        $scope.filterKeys='';
+        $scope.updatedView=$scope.source;
+        $scope.reset=delayedFilter.reset;
+
+        $scope.test=function(obj){
+            $scope.filterKeys=[obj];
         };
-        var testfilter={
-            '$uid':{
-                a:''
-            },
-            'obj':{
-                a:'',
-                sub:{
-                    sub2:''
-                }
-            },
-            'arr':['#','#',
-                {a:''}
-            ]
-        };
-        $scope.test=function(){
-            var res=snippet.filterRawData(testraw,testfilter,{});
-            console.log(JSON.stringify(res))
-        }
     }]);
 
     app.config(['$routeProvider', function ($routeProvider) {

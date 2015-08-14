@@ -10,11 +10,16 @@ Status: {{orderStatus[selectedOrder.orderId]}}-->
 <button ng-click="loadOrders(1)">today</button>
 <button ng-click="loadOrders(3)">last 3 days</button>
 <button ng-click="loadOrders(7)">last week</button>
-<button ng-click="loadOrders(65535)">all</button>
-
-
+<button ng-click="loadOrders(65535)">all orders</button>
 <hr>
-<div ng-repeat="order in allOrders|reverse" ng-init="orderStatus[order.$id]=order.orderStatus; renewSubTotal(order.$id, order.products, this)">
+
+<label>received: <input type="checkbox" ng-model="receivedChecked" ng-change="checkFilter(receivedChecked, {orderStatus:'received'})"></label>
+<label>preparing: <input type="checkbox" ng-model="preparingChecked" ng-change="checkFilter(preparingChecked, {orderStatus:'preparing'})"></label>
+<label>ready: <input type="checkbox" ng-model="readyChecked" ng-change="checkFilter(readyChecked, {orderStatus:'ready'})"></label>
+<br>
+search:<input ng-model="filterKeys">
+<hr>
+<div ng-repeat="order in allOrders||reverse" ng-init="orderStatus[order.$id]=order.orderStatus; renewSubTotal(order.$id, order.products, this)">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
     <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 

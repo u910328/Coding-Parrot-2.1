@@ -7,8 +7,9 @@ angular.module('core.binder', ['firebase', 'myApp.config'])
         //}
 
         function processRule(rawRule, paramArr){
-            var params=snippet.getUnionOfObj(paramArr),
+            var params=angular.extend.apply(null, paramArr.unshift({})),
                 ruleString=JSON.stringify(rawRule);
+            paramArr.shift(); //revert the change to paramArr;
             for(var key in params){
                 ruleString=ruleString.replace(eval("/\\"+key+"/g"), params[key])
             }

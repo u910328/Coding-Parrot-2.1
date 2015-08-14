@@ -1,5 +1,5 @@
 angular.module('core.snippet', ['firebase', 'myApp.config'])
-    .factory('snippet', ['config','$q',function (config, $q) {
+    .factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
 
         function isArray(someVar){
             return Object.prototype.toString.call( someVar ) === '[object Array]'
@@ -43,16 +43,16 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             return replacedObj
         }
 
-        function getUnionOfObj(objArr){
-            var result=objArr[0];
-            if(objArr.length===1) return result;
-            for(var i=1;i<objArr.length;i++){
-                for(var key in objArr[i]){
-                    result[key]=objArr[i][key];
-                }
-            }
-            return result
-        }
+        //function getUnionOfObj(objArr){
+        //    var result=objArr[0];
+        //    if(objArr.length===1) return result;
+        //    for(var i=1;i<objArr.length;i++){
+        //        for(var key in objArr[i]){
+        //            result[key]=objArr[i][key];
+        //        }
+        //    }
+        //    return result
+        //}
 
         function evalAssignment(lhsArr, rhsArr){
 
@@ -408,8 +408,49 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             return f + str.substr(1);
         }
 
+        function DelayExec(delay){
+            this.delay=delay||1000;
+        }
+
+        DelayExec.prototype={
+            reset:function(onComplete, customDelay){
+                var that=this;
+                if(this.timeout!=undefined) clearTimeout(this.timeout);
+                this.timeout=setTimeout(function(){
+                    onComplete.apply(null);
+                    that.timeout=undefined;
+                }, customDelay||this.delay);
+                this.onComplete=onComplete;
+            }
+        };
+
+        function DelayedFilter(scope, source, target, filter, delayedTime){
+            var delay=new DelayExec(delayedTime||500),
+                that=this;
+
+            this.reset=function(){
+                delay.reset(function(){
+                    scope[target]=$filter('consecutive')(scope[source], scope[filter]);
+                    scope.$digest();
+                })
+            };
+
+            this.setFilter=function(rule){
+                scope[filter]=[rule];
+            };
+
+            scope.$watch(filter,function(){
+                that.reset();
+            });
+            scope.$watch(source,function(){
+                that.reset();
+            });
+        }
+
 
         return {
+            DelayExec:DelayExec,
+            DelayedFilter:DelayedFilter,
             flatten:flatten,
             unflatten:unflatten,
             isArray:isArray,
@@ -419,7 +460,7 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             evalAssignment:evalAssignment,
             checkIfPropertyExist:checkIfPropertyExist,
             WaitUntil:WaitUntil,
-            getUnionOfObj:getUnionOfObj,
+            //getUnionOfObj:getUnionOfObj,
             ReplaceableObj:ReplaceableObj,
             replaceParamsInObj:replaceParamsInObj,
             replaceParamsInString:replaceParamsInString,

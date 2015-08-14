@@ -119,6 +119,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             }
         };
 
+        //TODO:用snippet.DelayExec改寫
         function Digest(scope, fbObj, isSync, delay){
             var timeout;
             this.reset=function(callback, customDelay){
@@ -219,7 +220,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             var fbObj=new FbObj(replacedRefUrl), ref=fbObj.ref(), type=removePrev? 'set':'update';
 
             //將因push而自動生成的key值放到value內相對應的property中
-            var params=snippet.getUnionOfObj([refUrlParams, fbObj.params]);
+            var params=angular.extend({},refUrlParams, fbObj.params);
             //console.log(JSON.stringify(params));
             if(typeof value==='object'&&value!=null) {
                 for(var key in params){
@@ -232,7 +233,6 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                     value.replace(key, params[key]);
                 }
             }
-
 
             fbObj.goOnline();
 
@@ -271,7 +271,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             function update(i){
                 var ithOnComplete=(isConsecutive)? onCompletes[i]:values[i].onComplete;
                 var params=localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].set, refUrlParams).params;
-                refUrlParams=snippet.getUnionOfObj([refUrlParams, params]);
+                refUrlParams=angular.extend(refUrlParams, params);
             }
 
             function OnComplete(j, isLast){

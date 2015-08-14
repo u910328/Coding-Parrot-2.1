@@ -13,7 +13,7 @@ var newModule='myApp.allOrders';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location) {
+    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location, $filter) {
 
         var fbObj=new localFb.FbObj('orders');
 
@@ -21,10 +21,22 @@ var newModule='myApp.allOrders';
             var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
             var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
 
-            $scope.allOrders=$firebaseArray(ref);
+            $scope.allOrdersSrc=$firebaseArray(ref);
         };
 
         $scope.loadOrders(1);
+
+        var delayedFilter=new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filterKeys',500);
+        $scope.filterKeys='';
+        $scope.allOrders=$scope.allOrdersSrc;
+        $scope.setFilter=delayedFilter.setFilter;
+
+        $scope.checkFilter=function(isChecked, filterValue){
+            if(isChecked) {$scope.setFilter(filterValue)}
+            else {$scope.setFilter()}
+        };
+
+
 
         $scope.statusOptions=['received','preparing','ready'];
         $scope.orderStatus={};
