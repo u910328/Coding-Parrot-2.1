@@ -1,14 +1,15 @@
 <h2>My orders</h2>
-OrderId: {{selectedOrder.orderId}}<br>
+<!--OrderId: {{selectedOrder.orderId}}<br>
 Item name: {{selectedOrder.itemName}}<br>
 Price: {{selectedOrder.price|currency : '$' : 2}}<br>
 Sub total:{{selectedOrder.price*selectedOrder.quantity|currency : '$' : 2}}<br>
-Created time: {{selectedOrder.createdTime}}
-Status: {{selectedOrder.orderStatus}}
+Created time: {{selectedOrder.createdTime| date: 'fullDate'}}
+Status: {{selectedOrder.orderStatus}}-->
+<!--
 <hr>
 <div ng-repeat="(orderId, order) in myOrders" ng-init="calcSubTotal(orderId, order.products, this)">
     <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
-    Date: {{order.createdTime}}<br>
+    Date: {{order.createdTime| date: 'fullDate'}}<br>
     subtotal:{{subTotal[orderId]}}<br>
     Status: {{order.orderStatus}}<br>
 
@@ -18,4 +19,26 @@ Status: {{selectedOrder.orderStatus}}
 
 <div ng-repeat="(key0, value0) in object">
 
+</div>
+-->
+<label>received: <input type="checkbox" ng-model="receivedChecked" ng-change="checkFilter(receivedChecked, {orderStatus:'received'})"></label>
+<label>preparing: <input type="checkbox" ng-model="preparingChecked" ng-change="checkFilter(preparingChecked, {orderStatus:'preparing'})"></label>
+<label>ready: <input type="checkbox" ng-model="readyChecked" ng-change="checkFilter(readyChecked, {orderStatus:'ready'})"></label>
+<br>
+search:<input ng-model="filterKeys">
+<hr>
+<div ng-repeat="order in myOrders||reverse" ng-init="calcSubTotal(order.$id, order.products, this)">
+    <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a><br>
+    date: {{order.createdTime| date: 'fullDate'}}<br>
+    ------------------------------------------------------
+    <div ng-repeat="(productId, productInfo) in order.products">
+        Item name: {{productInfo.itemName}}<br>
+        Price: {{productInfo.price}}<br>
+        Quantity: {{productInfo.quantity}}<br>
+    </div>
+    ------------------------------------------------------
+    <br>
+    status:{{order.orderStatus}}<br>
+    subtotal:{{subTotal[order.$id]}}
+    <hr>
 </div>

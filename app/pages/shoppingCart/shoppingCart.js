@@ -108,8 +108,8 @@ var newModule = 'myApp.shoppingCart';
             }, function (err) {
                 console.log(JSON.stringify(err)); //上傳失敗產生警告
             });
-            ngCart.empty(1); //清空購物車, ngCart有bug要執行兩次才能清空
-            ngCart.empty(1);
+            ngCart.empty(); //清空購物車, ngCart有bug要執行兩次才能清空
+            ngCart.empty();
         }
     });
 

@@ -28,7 +28,6 @@ var newModule='myApp.allOrders';
 
         var delayedFilter=new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filterKeys',500);
         $scope.filterKeys='';
-        $scope.allOrders=$scope.allOrdersSrc;
         $scope.setFilter=delayedFilter.setFilter;
 
         $scope.checkFilter=function(isChecked, filterValue){

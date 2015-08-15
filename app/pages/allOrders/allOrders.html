@@ -23,7 +23,7 @@ search:<input ng-model="filterKeys">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
     <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 
-    date: {{order.createdTime}}<br>
+    date: {{order.createdTime| date: 'fullDate'}}<br>
     client name: {{order.clientName}}<br>
     client id: {{order.clientId}}<br>
     ------------------------------------------------------
