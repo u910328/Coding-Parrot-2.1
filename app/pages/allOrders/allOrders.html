@@ -19,7 +19,7 @@ Status: {{orderStatus[selectedOrder.orderId]}}-->
 <br>
 search:<input ng-model="filterKeys">
 <hr>
-<div ng-repeat="order in allOrders||reverse" ng-init="orderStatus[order.$id]=order.orderStatus; renewSubTotal(order.$id, order.products, this)">
+<div ng-repeat="order in allOrders||reverse" ng-init="orderStatus[order.$id]=order.orderStatus; calcSubTotal(order.$id, order.products, this)">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
     <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 

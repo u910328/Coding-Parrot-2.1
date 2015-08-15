@@ -24,6 +24,7 @@ angular.module('myApp')
 
         }
     }])
+    ////see http://jsfiddle.net/nirmalkumar_86/9F89Q/5/
     .filter('filterMultiple', ['$filter', function ($filter) {
         return function (items, keyObj) {
             var filterObj = {
@@ -77,5 +78,16 @@ angular.module('myApp')
             }
             return uniqueList;
         };
-    });
+    })
+    //see https://github.com/vpegado/angular-percentage-filter
+    .filter('percentage', ['$window', function ($window) {
+        return function (input, decimals, suffix) {
+            decimals = angular.isNumber(decimals)? decimals :  3;
+            suffix = suffix || '%';
+            if ($window.isNaN(input)) {
+                return '';
+            }
+            return Math.round(input * Math.pow(10, decimals + 2))/Math.pow(10, decimals) + suffix
+        };
+    }]);
 

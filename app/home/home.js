@@ -5,31 +5,6 @@
 
     app.controller('HomeCtrl', ['$scope', 'fbutil', 'user', '$firebaseObject', 'FBURL','snippet','$filter', function ($scope, fbutil, user, $firebaseObject, FBURL, snippet,$filter) {
         $scope.user = user;
-        $scope.source=[
-            {
-                name:'boss',
-                email:'uuuu',
-                gender:'male'
-            },
-            {
-                name:'boss',
-                email:'bbbb',
-                gender:'female'
-            },
-            {
-                name:'cat',
-                email:'uuuu',
-                gender:'female'
-            }
-        ];
-        var delayedFilter=new snippet.DelayedFilter($scope, 'source', 'updatedView', 'filterKeys',500);
-        $scope.filterKeys='';
-        $scope.updatedView=$scope.source;
-        $scope.reset=delayedFilter.reset;
-
-        $scope.test=function(obj){
-            $scope.filterKeys=[obj];
-        };
     }]);
 
     app.config(['$routeProvider', function ($routeProvider) {

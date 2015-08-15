@@ -13,14 +13,18 @@ var newModule = 'myApp.shoppingCart';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location) {
-        //取得productDetail製造的model.cart並和視圖綁定
-        model.cart = model.cart || {products: {}};
-        $scope.cart = model.cart;
+    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart) {
 
-        $scope.subTotal = model.calcSubTotal('', model.cart.products);
+        $scope.ngCart=ngCart;
+        var cart={products:{}};
 
-        angular.extend(model.cart,
+
+        angular.forEach(ngCart.getItems(), function(item){
+            cart.products[item._id]=item._data;
+            cart.products[item._id].quantity=item._quantity;
+        });
+
+        angular.extend(cart,
             {
                 clientName: user[user.provider].displayName || user[user.provider].email,
                 clientId: user.uid,
@@ -31,6 +35,15 @@ var newModule = 'myApp.shoppingCart';
                 shipment: {}//
             }
         );
+
+        $scope.keepShopping=function(){
+            $location.path('/products')
+        };
+
+        $scope.emptyCart=function(){
+            ngCart.empty();
+            ngCart.empty()
+        };
 
 
         $scope.checkout = function () {
@@ -57,7 +70,7 @@ var newModule = 'myApp.shoppingCart';
             //產生要存至主order資料庫的資料
             var mainOrderData = {
                 refUrl: 'orders/$orderId',
-                value: snippet.filterRawData(model.cart, mainOrderStructure)
+                value: snippet.filterRawData(cart, mainOrderStructure)
             };
             //產生要存至user的order資料庫的結構
             var userOderReceiptStructure = {
@@ -80,14 +93,14 @@ var newModule = 'myApp.shoppingCart';
             //產生要存至user的order資料庫的資料
             var userReceiptData = {
                 refUrl: 'users/$uid/orderHistory/$orderId',
-                value: snippet.filterRawData(model.cart, userOderReceiptStructure)
+                value: snippet.filterRawData(cart, userOderReceiptStructure)
             };
 
             //放到同一個array產生批次上傳資料
             var batchOrderData = [mainOrderData, userReceiptData];
 
             //產生收據
-            model.invoice = angular.extend({}, model.cart);
+            model.invoice = angular.extend({}, cart);
 
             //批次上傳
             localFb.batchUpdate(batchOrderData, true).then(function () {
@@ -95,7 +108,8 @@ var newModule = 'myApp.shoppingCart';
             }, function (err) {
                 console.log(JSON.stringify(err)); //上傳失敗產生警告
             });
-            model.cart = false; //清空購物車
+            ngCart.empty(1); //清空購物車, ngCart有bug要執行兩次才能清空
+            ngCart.empty(1);
         }
     });
 

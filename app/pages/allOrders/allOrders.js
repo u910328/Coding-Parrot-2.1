@@ -38,7 +38,7 @@ var newModule='myApp.allOrders';
 
 
 
-        $scope.statusOptions=['received','preparing','ready'];
+        $scope.statusOptions=['received','preparing','ready', 'delivered'];
         $scope.orderStatus={};
         $scope.subTotal={};
 
@@ -59,7 +59,7 @@ var newModule='myApp.allOrders';
                 console.log(JSON.stringify(err));
             });
         };
-        $scope.renewSubTotal=model.calcSubTotal;
+        $scope.calcSubTotal=model.calcSubTotal;
 
 
         $scope.selectOrder=function(orderId, order){

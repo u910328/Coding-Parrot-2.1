@@ -21,7 +21,7 @@
     <li ng-show="loggedIn"><a href="#/myOrders">my orders</a></li>
     <li><a href="#/allOrders">all orders</a></li>
     <li ng-hide="loggedIn"><a href="#/login">login</a></li>
-    <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart</a></li>
+    <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
     <li ng-show="loggedIn"><a href="#/account">account</a></li>
     <li><a href="#/objectGenerator">objectGenerator</a></li>
   </ul>
@@ -40,12 +40,13 @@
   <script src="core/firebase-mod.js"></script>
   <!--<script src="bower_components/firebase/firebase.js"></script>-->
   <script src="bower_components/angularfire/dist/angularfire.js"></script>
+  <script src="bower_components/ng-cart/dist/ngCart.js"></script>
 
   <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
   <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
 
   <script src="bower_components/angular-ui-bootstrap/src/carousel/carousel.js"></script>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
   <script src="config.js"></script>
 
