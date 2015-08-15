@@ -45,7 +45,6 @@ var newModule = 'myApp.shoppingCart';
             ngCart.empty()
         };
 
-
         $scope.checkout = function () {
             //產生要存至主order資料庫的結構
             var mainOrderStructure = {
@@ -67,6 +66,8 @@ var newModule = 'myApp.shoppingCart';
                 shipment: '',
                 schedule: ''
             };
+
+            cart.schedule=$scope.dt.getTime();
             //產生要存至主order資料庫的資料
             var mainOrderData = {
                 refUrl: 'orders/$orderId',
@@ -110,7 +111,43 @@ var newModule = 'myApp.shoppingCart';
             });
             ngCart.empty(); //清空購物車, ngCart有bug要執行兩次才能清空
             ngCart.empty();
-        }
+        };
+
+        //date picker
+        $scope.today = function() {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+
+        $scope.toggleMin = function() {
+            $scope.minDate = $scope.minDate ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function($event) {
+            $scope.status.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.format = 'yyyy/MM/dd';
+
+        $scope.status = {
+            opened: false
+        };
+
     });
 
 //Step 5: config providers.

@@ -29,7 +29,8 @@ angular.module('myApp.config', [])
 
 var appDI=[
     'ngCart',
-    'ui.bootstrap.carousel',
+    'ngAnimate',
+    'ui.bootstrap',
 
     'myApp.config',
     'myApp.security',

@@ -26,7 +26,8 @@
             //template
             if(config.debug) console.log('debug mode');
 
-
+            ngCart.setShipping(1);
+            ngCart.setTaxRate(6);
 
 
             function refreshTotalItems(){

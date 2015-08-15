@@ -12,12 +12,14 @@
             <th></th>
             <th></th>
             <th>Quantity</th>
+            <th>Option</th>
             <th>Amount</th>
             <th>Total</th>
         </tr>
         </thead>
         <tfoot>
         <tr ng-show="ngCart.getTax()">
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -28,10 +30,12 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td>Shipping:</td>
             <td>{{ ngCart.getShipping() | currency }}</td>
         </tr>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -48,6 +52,7 @@
                       ng-click="item.setQuantity(-1, true)"></span>&nbsp;&nbsp;
                 {{ item.getQuantity() | number }}&nbsp;&nbsp;
                 <span class="glyphicon glyphicon-plus" ng-click="item.setQuantity(1, true)"></span></td>
+            <td>{{item._data.selectedOption}}</td>
             <td>{{ item.getPrice() | currency}}</td>
             <td>{{ item.getTotal() | currency }}</td>
         </tr>

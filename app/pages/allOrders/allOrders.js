@@ -17,14 +17,15 @@ var newModule='myApp.allOrders';
 
         var fbObj=new localFb.FbObj('orders');
 
-        $scope.loadOrders=function(n){
-            var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
-            var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
+        $scope.loadOrders=function(startDay, endDay){
+            var now=(new Date).getTime(),
+                day=24*60*60*1000;
+            var ref=fbObj.ref().orderByChild('schedule').startAt(now+startDay*day).endAt(now+endDay*day);
 
             $scope.allOrdersSrc=$firebaseArray(ref);
         };
 
-        $scope.loadOrders(1);
+        $scope.loadOrders(-0.5, 1); //today's order
 
         var delayedFilter=new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filterKeys',500);
         $scope.filterKeys='';

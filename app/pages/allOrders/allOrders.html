@@ -7,10 +7,10 @@ Price: {{selectedOrder.price}}<br>
 Sub total:{{selectedOrder.price*selectedOrder.quantity}}<br>
 Created time: {{selectedOrder.createdTime}}<br>
 Status: {{orderStatus[selectedOrder.orderId]}}-->
-<button ng-click="loadOrders(1)">today</button>
-<button ng-click="loadOrders(3)">last 3 days</button>
-<button ng-click="loadOrders(7)">last week</button>
-<button ng-click="loadOrders(65535)">all orders</button>
+<button ng-click="loadOrders(-0.5,1)">today</button>
+<button ng-click="loadOrders(-0.5,3)">future 3 days</button>
+<button ng-click="loadOrders(7, 65535)">next week</button>
+<button ng-click="loadOrders(-65535,65535)">all orders</button>
 <hr>
 
 <label>received: <input type="checkbox" ng-model="receivedChecked" ng-change="checkFilter(receivedChecked, {orderStatus:'received'})"></label>
@@ -23,7 +23,7 @@ search:<input ng-model="filterKeys">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
     <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 
-    date: {{order.createdTime| date: 'fullDate'}}<br>
+    schedule: {{order.schedule| date: 'fullDate'}}<br>
     client name: {{order.clientName}}<br>
     client id: {{order.clientId}}<br>
     ------------------------------------------------------
