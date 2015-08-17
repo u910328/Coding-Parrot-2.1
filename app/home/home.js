@@ -3,7 +3,7 @@
 
     var app = angular.module('myApp.home', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-    app.controller('HomeCtrl', ['$scope', 'fbutil', 'user', '$firebaseObject', 'FBURL','snippet','$filter', function ($scope, fbutil, user, $firebaseObject, FBURL, snippet,$filter) {
+    app.controller('HomeCtrl', ['$scope', 'fbutil', 'localFb','user', '$firebaseObject', 'FBURL','snippet','$filter','ngNotify', function ($scope, fbutil,localFb, user, $firebaseObject, FBURL, snippet,$filter, ngNotify) {
         $scope.user = user;
     }]);
 

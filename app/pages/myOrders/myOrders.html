@@ -21,6 +21,12 @@ Status: {{selectedOrder.orderStatus}}-->
 
 </div>
 -->
+<button ng-click="loadOrders(-0.5,1)">today</button>
+<button ng-click="loadOrders(-0.5,3)">future 3 days</button>
+<button ng-click="loadOrders(7, 65535)">next week</button>
+<button ng-click="loadOrders(-65535, 65535)">all orders</button>
+<hr>
+
 <label>received: <input type="checkbox" ng-model="receivedChecked" ng-change="checkFilter(receivedChecked, {orderStatus:'received'})"></label>
 <label>preparing: <input type="checkbox" ng-model="preparingChecked" ng-change="checkFilter(preparingChecked, {orderStatus:'preparing'})"></label>
 <label>ready: <input type="checkbox" ng-model="readyChecked" ng-change="checkFilter(readyChecked, {orderStatus:'ready'})"></label>

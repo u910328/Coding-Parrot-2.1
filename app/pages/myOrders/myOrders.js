@@ -15,16 +15,26 @@ var newModule='myApp.myOrders';
 //Step 4: construct a controller.
     app.controller(ctrlName, function (user, $scope, $firebaseArray, model, localFb, snippet, $location) {
 
-        var fbObj=new localFb.FbObj('users/'+user.uid+'/orderHistory');
+        //var fbObj=new localFb.FbObj('users/'+user.uid+'/orderHistory');
 
-        $scope.loadOrders=function(n){
-            var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
-            var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
+        //$scope.loadOrders=function(n){
+        //    var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
+        //    var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
+        //
+        //    $scope.myOrdersSrc=$firebaseArray(ref);
+        //};
+        //
+        //$scope.loadOrders(65535);
 
-            $scope.myOrdersSrc=$firebaseArray(ref);
+        $scope.loadOrders = function (startDay, endDay) {
+            var now = (new Date).getTime(),
+                day = 24 * 60 * 60 * 1000;
+            var ref = localFb.ref('users/'+user.uid+'/orderHistory').orderByChild('createdTime').startAt(now + startDay * day).endAt(now + endDay * day);
+
+            $scope.myOrdersSrc = $firebaseArray(ref);
         };
 
-        $scope.loadOrders(65535);
+        $scope.loadOrders(-65535, 65535); //today's order
 
         var delayedFilter=new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filterKeys',500);
         $scope.filterKeys='';

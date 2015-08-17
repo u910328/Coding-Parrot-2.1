@@ -19,7 +19,6 @@ var newModule='myApp.products';
 
         $scope.checkDetail=function(itemId){
             $location.path('/productDetail/'+itemId);
-            localFb.load('products/'+itemId, 'products.'+itemId);
         }
     });
 

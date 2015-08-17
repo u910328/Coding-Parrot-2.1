@@ -2,19 +2,30 @@
 
 <ngcart-cart></ngcart-cart>
 <hr>
-Pick up:
-<p class="input-group">
-    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="status.opened"
-           min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions"
-           date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+<div ng-hide="!ngCart.getTotalItems()">
+    Pick up:
+    <p class="input-group">
+        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="status.opened"
+               min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions"
+               date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
               </span>
-</p>
+    </p><br>
+
+    <div ng-show="user.provider!=='password'">
+        send eamil to <input ng-model="clientEmail.$value"><button ng-click="saveEmail()">save this email for later use</button><br>
+    </div>
+    <div ng-hide="user.provider!=='password'">
+        an email will be sent to {{user['password'].email}}<br>
+    </div>
+
+    <button ng-click="checkout()">check out</button>
+    <button ng-click="emptyCart()">empty cart</button>
+
+</div>
 <br>
-<button ng-hide="!ngCart.getTotalItems()" ng-click="checkout()">check out</button>
-<button ng-hide="!ngCart.getTotalItems()" ng-click="emptyCart()">empty cart</button>
 <button ng-show="!ngCart.getTotalItems()" ng-click="keepShopping()">shop more</button>
 
 

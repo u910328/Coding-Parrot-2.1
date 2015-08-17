@@ -30,6 +30,7 @@ angular.module('myApp.config', [])
 var appDI=[
     'ngCart',
     'ngAnimate',
+    'ngNotify',
     'ui.bootstrap',
 
     'myApp.config',

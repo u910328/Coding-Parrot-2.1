@@ -1,5 +1,5 @@
 (function (angular){
-    angular.module('core.init', ['firebase', 'myApp.config'])
+    angular.module('core.init', ['firebase', 'myApp.config', 'firebase.auth', 'core.localFb','core.model','core.snippet','ngCart','ui.bootstrap'])
         .factory('init', ['Auth','localFb','$q','model',function(Auth, localFb, $q, model) {
             //function logInMain(){}
             //function getDbName(){}
@@ -9,7 +9,7 @@
 
             return {}
         }])
-        .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart){
+        .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){
                 var subTotal=0;
@@ -22,6 +22,14 @@
                 }
                 return subTotal;
             };
+
+            //$rootScope.broadcasts={};
+            //$rootScope.addBroadcast=function(broadcast){
+            //    angular.extend($rootScope.broadcasts, broadcast);
+            //};
+            //$rootScope.closeBroadcast = function(index) {
+            //    delete $rootScope.broadcasts[index];
+            //};
 
             //template
             if(config.debug) console.log('debug mode');
@@ -36,14 +44,27 @@
 
             $rootScope.$on('ngCart:change', refreshTotalItems);
             refreshTotalItems();
-            Auth.$onAuth(function(user) { //app.js也有同樣的用法
 
+            var _ref;
+            Auth.$onAuth(function(user) { //app.js也有同樣的用法
                 if(user) {
                     console.log('user', user);
                     localFb.params={
                         '$uid':user.uid
-                    }
+                    };
+
+                    $rootScope.user=user;
+
+                    _ref=localFb.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
+                    $rootScope.notification=$firebaseArray(_ref);
+
+                    $rootScope.notification.$watch(function(obj){
+                        var newNoti=$rootScope.notification.$getRecord(obj.key);
+                        var orderStatus='your order('+obj.key+') is '+newNoti.orderStatus;
+                        ngNotify(orderStatus);
+                    });
                 } else {
+                    if(_ref ) _ref.off();
                     console.log('no user', user);
                     localFb.params={};
                 }

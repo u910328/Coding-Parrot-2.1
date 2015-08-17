@@ -13,11 +13,20 @@ var newModule = 'myApp.productDetail';
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseObject, localFb, $location, $routeParams, model, snippet, ngCart) {
-
         var productId = $routeParams.pid;
-        $scope.productInfo = model.products[productId];
-        $scope.productInfo.quantity=1;
-        $scope.productInfo.itemId = $routeParams.pid;
+        $scope.show=false;
+        $scope.productInfo={quantity:1};
+        localFb.load('products/'+productId, 'products.'+productId,{scope:$scope},function(){
+            $scope.productInfo =model.products[productId];
+            angular.extend($scope.productInfo,
+                {
+                    quantity:1,
+                    itemId:$routeParams.pid
+                }
+            );
+            $scope.show=true;
+        });
+
 
 
       /*  $scope.setOption = function () {

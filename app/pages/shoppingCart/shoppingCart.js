@@ -13,11 +13,10 @@ var newModule = 'myApp.shoppingCart';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart) {
+    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
         $scope.ngCart=ngCart;
         var cart={products:{}};
-
 
         angular.forEach(ngCart.getItems(), function(item){
             cart.products[item._id]=item._data;
@@ -45,7 +44,21 @@ var newModule = 'myApp.shoppingCart';
             ngCart.empty()
         };
 
+
+        $scope.clientEmail=$firebaseObject(localFb.ref('users/'+user.uid+'/email'));
+        $scope.saveEmail=function(){
+            $scope.clientEmail.$save();
+        };
+
         $scope.checkout = function () {
+            //由payeezy取得token並將此token和其他資料一起上傳
+
+            cart.clientEmail=$scope.email;
+            cart.schedule=$scope.dt.getTime();
+            //payeezy.getToke(data).then(function(res){
+            // cart.payment=angular.extend({paymentProvider:'payeezy'},res)
+            // }); 先取得token在繼續執行
+            //
             //產生要存至主order資料庫的結構
             var mainOrderStructure = {
                 clientName: '',
@@ -67,8 +80,8 @@ var newModule = 'myApp.shoppingCart';
                 schedule: ''
             };
 
-            cart.schedule=$scope.dt.getTime();
             //產生要存至主order資料庫的資料
+
             var mainOrderData = {
                 refUrl: 'orders/$orderId',
                 value: snippet.filterRawData(cart, mainOrderStructure)
@@ -99,6 +112,8 @@ var newModule = 'myApp.shoppingCart';
 
             //放到同一個array產生批次上傳資料
             var batchOrderData = [mainOrderData, userReceiptData];
+
+
 
             //產生收據
             model.invoice = angular.extend({}, cart);

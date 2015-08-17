@@ -10,11 +10,11 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             path:{},
             debug:'debug',
             params:{},
-            databases:{}
+            databases:{},
+            ref:ref
         };
 
         var activeRefUrl={};
-
 
         function FbObj(refUrl, opt){
             var dbOpt=opt||{}, db=localFb.databases[refUrl.split("@")[1]]||{};
@@ -118,6 +118,11 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                 return this
             }
         };
+
+        function ref(refUrl, opt){
+            var fbObj=new FbObj(refUrl, opt);
+            return fbObj.ref()
+        }
 
         //TODO:用snippet.DelayExec改寫
         function Digest(scope, fbObj, isSync, delay){

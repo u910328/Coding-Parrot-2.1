@@ -1,4 +1,4 @@
-angular.module('core.driver', ['firebase', 'myApp.config'])
+angular.module('core.driver', ['firebase', 'myApp.config', 'core.localFb', 'core.model', 'core.snippet'])
     .factory('driver', ['config','$q','action','localFb','model','snippet',function (config, $q, action, localFb, model, snippet) {
 
         function addActivity(info) {
