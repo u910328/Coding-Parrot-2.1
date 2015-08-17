@@ -14,7 +14,7 @@ var newModule = 'myApp.allOrders';
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location, $filter) {
-        
+
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
                 day = 24 * 60 * 60 * 1000;
@@ -25,18 +25,19 @@ var newModule = 'myApp.allOrders';
 
         $scope.loadOrders(-0.5, 1); //today's order
 
-        var delayedFilter = new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filterKeys', 500);
-        $scope.filterKeys = '';
-        $scope.setFilter = delayedFilter.setFilter;
+        var delayedFilter = new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filters', 500);
 
-        $scope.checkFilter = function (isChecked, filterValue) {
-            if (isChecked) {
-                $scope.setFilter(filterValue)
-            }
-            else {
-                $scope.setFilter()
-            }
+
+        $scope.filterOpt={};
+        $scope.refreshFilter = function () {
+            $scope.search=$scope.search? $scope.search:'';
+            var searcKeyhArr=$scope.search.split(' ');
+            $scope.filters=angular.extend({}, $scope.filterOpt, searcKeyhArr);
         };
+
+        $scope.$watch('filterOpt', function(){
+            $scope.refreshFilter();
+        }, true);
 
 
         $scope.statusOptions = ['received', 'preparing', 'ready', 'delivered'];

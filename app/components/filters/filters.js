@@ -8,10 +8,15 @@ angular.module('myApp')
     })
     .filter('consecutive', ['$filter', function ($filter) {
         return function (items, input) {
-            var result=items.slice(0);
+            var result=angular.copy(items);
             if(typeof input==='object'){
-                angular.forEach(input, function(value){
-                    result=$filter('filter')(result, value);
+                angular.forEach(input, function(value, key){
+                    if(!value) return;
+                    if(value===true) {
+                        result=$filter('filter')(result, key);
+                    } else {
+                        result=$filter('filter')(result, value);
+                    }
                 });
                 return result
             } else if(typeof input==='string'){

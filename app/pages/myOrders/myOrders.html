@@ -27,12 +27,30 @@ Status: {{selectedOrder.orderStatus}}-->
 <button ng-click="loadOrders(-65535, 65535)">all orders</button>
 <hr>
 
-<label>received: <input type="checkbox" ng-model="receivedChecked" ng-change="checkFilter(receivedChecked, {orderStatus:'received'})"></label>
-<label>preparing: <input type="checkbox" ng-model="preparingChecked" ng-change="checkFilter(preparingChecked, {orderStatus:'preparing'})"></label>
-<label>ready: <input type="checkbox" ng-model="readyChecked" ng-change="checkFilter(readyChecked, {orderStatus:'ready'})"></label>
+
+<form name="status">
+    <label>
+        <input type="radio" ng-model="filterOpt.orderStatus" value="received">
+        received
+    </label>
+    <label>
+        <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
+        preparing
+    </label>
+    <label>
+        <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
+        ready
+    </label>
+</form>
+
+<label>雞腿: <input type="checkbox" ng-model="bd1Selected" ng-change="filterOpt['雞']=!filterOpt['雞']"></label>
+<label>豬排: <input type="checkbox" ng-model="bd2Selected" ng-change="filterOpt['豬']=!filterOpt['豬']"></label>
+<label>羊腿: <input type="checkbox" ng-model="bd3Selected" ng-change="filterOpt['羊']=!filterOpt['羊']"></label>
 <br>
-search:<input ng-model="filterKeys">
+
+search:<input ng-model="search" ng-change="refreshFilter()">
 <hr>
+
 <div ng-repeat="order in myOrders||reverse" ng-init="calcSubTotal(order.$id, order.products, this)">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a><br>
     date: {{order.createdTime| date: 'fullDate'}}<br>

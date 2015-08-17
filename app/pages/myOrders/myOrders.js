@@ -36,14 +36,18 @@ var newModule='myApp.myOrders';
 
         $scope.loadOrders(-65535, 65535); //today's order
 
-        var delayedFilter=new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filterKeys',500);
-        $scope.filterKeys='';
-        $scope.setFilter=delayedFilter.setFilter;
+        var delayedFilter = new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', 500);
 
-        $scope.checkFilter=function(isChecked, filterValue){
-            if(isChecked) {$scope.setFilter(filterValue)}
-            else {$scope.setFilter()}
+        $scope.filterOpt={};
+        $scope.refreshFilter = function () {
+            $scope.search=$scope.search? $scope.search:'';
+            var searcKeyhArr=$scope.search.split(' ');
+            $scope.filters=angular.extend({}, $scope.filterOpt, searcKeyhArr);
         };
+
+        $scope.$watch('filterOpt', function(){
+            $scope.refreshFilter();
+        }, true);
 
         $scope.orderStatus={};
         $scope.subTotal={};

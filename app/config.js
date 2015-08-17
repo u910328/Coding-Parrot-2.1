@@ -35,10 +35,6 @@ var appDI=[
 
     'myApp.config',
     'myApp.security',
-    'myApp.home',
-    'myApp.account',
-    'myApp.chat',
-    'myApp.login',
 
     'core.snippet',
     'core.viewLogic',

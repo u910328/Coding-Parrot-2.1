@@ -5,9 +5,17 @@
 <div ng-hide="!ngCart.getTotalItems()">
     Pick up:
     <p class="input-group">
-        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="status.opened"
-               min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions"
-               date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+        <input type="text" style="background-color: white" readonly="readonly"
+               class="form-control"
+               datepicker-popup="{{format}}"
+               ng-model="dt" is-open="status.opened"
+               ng-focus="open($event)"
+               min-date="minDate"
+               max-date="'2020-06-22'"
+               datepicker-options="dateOptions"
+               date-disabled="disabled(date, mode)"
+               ng-required="true"
+               close-text="Close"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
@@ -15,11 +23,20 @@
     </p><br>
 
     <div ng-show="user.provider!=='password'">
-        send eamil to <input ng-model="clientEmail.$value"><button ng-click="saveEmail()">save this email for later use</button><br>
+        <form name="notiemail" ng-submit="saveEmail()">
+            send notification emails to <input class="form-control"
+                                               name="email"
+                                               type="email"
+                                               required ng-model="clientEmail.$value"
+                                               ng-model-options="{ debounce: 100 }">
+            <input ng-hide="notiemail.email.$error.email||!clientEmail.$value" type="submit" value="save this email for later use">
+        </form>
+        <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
     </div>
     <div ng-hide="user.provider!=='password'">
-        an email will be sent to {{user['password'].email}}<br>
+        notification emails will be sent to {{user['password'].email}}<br>
     </div>
+    <hr>
 
     <button ng-click="checkout()">check out</button>
     <button ng-click="emptyCart()">empty cart</button>

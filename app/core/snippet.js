@@ -428,8 +428,10 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             var delay=new DelayExec(delayedTime||500),
                 that=this;
 
-            this.reset=function(){
+            this.refresh=function(){
+
                 delay.reset(function(){
+                    scope[filter]=scope[filter]? scope[filter]:{};
                     scope[target]=$filter('consecutive')(scope[source], scope[filter]);
                     scope.$digest();
                 })
@@ -440,10 +442,10 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             };
 
             scope.$watch(filter,function(){
-                that.reset();
+                that.refresh();
             });
             scope.$watch(source,function(){
-                that.reset();
+                that.refresh();
             });
         }
 
