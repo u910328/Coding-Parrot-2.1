@@ -25,10 +25,15 @@
     <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
     <li ng-show="loggedIn"><a href="#/account">account</a></li>
     <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
+    <li><a href="#/stripeTest">stripeTest</a></li>
+
+
 </ul>
 
 <div ng-view></div>
 
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <!--<div>Coding-Parrot v<span app-version></span></div>-->
 
 <!-- In production use:
@@ -44,6 +49,8 @@
 <script src="core/firebase-mod.js"></script>
 <!--<script src="bower_components/firebase/firebase.js"></script>-->
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
+
+<script src="bower_components/angular-stripe/release/angular-stripe.js"></script>
 
 <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
 <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
@@ -67,6 +74,8 @@
 <script src="pages/myOrders/myOrders.js"></script>
 <script src="pages/allOrders/allOrders.js"></script>
 <script src="pages/invoice/invoice.js"></script>
+
+<script src="pages/stripeTest/stripeTest.js"></script>
 <script src="pages/objectGenerator/objectGenerator.js"></script>
 
 <script src="app.js"></script>

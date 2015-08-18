@@ -9,6 +9,9 @@
 
             return {}
         }])
+        .config(function(stripeProvider){
+            stripeProvider.setPublishableKey('pk_test_h8DUz8dP0QDdFpVQlKXYjks3');
+        })
         .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){

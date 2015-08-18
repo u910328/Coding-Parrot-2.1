@@ -32,6 +32,7 @@ var appDI=[
     'ngAnimate',
     'ngNotify',
     'ui.bootstrap',
+    'angular-stripe',
 
     'myApp.config',
     'myApp.security',
