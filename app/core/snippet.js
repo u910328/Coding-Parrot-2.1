@@ -425,11 +425,10 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
         };
 
         function DelayedFilter(scope, source, target, filter, delayedTime){
-            var delay=new DelayExec(delayedTime||500),
+            var delay=new DelayExec(delayedTime||1000),
                 that=this;
 
             this.refresh=function(){
-
                 delay.reset(function(){
                     scope[filter]=scope[filter]? scope[filter]:{};
                     scope[target]=$filter('consecutive')(scope[source], scope[filter]);

@@ -50,9 +50,31 @@ var newModule = 'myApp.shoppingCart';
             $scope.clientEmail.$save();
         };
 
-        $scope.checkout = function () {
-            //由payeezy取得token並將此token和其他資料一起上傳
+        $scope.number='4242424242424242';
+        $scope.expiry='11/16';
+        $scope.cvc='123';
 
+        $scope.checkOut = function (code, result) {
+            setToken(code,result);
+
+            //將payment provider取得的token加入其他資料一起上傳
+            uploadOrder();
+        };
+        function setToken(code, result){
+            if (result.error) {
+                window.alert('it failed! error: ' + result.error.message);
+            } else {
+                console.log('success! token: ' + result.id);
+                cart.payment={
+                    token:result.id,
+                    provider:'stripe'
+                };
+
+            }
+        }
+
+        function uploadOrder() {
+            //整理order 資料
             cart.clientEmail=$scope.email;
             cart.schedule=$scope.dt.getTime();
             //payeezy.getToke(data).then(function(res){
@@ -113,20 +135,38 @@ var newModule = 'myApp.shoppingCart';
             //放到同一個array產生批次上傳資料
             var batchOrderData = [mainOrderData, userReceiptData];
 
-
+            //先取得payment的token
 
             //產生收據
             model.invoice = angular.extend({}, cart);
 
             //批次上傳
-            localFb.batchUpdate(batchOrderData, true).then(function () {
-                $location.path('/invoice'); //成功後轉換至invoice頁面
+            localFb.batchUpdate(batchOrderData, true).then(function (res) {
+                var orderId=res.params['$orderId'];
+                console.log('orderId is '+orderId);
+                var reportRef=localFb.ref('users/'+user.uid+'/orderHistory/'+orderId+'/payment/status');
+                reportRef.on('value', function(snap){
+                    if(snap.val()===null) return;
+                    if(snap.val()==='succeeded') {
+                        console.log('transaction '+snap.val());
+                        $location.path('/invoice'); //成功後轉換至invoice頁面
+                        ngCart.empty(); //清空購物車, ngCart有bug要執行兩次才能清空
+                        ngCart.empty();
+                        $scope.$digest();
+                    } else {
+                        var errorId=(new Date()).getTime();
+                        model.error[errorId]={
+                            type:'transaction failed',
+                            content:'transaction failed, please contact us'
+                        };
+                        $location.path('/error/'+errorId);
+                        console.log('payment failed:'+JSON.stringify(snap.val()))
+                    }
+                });
             }, function (err) {
                 console.log(JSON.stringify(err)); //上傳失敗產生警告
             });
-            ngCart.empty(); //清空購物車, ngCart有bug要執行兩次才能清空
-            ngCart.empty();
-        };
+        }
 
         //date picker
         $scope.today = function() {

@@ -9,9 +9,6 @@
 
             return {}
         }])
-        .config(function(stripeProvider){
-            stripeProvider.setPublishableKey('pk_test_h8DUz8dP0QDdFpVQlKXYjks3');
-        })
         .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){
@@ -57,15 +54,15 @@
                     };
 
                     $rootScope.user=user;
-
-                    _ref=localFb.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
-                    $rootScope.notification=$firebaseArray(_ref);
-
-                    $rootScope.notification.$watch(function(obj){
-                        var newNoti=$rootScope.notification.$getRecord(obj.key);
-                        var orderStatus='your order('+obj.key+') is '+newNoti.orderStatus;
-                        ngNotify(orderStatus);
-                    });
+                    //Notification
+                    //_ref=localFb.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
+                    //$rootScope.notification=$firebaseArray(_ref);
+                    //
+                    //$rootScope.$watch('notification',function(obj){
+                    //    var newNoti=$rootScope.notification.$getRecord(obj.key)||{};
+                    //    var orderStatus='your order('+obj.key+') is '+newNoti.orderStatus;
+                    //    ngNotify(orderStatus);
+                    //});
                 } else {
                     if(_ref ) _ref.off();
                     console.log('no user', user);

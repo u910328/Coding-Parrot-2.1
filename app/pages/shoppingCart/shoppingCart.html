@@ -37,6 +37,34 @@
         notification emails will be sent to {{user['password'].email}}<br>
     </div>
     <hr>
+    <form stripe-form="checkOut" name="myForm">
+
+        <div class="span3">
+            <label for="">Card number</label>
+            <input type="text" class="input-block-level" ng-model="number" payments-validate="card" payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
+        </div>
+
+        <div class="span1">
+            <label for="">Expiry</label>
+            <input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
+        </div>
+
+        <div class="span3">
+            <label for="">Name on card </label>
+            <input type="text" class="input-block-level">
+        </div>
+
+        <div class="span1">
+            <label for="">CVC</label>
+            <input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
+        </div>
+
+        <div class="span4">
+            <button type="submit" class="btn btn-primary btn-large">Submit</button>
+        </div>
+    </form>
+
+    <hr>
 
     <button ng-click="checkout()">check out</button>
     <button ng-click="emptyCart()">empty cart</button>

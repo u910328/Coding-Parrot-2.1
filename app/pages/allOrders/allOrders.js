@@ -95,7 +95,9 @@ var newModule = 'myApp.allOrders';
                     set: true
                 }
             ];
-            localFb.batchUpdate(values, true)
+            localFb.batchUpdate(values, true).then(function(){
+                $scope.refreshFilter();
+            })
         }
     });
 
