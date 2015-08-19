@@ -56,14 +56,14 @@ var newModule = 'myApp.allOrders';
                     refUrl: 'users/' + userId + '/orderHistory/' + orderId + '/orderStatus',
                     value: changedStatus,
                     set: true
-                },
+                }/*,
                 {
                     refUrl: 'users/' + userId + '/notification/' + orderId,
                     value: {
                         orderStatus: changedStatus,
                         unread:true
                     }
-                }
+                }*/
             ];
             localFb.batchUpdate(values, true).then(function () {
             }, function (err) {
@@ -88,12 +88,12 @@ var newModule = 'myApp.allOrders';
                     refUrl: 'orders/' + orderId,
                     value: null,
                     set: true
-                },
+                }/*,
                 {
                     refUrl: 'users/' + userId + '/notification/' + orderId,
                     value: {msg: 'your order(' + orderId + ') has been canceled.' + reason || '' + ''},
                     set: true
-                }
+                }*/
             ];
             localFb.batchUpdate(values, true).then(function(){
                 $scope.refreshFilter();

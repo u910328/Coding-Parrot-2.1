@@ -75,7 +75,7 @@ var newModule = 'myApp.shoppingCart';
 
         function uploadOrder() {
             //整理order 資料
-            cart.clientEmail=$scope.email;
+            cart.clientEmail=$scope.clientEmail.$value||null;
             cart.schedule=$scope.dt.getTime();
             //payeezy.getToke(data).then(function(res){
             // cart.payment=angular.extend({paymentProvider:'payeezy'},res)
@@ -144,24 +144,36 @@ var newModule = 'myApp.shoppingCart';
             localFb.batchUpdate(batchOrderData, true).then(function (res) {
                 var orderId=res.params['$orderId'];
                 console.log('orderId is '+orderId);
+
+                var errorId=(new Date()).getTime(),
+                    timeout=setTimeout(function(){
+                        model.error[errorId]={
+                            type:'timeout',
+                            message:'timeout'
+                        };
+                    },5000);
+
                 var reportRef=localFb.ref('users/'+user.uid+'/orderHistory/'+orderId+'/payment/status');
                 reportRef.on('value', function(snap){
                     if(snap.val()===null) return;
+
+                    clearTimeout(timeout);
+
                     if(snap.val()==='succeeded') {
-                        console.log('transaction '+snap.val());
                         $location.path('/invoice'); //成功後轉換至invoice頁面
-                        ngCart.empty(); //清空購物車, ngCart有bug要執行兩次才能清空
+                        console.log('transaction '+snap.val());
+                        ngCart.empty(); //清空購物車, ngCart 要清兩次才會清空
                         ngCart.empty();
-                        $scope.$digest();
+
                     } else {
-                        var errorId=(new Date()).getTime();
                         model.error[errorId]={
                             type:'transaction failed',
-                            content:'transaction failed, please contact us'
+                            message:snap.val().message
                         };
                         $location.path('/error/'+errorId);
                         console.log('payment failed:'+JSON.stringify(snap.val()))
                     }
+                    if(!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
                 });
             }, function (err) {
                 console.log(JSON.stringify(err)); //上傳失敗產生警告
