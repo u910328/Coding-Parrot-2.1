@@ -36,7 +36,7 @@ var newModule='myApp.myOrders';
 
         $scope.loadOrders(-65535, 65535); //today's order
 
-        var delayedFilter = new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', 500);
+        var delayedFilter = new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', true, 500);
 
         $scope.filterOpt={};
         $scope.refreshFilter = function () {

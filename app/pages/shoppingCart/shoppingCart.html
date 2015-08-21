@@ -1,75 +1,79 @@
 <h2>ShoppingCart</h2>
 
-<ngcart-cart></ngcart-cart>
-<hr>
-<div ng-hide="!ngCart.getTotalItems()">
-    Pick up:
-    <p class="input-group">
-        <input type="text" style="background-color: white" readonly="readonly"
-               class="form-control"
-               datepicker-popup="{{format}}"
-               ng-model="dt" is-open="status.opened"
-               ng-focus="open($event)"
-               min-date="minDate"
-               max-date="'2020-06-22'"
-               datepicker-options="dateOptions"
-               date-disabled="disabled(date, mode)"
-               ng-required="true"
-               close-text="Close"/>
+<div ng-show="waiting"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />Please wait...</div>
+
+<div ng-hide="waiting">
+    <ngcart-cart></ngcart-cart>
+    <hr>
+    <div ng-hide="!ngCart.getTotalItems()">
+        Pick up:
+        <p class="input-group">
+            <input type="text" style="background-color: white" readonly="readonly"
+                   class="form-control"
+                   datepicker-popup="{{format}}"
+                   ng-model="dt" is-open="status.opened"
+                   ng-focus="open($event)"
+                   min-date="minDate"
+                   max-date="'2020-06-22'"
+                   datepicker-options="dateOptions"
+                   date-disabled="disabled(date, mode)"
+                   ng-required="true"
+                   close-text="Close"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
               </span>
-    </p><br>
+        </p><br>
 
-    <div ng-show="user.provider!=='password'">
-        <form name="notiemail" ng-submit="saveEmail()">
-            send notification emails to <input class="form-control"
-                                               name="email"
-                                               type="email"
-                                               required ng-model="clientEmail.$value"
-                                               ng-model-options="{ debounce: 100 }">
-            <input ng-hide="notiemail.email.$error.email||!clientEmail.$value" type="submit" value="save this email for later use">
+        <div ng-show="user.provider!=='password'">
+            <form name="notiemail" ng-submit="saveEmail()">
+                send notification emails to <input class="form-control"
+                                                   name="email"
+                                                   type="email"
+                                                   required ng-model="clientEmail.$value"
+                                                   ng-model-options="{ debounce: 100 }">
+                <input ng-hide="notiemail.email.$error.email||!clientEmail.$value" type="submit" value="save this email for later use">
+            </form>
+            <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
+        </div>
+        <div ng-hide="user.provider!=='password'">
+            notification emails will be sent to {{user['password'].email}}<br>
+        </div>
+        <hr>
+        <form stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
+
+            <div class="span3">
+                <label for="">Card number</label>
+                <input type="text" class="input-block-level" ng-model="number" payments-validate="card" payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
+            </div>
+
+            <div class="span1">
+                <label for="">Expiry</label>
+                <input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
+            </div>
+
+            <div class="span3">
+                <label for="">Name on card </label>
+                <input type="text" class="input-block-level">
+            </div>
+
+            <div class="span1">
+                <label for="">CVC</label>
+                <input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
+            </div>
+
+            <div class="span4">
+                <button type="submit" class="btn btn-primary btn-large">Submit</button>
+                <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
+            </div>
         </form>
-        <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
+        <hr>
+
+
     </div>
-    <div ng-hide="user.provider!=='password'">
-        notification emails will be sent to {{user['password'].email}}<br>
-    </div>
-    <hr>
-    <form stripe-form="checkOut" name="myForm">
-
-        <div class="span3">
-            <label for="">Card number</label>
-            <input type="text" class="input-block-level" ng-model="number" payments-validate="card" payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
-        </div>
-
-        <div class="span1">
-            <label for="">Expiry</label>
-            <input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
-        </div>
-
-        <div class="span3">
-            <label for="">Name on card </label>
-            <input type="text" class="input-block-level">
-        </div>
-
-        <div class="span1">
-            <label for="">CVC</label>
-            <input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
-        </div>
-
-        <div class="span4">
-            <button type="submit" class="btn btn-primary btn-large">Submit</button><button class="btn btn-warning btn-large" ng-click="emptyCart()">empty cart</button>
-        </div>
-    </form>
-
-    <hr>
+    <br>
+    <button class="btn btn-primary btn-large" ng-show="!ngCart.getTotalItems()" ng-click="keepShopping()">shop more</button>
 
 
 </div>
-<br>
-<button ng-show="!ngCart.getTotalItems()" ng-click="keepShopping()">shop more</button>
-
-
 

@@ -51,7 +51,7 @@ Status: {{selectedOrder.orderStatus}}-->
 search:<input ng-model="search" ng-change="refreshFilter()">
 <hr>
 
-<div ng-repeat="order in myOrders||reverse" ng-init="calcSubTotal(order.$id, order.products, this)">
+<div ng-repeat="order in myOrders" ng-init="calcSubTotal(order.$id, order.products, this)">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a><br>
     date: {{order.createdTime| date: 'fullDate'}}<br>
     ------------------------------------------------------

@@ -15,12 +15,12 @@ var newModule = 'myApp.shoppingCart';
 //Step 4: construct a controller.
     app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
-        $scope.ngCart=ngCart;
-        var cart={products:{}};
+        $scope.ngCart = ngCart;
+        var cart = {products: {}};
 
-        angular.forEach(ngCart.getItems(), function(item){
-            cart.products[item._id]=item._data;
-            cart.products[item._id].quantity=item._quantity;
+        angular.forEach(ngCart.getItems(), function (item) {
+            cart.products[item._id] = item._data;
+            cart.products[item._id].quantity = item._quantity;
         });
 
         angular.extend(cart,
@@ -35,48 +35,93 @@ var newModule = 'myApp.shoppingCart';
             }
         );
 
-        $scope.keepShopping=function(){
+        $scope.keepShopping = function () {
             $location.path('/products')
         };
 
-        $scope.emptyCart=function(){
-            ngCart.empty();
+        $scope.emptyCart = function () {
+            ngCart.empty();  //清空購物車, ngCart 要清兩次才會清空
             ngCart.empty()
         };
 
 
-        $scope.clientEmail=$firebaseObject(localFb.ref('users/'+user.uid+'/email'));
-        $scope.saveEmail=function(){
+        $scope.clientEmail = $firebaseObject(localFb.ref('users/' + user.uid + '/email'));
+        $scope.saveEmail = function () {
             $scope.clientEmail.$save();
         };
 
-        $scope.number='4242424242424242';
-        $scope.expiry='11/16';
-        $scope.cvc='123';
+        $scope.number = '4242424242424242';
+        $scope.expiry = '11/16';
+        $scope.cvc = '123';
 
-        $scope.checkOut = function (code, result) {
-            setToken(code,result);
-
-            //將payment provider取得的token加入其他資料一起上傳
-            uploadOrder();
+        $scope.checkOut = function () {
+            $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
         };
-        function setToken(code, result){
+
+        function setToken(code, result) {
             if (result.error) {
                 window.alert('it failed! error: ' + result.error.message);
             } else {
                 console.log('success! token: ' + result.id);
-                cart.payment={
-                    token:result.id,
-                    provider:'stripe'
+                cart.payment = {
+                    token: result.id,
+                    provider: 'stripe'
                 };
 
             }
         }
 
+        $scope.stripeCallback = function (code, result) {
+            setToken(code, result);
+
+            //將payment provider取得的token加入其他資料一起上傳
+            uploadOrder()
+                .then(function (res) {
+                    var orderId = res.params['$orderId'];
+                    console.log('orderId is ' + orderId);
+
+                    function errorHandler(errorId, type, message) {
+                        model.error[errorId] = {
+                            type: type,
+                            message: message
+                        };
+                        $location.path('/error/' + errorId);
+                        console.log('an error has occurred:' + message);
+                        if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
+                    }
+
+                    var errorId = (new Date()).getTime(),
+                        timeout = setTimeout(function () {
+                            $scope.waiting = false;
+                            errorHandler(errorId, 'timeout', 'timeout');
+                        }, 5000);
+
+                    var reportRef = localFb.ref('users/' + user.uid + '/orderHistory/' + orderId + '/payment/status');
+                    reportRef.on('value', function (snap) {
+                        if (snap.val() === null) return;
+
+                        clearTimeout(timeout);
+
+                        if (snap.val() === 'succeeded') {
+                            $location.path('/invoice'); //成功後轉換至invoice頁面
+                            console.log('transaction ' + snap.val());
+                            $scope.emptyCart();
+                            if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
+                        } else {
+                            errorHandler(errorId, 'transaction failed', snap.val().message);
+                        }
+                        $scope.waiting = false;
+                    });
+                }, function (err) {
+                    console.log(JSON.stringify(err)); //上傳失敗產生警告
+                });
+        };
+
+
         function uploadOrder() {
             //整理order 資料
-            cart.clientEmail=$scope.clientEmail.$value||null;
-            cart.schedule=$scope.dt.getTime();
+            cart.clientEmail = $scope.clientEmail.$value || null;
+            cart.schedule = $scope.dt.getTime();
             //payeezy.getToke(data).then(function(res){
             // cart.payment=angular.extend({paymentProvider:'payeezy'},res)
             // }); 先取得token在繼續執行
@@ -141,47 +186,11 @@ var newModule = 'myApp.shoppingCart';
             model.invoice = angular.extend({}, cart);
 
             //批次上傳
-            localFb.batchUpdate(batchOrderData, true).then(function (res) {
-                var orderId=res.params['$orderId'];
-                console.log('orderId is '+orderId);
-
-                var errorId=(new Date()).getTime(),
-                    timeout=setTimeout(function(){
-                        model.error[errorId]={
-                            type:'timeout',
-                            message:'timeout'
-                        };
-                    },5000);
-
-                var reportRef=localFb.ref('users/'+user.uid+'/orderHistory/'+orderId+'/payment/status');
-                reportRef.on('value', function(snap){
-                    if(snap.val()===null) return;
-
-                    clearTimeout(timeout);
-
-                    if(snap.val()==='succeeded') {
-                        $location.path('/invoice'); //成功後轉換至invoice頁面
-                        console.log('transaction '+snap.val());
-                        ngCart.empty(); //清空購物車, ngCart 要清兩次才會清空
-                        ngCart.empty();
-
-                    } else {
-                        model.error[errorId]={
-                            type:'transaction failed',
-                            message:snap.val().message
-                        };
-                        $location.path('/error/'+errorId);
-                        console.log('payment failed:'+JSON.stringify(snap.val()))
-                    }
-                    if(!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
-                });
-            }, function (err) {
-                console.log(JSON.stringify(err)); //上傳失敗產生警告
-            });
+            return localFb.batchUpdate(batchOrderData, true)
         }
 
         //date picker
-        $scope.today = function() {
+        $scope.today = function () {
             $scope.dt = new Date();
         };
         $scope.today();
@@ -191,16 +200,16 @@ var newModule = 'myApp.shoppingCart';
         };
 
         // Disable weekend selection
-        $scope.disabled = function(date, mode) {
+        $scope.disabled = function (date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };
 
-        $scope.toggleMin = function() {
+        $scope.toggleMin = function () {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
         $scope.toggleMin();
 
-        $scope.open = function($event) {
+        $scope.open = function ($event) {
             $scope.status.opened = true;
         };
 

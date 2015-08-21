@@ -7,7 +7,7 @@ angular.module('myApp')
         };
     })
     .filter('consecutive', ['$filter', function ($filter) {
-        return function (items, input) {
+        return function (items, input, isReverse) {
             var result=angular.copy(items);
             if(typeof input==='object'){
                 angular.forEach(input, function(value, key){
@@ -18,15 +18,16 @@ angular.module('myApp')
                         result=$filter('filter')(result, value);
                     }
                 });
-                return result
+
             } else if(typeof input==='string'){
+                input=input.trim();
                 var keyArray = input.split(' ');
                 for (var i = 0; i < keyArray.length; i++) {
                     result = $filter('filter')(result, keyArray[i]);
                 }
-                return input === '' ? items : result
+                result=input === '' ? items : result
             }
-
+            return isReverse? result.slice().reverse():result
         }
     }])
     ////see http://jsfiddle.net/nirmalkumar_86/9F89Q/5/

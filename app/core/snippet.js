@@ -424,20 +424,16 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             }
         };
 
-        function DelayedFilter(scope, source, target, filter, delayedTime){
+        function DelayedFilter(scope, source, target, filter, isReverse, delayedTime){
             var delay=new DelayExec(delayedTime||1000),
                 that=this;
 
             this.refresh=function(){
                 delay.reset(function(){
                     scope[filter]=scope[filter]? scope[filter]:{};
-                    scope[target]=$filter('consecutive')(scope[source], scope[filter]);
+                    scope[target]=$filter('consecutive')(scope[source], scope[filter], isReverse);
                     scope.$digest();
                 })
-            };
-
-            this.setFilter=function(rule){
-                scope[filter]=[rule];
             };
 
             scope.$watch(filter,function(){
