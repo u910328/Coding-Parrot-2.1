@@ -13,7 +13,12 @@ var newModule='myApp.home';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['fbutil', 'localFb','user', '$firebaseObject', 'FBURL','snippet','$filter','ngNotify', function (fbutil,localFb, user, $firebaseObject, FBURL, snippet,$filter, ngNotify) {
+    app.controller(ctrlName, ['$scope', 'fbutil', 'localFb','user', 'snippet','elasticSearch', function ($scope, fbutil,localFb, user, snippet, elasticSearch) {
+        $scope.queryString='';
+        $scope.doSearch=function(){
+            var query={"query_string":{"query":"*"+$scope.queryString+"*"}};
+            elasticSearch($scope, 'firebase', 'order', query);
+        };
         this.user = user;
     }]);
 

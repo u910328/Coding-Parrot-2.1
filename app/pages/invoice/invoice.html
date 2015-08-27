@@ -1,11 +1,8 @@
 <h2>Thank you!</h2>
 
 <div>
-    <a href ng-click="">{{orderId}}</a><br>
-
-    date: {{date}}<br>
+    date: {{date| date: 'short'}}<br>
     client name: {{invoice.clientName}}<br>
-    client id: {{invoice.clientId}}<br>
     ------------------------------------------------------
     <div ng-repeat="(productId, productInfo) in invoice.products">
         Item name: {{productInfo.itemName}}<br>
@@ -15,8 +12,10 @@
     ------------------------------------------------------
     <br>
     status: received<br>
-    schedule:{{invoice.schedule| date: 'fullDate'}}<br>
-    subtotal:{{subTotal}}
+    pick-up time:{{invoice.schedule| date: 'short'}}<br>
+    subtotal:{{subTotal}}<br>
+    payment: {{invoice.payment.token? 'credit card': 'payment upon pickup'}}<br>
+    note:{{invoice.note}}
 
     <hr>
 </div>

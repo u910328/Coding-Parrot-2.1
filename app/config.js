@@ -31,6 +31,7 @@ var appDI=[
     'ngCart',
     'ngAnimate',
     'ngNotify',
+    'ui.mask',
     'ui.bootstrap',
     'angularPayments',
 
@@ -44,5 +45,6 @@ var appDI=[
     'core.binder',
     'core.driver',
     'core.action',
-    'core.init'
+    'core.init',
+    'core.elasticSearch'
 ];

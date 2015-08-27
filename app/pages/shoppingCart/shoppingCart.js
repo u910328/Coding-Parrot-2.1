@@ -18,22 +18,6 @@ var newModule = 'myApp.shoppingCart';
         $scope.ngCart = ngCart;
         var cart = {products: {}};
 
-        angular.forEach(ngCart.getItems(), function (item) {
-            cart.products[item._id] = item._data;
-            cart.products[item._id].quantity = item._quantity;
-        });
-
-        angular.extend(cart,
-            {
-                clientName: user[user.provider].displayName || user[user.provider].email,
-                clientId: user.uid,
-                clientEmail: user[user.provider].email || null,
-                createdTime: Firebase.ServerValue.TIMESTAMP,
-                orderStatus: 'received',
-                payment: {}, //未來可加入用戶選擇的payment 或 shipment的資訊
-                shipment: {}//
-            }
-        );
 
         $scope.keepShopping = function () {
             $location.path('/products')
@@ -46,8 +30,23 @@ var newModule = 'myApp.shoppingCart';
 
 
         $scope.clientEmail = $firebaseObject(localFb.ref('users/' + user.uid + '/email'));
-        $scope.saveEmail = function () {
-            $scope.clientEmail.$save();
+        localFb.ref('users/' + user.uid + '/phone').on('value', function (snap) {
+            $scope.clientPhone = snap.val();
+        });
+
+        var delayExe=new snippet.DelayExec(1000);
+        $scope.saveEmail = function (isValid) {
+            function onComplete(){
+                if(isValid) $scope.clientEmail.$save();
+                console.log($scope.clientEmail.$value)
+            }
+            delayExe.reset(onComplete)
+        };
+        $scope.savePhone = function () {
+            function onComplete(){
+                if ($scope.clientPhone) localFb.update('users/' + user.uid, false, {phone: $scope.clientPhone || null});
+            }
+            delayExe.reset(onComplete)
         };
 
         $scope.number = '4242424242424242';
@@ -56,23 +55,28 @@ var newModule = 'myApp.shoppingCart';
 
         $scope.checkOut = function () {
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
+            if(!$scope.payOnline) uploadOrder().then(function(){
+                $location.path('/invoice'); //成功後轉換至invoice頁面
+                $scope.emptyCart();
+                if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
+            });
         };
 
-        function setToken(code, result) {
+        function getPaymentData(code, result) {
+            $scope.payment={};
             if (result.error) {
                 window.alert('it failed! error: ' + result.error.message);
             } else {
                 console.log('success! token: ' + result.id);
-                cart.payment = {
+                $scope.payment = {
                     token: result.id,
                     provider: 'stripe'
                 };
-
             }
         }
 
         $scope.stripeCallback = function (code, result) {
-            setToken(code, result);
+            getPaymentData(code, result);
 
             //將payment provider取得的token加入其他資料一起上傳
             uploadOrder()
@@ -117,22 +121,42 @@ var newModule = 'myApp.shoppingCart';
                 });
         };
 
+        function prepareOrderData() {
+            angular.forEach(ngCart.getItems(), function (item) {
+                cart.products[item._id] = item._data;
+                cart.products[item._id].quantity = item._quantity;
+            });
+
+            angular.extend(cart,
+                {
+                    clientName: user[user.provider].displayName || user[user.provider].email,
+                    clientId: user.uid,
+                    clientEmail: $scope.clientEmail.$value || null,
+                    clientPhone: $scope.clientPhone || null,
+                    createdTime: Firebase.ServerValue.TIMESTAMP,
+                    note:$scope.note||null,
+                    schedule: $scope.dt.getTime(),
+                    orderStatus: 'received',
+                    payment: $scope.payment||{status:'payment upon pickup'},
+                    shipment: {}//
+                }
+            );
+        }
+
 
         function uploadOrder() {
             //整理order 資料
-            cart.clientEmail = $scope.clientEmail.$value || null;
-            cart.schedule = $scope.dt.getTime();
-            //payeezy.getToke(data).then(function(res){
-            // cart.payment=angular.extend({paymentProvider:'payeezy'},res)
-            // }); 先取得token在繼續執行
-            //
+            prepareOrderData();
+
             //產生要存至主order資料庫的結構
             var mainOrderStructure = {
                 clientName: '',
                 clientId: '',
                 clientEmail: '',
+                clientPhone: '',
                 createdTime: '',
                 orderStatus: '',
+                note:'',
                 //subTotal:'',        由主機端計算，防止人為竄改。
                 products: {
                     $productId: {
@@ -157,6 +181,7 @@ var newModule = 'myApp.shoppingCart';
             var userOderReceiptStructure = {
                 createdTime: '',
                 orderStatus: '',
+                note:'',
                 products: {
                     $productId: {
                         itemId: '',
@@ -180,8 +205,6 @@ var newModule = 'myApp.shoppingCart';
             //放到同一個array產生批次上傳資料
             var batchOrderData = [mainOrderData, userReceiptData];
 
-            //先取得payment的token
-
             //產生收據
             model.invoice = angular.extend({}, cart);
 
@@ -195,19 +218,16 @@ var newModule = 'myApp.shoppingCart';
         };
         $scope.today();
 
-        $scope.clear = function () {
-            $scope.dt = null;
-        };
+        $scope.dt.setHours(12);
+        $scope.dt.setMinutes(0);
+
 
         // Disable weekend selection
         $scope.disabled = function (date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };
 
-        $scope.toggleMin = function () {
-            $scope.minDate = $scope.minDate ? null : new Date();
-        };
-        $scope.toggleMin();
+        $scope.minDate = $scope.minDate ? null : new Date();
 
         $scope.open = function ($event) {
             $scope.status.opened = true;

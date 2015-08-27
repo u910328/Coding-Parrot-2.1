@@ -31,18 +31,24 @@ Status: {{orderStatus[selectedOrder.orderId]}}-->
 
 <label>雞腿: <input type="checkbox" ng-model="bd1Selected" ng-change="filterOpt['雞']=!filterOpt['雞']"></label>
 <label>豬排: <input type="checkbox" ng-model="bd2Selected" ng-change="filterOpt['豬']=!filterOpt['豬']"></label>
-<label>羊腿: <input type="checkbox" ng-model="bd3Selected" ng-change="filterOpt['羊']=!filterOpt['羊']"></label>
+<label>羊腿: <input type="checkbox" ng-model="bd3Selected" ng-change="filterOpt['羊']=!filterOpt['羊']"></label><br>
+
+<label>已付款: <input type="checkbox" ng-model="isPaid" ng-change="filterOpt['isPaid']= isPaid? 'succeed':'payment upon pickup'"></label>
+
 <br>
 
-search:<input ng-model="search" ng-change="refreshFilter()">
+search:<input ng-model="search" ng-change="refreshFilter()"><br>
+<button ng-click="filterOpt={}">clear</button>
 <hr>
 <div ng-repeat="order in allOrders||reverse" ng-init="orderStatus[order.$id]=order.orderStatus; calcSubTotal(order.$id, order.products, this)">
     <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
     <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 
-    schedule: {{order.schedule| date: 'fullDate'}}<br>
+    schedule: {{order.schedule| date: 'M/d/yy'}}<br>
+    pick up time:{{order.schedule| date: 'h:mm a'}}<br>
     client name: {{order.clientName}}<br>
-    client id: {{order.clientId}}<br>
+    client phone: {{order.clientPhone}}<br>
+    payment: {{order.payment.token? 'credit card':'pay when pick-up'}}<br>
     ------------------------------------------------------
     <div ng-repeat="(productId, productInfo) in order.products">
         Item name: {{productInfo.itemName}}<br>
