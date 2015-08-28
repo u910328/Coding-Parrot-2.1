@@ -13,39 +13,20 @@ var newModule='myApp.home';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', 'fbutil', 'localFb','user', 'snippet','elasticSearch', function ($scope, fbutil,localFb, user, snippet, elasticSearch) {
-        $scope.queryString='';
-        $scope.doSearch=function(){
-            var query={"query_string":{"query":"*"+$scope.queryString+"*"}};
-            elasticSearch($scope, 'firebase', 'order', query);
-        };
-        this.user = user;
-    }]);
+    app.controller(ctrlName, function ($scope, $firebaseObject, $location, viewLogic, model, snippet, localFb) {
+        var fbObj=new localFb.FbObj('products');
+        $scope.productList=$firebaseObject(fbObj.ref());
 
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/home', {
-            templateUrl: 'home/home.html',
-            controller: 'HomeCtrl',
-            resolve: {
-                user: ['Auth', function (Auth) {
-                    return Auth.$waitForAuth();
-                }]
-            }
-        }).otherwise({
-            redirectTo: 'home'
-        });
-    }]);
+        $scope.checkDetail=function(itemId){
+            $location.path('/productDetail/'+itemId);
+        }
+    });
 
 //Step 5: config providers.
     app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, { // user whenAuthenticated instead of when if you need this page can only be seen by logged in user. user who did not log in will be redirected to the default route. (loginRedirectPath in config.js)
+        $routeProvider.when(route, {
             templateUrl: templateUrl,
-            controller: ctrlName,
-            resolve: {
-              user: ['Auth', function (Auth) {
-                return Auth.$waitForAuth();
-              }]
-            }
+            controller: ctrlName
         }).otherwise({
             redirectTo: 'home'
         });

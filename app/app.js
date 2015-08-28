@@ -7,6 +7,7 @@ angular.module('myApp', appDI)
         // track status of authentication
 
         Auth.$onAuth(function (user) {
+            $rootScope.user=user;
             $rootScope.loggedIn = !!user;
         });
     }]);

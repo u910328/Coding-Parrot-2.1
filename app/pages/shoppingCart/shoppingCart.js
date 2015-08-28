@@ -28,6 +28,8 @@ var newModule = 'myApp.shoppingCart';
             ngCart.empty()
         };
 
+        $scope.paymentMethod='uponPickup';
+
 
         $scope.clientEmail = $firebaseObject(localFb.ref('users/' + user.uid + '/email'));
         localFb.ref('users/' + user.uid + '/phone').on('value', function (snap) {

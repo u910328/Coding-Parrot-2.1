@@ -1,12 +1,4 @@
 <h2>All orders</h2>
-<!--OrderId: {{selectedOrder.orderId}}<br>
-Client name: {{selectedOrder.clientName}}<br>
-Item name: {{selectedOrder.itemName}}<br>
-List price: {{selectedOrder.listPrice}}<br>
-Price: {{selectedOrder.price}}<br>
-Sub total:{{selectedOrder.price*selectedOrder.quantity}}<br>
-Created time: {{selectedOrder.createdTime}}<br>
-Status: {{orderStatus[selectedOrder.orderId]}}-->
 <button ng-click="loadOrders(-0.5,1)">today</button>
 <button ng-click="loadOrders(-0.5,3)">future 3 days</button>
 <button ng-click="loadOrders(7, 65535)">next week</button>

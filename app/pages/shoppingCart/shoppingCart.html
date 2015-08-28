@@ -41,17 +41,20 @@
                 phone number: <input ng-model="clientPhone" type="text"
                                      ui-mask="(999) 999-9999"
                                      ng-change="savePhone()"/>
-                <!--<input ng-hide="clientEmail.$value&&!notiemail.email.$error.email" type="submit"-->
-                <!--value="save this email for later use">-->
-                <label>pay online:
-                    <input type="checkbox" ng-model="payOnline">
+
+                <label>upon pickup
+                    <input type="radio" ng-model="paymentMethod" value="uponPickup">
                 </label>
+                <label>online:
+                    <input type="radio" ng-model="paymentMethod" value="online">
+                </label>
+
             </form>
             <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
         </div>
 
         <hr>
-        <form ng-show="payOnline" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
+        <form ng-show="paymentMethod==='online'" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
             <div ng-show="payOnline"></div>
             <div class="span3">
                 <label for="">Card number</label>
@@ -79,21 +82,17 @@
             <div class="span4">
                 <button type="submit" class="btn btn-primary btn-large">Submit</button>
                 <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
+                <button class="btn btn-primary btn-large" ng-click="keepShopping()">shop more</button>
             </div>
         </form>
-        <form ng-hide="payOnline" ng-submit="checkOut()">
+        <form ng-show="paymentMethod==='uponPickup'" ng-submit="checkOut()">
             <div class="span4">
                 <button type="submit" class="btn btn-primary btn-large">Submit</button>
                 <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
+                <button class="btn btn-primary btn-large" ng-click="keepShopping()">shop more</button>
+
             </div>
         </form>
-        <hr>
-
-
-    </div>
-    <br>
-    <button class="btn btn-primary btn-large" ng-show="!ngCart.getTotalItems()" ng-click="keepShopping()">shop more
-    </button>
 
 
 </div>
