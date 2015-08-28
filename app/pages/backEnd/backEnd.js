@@ -40,7 +40,7 @@ var newModule = 'myApp.backEnd';
         }, true);
 
 
-        $scope.statusOptions = ['received', 'preparing', 'ready', 'delivered'];
+        $scope.statusOptions = ['received', 'preparing', 'ready', 'picked-up'];
         $scope.orderStatus = {};
         $scope.subTotal = {};
 
@@ -99,8 +99,9 @@ var newModule = 'myApp.backEnd';
             $scope.selectedProduct.options.pop();
         };
         $scope.selectProduct=function(productId){
-            $scope.selectedProduct={options:[]};
+            $scope.selectedProduct={};
             $scope.selectedProduct=angular.extend({},$scope.products[productId]);
+            $scope.selectedProduct.options=$scope.selectedProduct.options||[]
         };
         $scope.updateProduct=function(){
             $scope.products[$scope.selectedProduct.itemId]=$scope.selectedProduct;

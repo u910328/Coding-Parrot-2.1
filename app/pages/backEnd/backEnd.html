@@ -2,7 +2,7 @@
 <button ng-click="subPage='productManager'">productManager</button>
 
 <div ng-show="subPage=='orders'">
-    <h2>All orders</h2>
+    <h2>Orders</h2>
     <!--OrderId: {{selectedOrder.orderId}}<br>
     Client name: {{selectedOrder.clientName}}<br>
     Item name: {{selectedOrder.itemName}}<br>
@@ -19,27 +19,21 @@
 
 
     <form name="status">
-        <label>
-            <input type="radio" ng-model="filterOpt.orderStatus" value="received">
-            received
-        </label>
-        <label>
-            <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
-            preparing
-        </label>
-        <label>
-            <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
-            ready
-        </label>
+        <span ng-repeat="status in statusOptions">
+            <label>
+                <input type="radio" ng-model="filterOpt.orderStatus" value="{{status}}">
+                {{status}}
+            </label>
+        </span>
     </form>
 
-    <label>雞腿: <input type="checkbox" ng-model="bd1Selected" ng-change="filterOpt['雞']=!filterOpt['雞']"></label>
-    <label>豬排: <input type="checkbox" ng-model="bd2Selected" ng-change="filterOpt['豬']=!filterOpt['豬']"></label>
-    <label>羊腿: <input type="checkbox" ng-model="bd3Selected" ng-change="filterOpt['羊']=!filterOpt['羊']"></label><br>
+    <div ng-repeat="(productId, product) in products">
+        <label>{{product.itemName}}: <input type="checkbox" ng-model="filterOpt[productId]"></label>
+    </div>
 
     <label>已付款: <input type="checkbox" ng-model="isPaid"
-                       ng-change="filterOpt['isPaid']= isPaid? 'succeed':'payment upon pickup'"></label>
-
+                       ng-change="filterOpt['isPaid']= isPaid? 'online':''">
+    </label>
     <br>
 
     search:<input ng-model="search" ng-change="refreshFilter()"><br>
@@ -54,7 +48,7 @@
         pick up time:{{order.schedule| date: 'h:mm a'}}<br>
         client name: {{order.clientName}}<br>
         client phone: {{order.clientPhone}}<br>
-        payment: {{order.payment.token? 'credit card':'pay when pick-up'}}<br>
+        payment: {{order.payment.method}}<br>
         ------------------------------------------------------
         <div ng-repeat="(productId, productInfo) in order.products">
             Item name: {{productInfo.itemName}}<br>

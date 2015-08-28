@@ -57,7 +57,7 @@ var newModule = 'myApp.shoppingCart';
 
         $scope.checkOut = function () {
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
-            if(!$scope.payOnline) uploadOrder().then(function(){
+            if($scope.paymentMethod==='uponPickup') uploadOrder().then(function(){
                 $location.path('/invoice'); //成功後轉換至invoice頁面
                 $scope.emptyCart();
                 if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
@@ -127,7 +127,11 @@ var newModule = 'myApp.shoppingCart';
             angular.forEach(ngCart.getItems(), function (item) {
                 cart.products[item._id] = item._data;
                 cart.products[item._id].quantity = item._quantity;
+                cart.products[item._id].itemId = item._id;
             });
+
+            var payment=$scope.payment||{};
+            payment.method=$scope.paymentMethod;
 
             angular.extend(cart,
                 {
@@ -139,7 +143,7 @@ var newModule = 'myApp.shoppingCart';
                     note:$scope.note||null,
                     schedule: $scope.dt.getTime(),
                     orderStatus: 'received',
-                    payment: $scope.payment||{status:'payment upon pickup'},
+                    payment: payment,
                     shipment: {}//
                 }
             );
@@ -163,6 +167,7 @@ var newModule = 'myApp.shoppingCart';
                 products: {
                     $productId: {
                         itemName: '',
+                        itemId:'',
                         quantity: '',
                         price: '',
                         selectedOption: ''

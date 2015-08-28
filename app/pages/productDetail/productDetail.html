@@ -9,7 +9,8 @@
         total:{{productInfo.subTotal}}
     </form>
     <hr>
-    <ngcart-addtocart id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>
+    <ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>
+    <a ng-show="!loggedIn" href="#/login">log in to add items</a>
     <button ng-click="keepShopping()">keep shopping</button>
 </div>
 

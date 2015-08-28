@@ -27,7 +27,7 @@ var newModule='myApp.login';
             $scope.err = null;
             Auth.$authWithPassword({ email: email, password: pass }, {rememberMe: true})
                 .then(function(/* user */) {
-                    $location.path('/account');
+                    $location.path('/home');
                 }, showError);
         };
 
@@ -44,7 +44,7 @@ var newModule='myApp.login';
                     })
                     .then(Auth.createAccount)
                     .then(function(/* user */) {
-                        // redirect to the account page
+                        // redirect to home
                         $location.path('/home');
                     }, showError);
             }

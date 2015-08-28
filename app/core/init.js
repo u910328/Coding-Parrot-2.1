@@ -10,6 +10,8 @@
             return {}
         }])
         .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
+            $rootScope.debug=config.debug;
+
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){
                 var subTotal=0;
@@ -34,8 +36,8 @@
             //template
             if(config.debug) console.log('debug mode');
 
-            ngCart.setShipping(1);
-            ngCart.setTaxRate(6);
+            ngCart.setShipping(config.shipping);
+            ngCart.setTaxRate(config.taxRate);
 
 
             function refreshTotalItems(){

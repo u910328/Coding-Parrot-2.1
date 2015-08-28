@@ -12,9 +12,10 @@ var newModule = 'myApp.productDetail';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, localFb, $location, $routeParams, model, snippet, ngCart) {
+    app.controller(ctrlName, function ($scope, user, $firebaseObject, localFb, $location, $routeParams, model, snippet, ngCart) {
         var productId = $routeParams.pid;
         $scope.show=false;
+        $scope.user=user;
         $scope.productInfo={quantity:1};
         localFb.load('products/'+productId, 'products.'+productId,{scope:$scope},function(){
             $scope.productInfo =model.products[productId];
@@ -52,7 +53,16 @@ var newModule = 'myApp.productDetail';
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when(route, {
             templateUrl: templateUrl,
-            controller: ctrlName
+            controller: ctrlName,
+            resolve: {
+                // forces the page to wait for this promise to resolve before controller is loaded
+                // the controller can then inject `user` as a dependency. This could also be done
+                // in the controller, but this makes things cleaner (controller doesn't need to worry
+                // about auth status or timing of accessing data or displaying elements)
+                user: ['Auth', function (Auth) {
+                    return Auth.$waitForAuth();
+                }]
+            }
         });
     }]);
 
