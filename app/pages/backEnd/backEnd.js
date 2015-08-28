@@ -23,7 +23,7 @@ var newModule = 'myApp.backEnd';
             $scope.allOrdersSrc = $firebaseArray(ref);
         };
 
-        $scope.loadOrders(-0.5, 1); //today's order
+        //$scope.loadOrders(-0.5, 1); //today's order
 
         var delayedFilter = new snippet.DelayedFilter($scope, 'allOrdersSrc', 'allOrders', 'filters', 500);
 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
     <link rel="stylesheet" href="app.css"/>
-
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body ng-cloak>
@@ -34,6 +34,20 @@
 <div ng-view></div>
 <account-window is-open="isAccountOpen"></account-window>
 <log-in-window is-open="isLogInOpen"></log-in-window>
+
+<h2>
+    <a social-twitter class="fa fa-twitter-square ng-isolate-scope"></a>
+    <a social-facebook class="fa fa-facebook-square ng-scope"></a>
+    <a social-gplus class="fa fa-google-plus-square ng-scope"></a>
+    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope" media="http://lorempixel.com/100/100/nature/1"></a>
+    <a social-linkedin class="fa fa-linkedin-square ng-scope"></a>
+    <a social-stumbleupon class="fa fa-stumbleupon ng-scope"></a>
+    <a social-reddit class="fa fa-reddit-square ng-scope"></a>
+    <a social-vk class="fa fa-vk ng-scope"></a>
+    <!--<a social-ok>share on ok.ru</a>-->
+    <!--<a social-xing>share on xing</a>-->
+</h2>
+
 
 
 
@@ -102,6 +116,8 @@
 <link rel="stylesheet" href="components/notify/notify.css">
 
 <script src="components/inputMask/ui-mask.js"></script>
+<script src="components/socialLinks/socialLinks.js"></script>
+
 
 
 

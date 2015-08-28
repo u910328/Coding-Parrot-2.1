@@ -27,6 +27,7 @@ angular.module('myApp')
                 }
                 result=input === '' ? items : result
             }
+            if(result===undefined) result=[];
             return isReverse? result.slice().reverse():result
         }
     }])

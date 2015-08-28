@@ -32,7 +32,7 @@
     </div>
 
     <label>已付款: <input type="checkbox" ng-model="isPaid"
-                       ng-change="filterOpt['isPaid']= isPaid? 'online':''">
+                       ng-change="filterOpt['isPaid']= isPaid? 'succeeded':'uponPickup'">
     </label>
     <br>
 
@@ -48,11 +48,11 @@
         pick up time:{{order.schedule| date: 'h:mm a'}}<br>
         client name: {{order.clientName}}<br>
         client phone: {{order.clientPhone}}<br>
-        payment: {{order.payment.method}}<br>
+        payment: {{order.payment.method}}{{order.payment.status=='succeeded'? ':paid':''}}<br>
         ------------------------------------------------------
         <div ng-repeat="(productId, productInfo) in order.products">
             Item name: {{productInfo.itemName}}<br>
-            Price: {{productInfo.price}}<br>
+            Price: {{productInfo.price|currency : '$' : 2}}<br>
             Quantity: {{productInfo.quantity}}<br>
         </div>
         ------------------------------------------------------
@@ -62,7 +62,7 @@
                 ng-model="orderStatus[order.$id]"
                 ng-change="changeOrderStatus(order.$id, order.clientId, orderStatus[order.$id])">
         </select><br>
-        subtotal:{{subTotal[order.$id]}}
+        subtotal:{{subTotal[order.$id]|currency : '$' : 2}}
         <hr>
     </div>
 </div>
