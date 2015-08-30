@@ -11,7 +11,7 @@ angular.module('myApp.config', [])
     .constant('loginRedirectPath', '/login')
 
     // your Firebase data URL goes here, no trailing slash
-    .constant('FBURL', 'https://lauchbox.firebaseio.com')
+    .constant('FBURL', 'https://hojia.firebaseio.com')
     .constant('config', {
         debug:true,
         shipping:0,

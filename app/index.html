@@ -14,8 +14,10 @@
 </head>
 <body ng-cloak>
 
-<alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">{{broadcast.msg}}</alert>
-<ul class="menu">
+<alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
+    {{broadcast.msg}}
+</alert>
+<ul class="nav nav-tabs">
     <li><a href="#/home">home</a></li>
     <!--<li><a href="#/chat">chat</a></li>-->
     <!--<li><a href="#/products">products</a></li>-->
@@ -28,18 +30,25 @@
     <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
     <li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>
     <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
+    <li ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Drow down</a>
+        <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
+            <li ><a href="#/account">My Info</a></li>
+            <li ><a href="#/myOrders">My orders</a></li>
+        </ul>
+    </li>
 
 </ul>
 
 <div ng-view></div>
-<account-window is-open="isAccountOpen"></account-window>
-<log-in-window is-open="isLogInOpen"></log-in-window>
+<!--<account-window is-open="isAccountOpen"></account-window>-->
+<!--<log-in-window is-open="isLogInOpen"></log-in-window>-->
 
 <h2>
     <a social-twitter class="fa fa-twitter-square ng-isolate-scope"></a>
     <a social-facebook class="fa fa-facebook-square ng-scope"></a>
     <a social-gplus class="fa fa-google-plus-square ng-scope"></a>
-    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope" media="http://lorempixel.com/100/100/nature/1"></a>
+    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope"
+       media="http://lorempixel.com/100/100/nature/1"></a>
     <a social-linkedin class="fa fa-linkedin-square ng-scope"></a>
     <a social-stumbleupon class="fa fa-stumbleupon ng-scope"></a>
     <a social-reddit class="fa fa-reddit-square ng-scope"></a>
@@ -47,9 +56,6 @@
     <!--<a social-ok>share on ok.ru</a>-->
     <!--<a social-xing>share on xing</a>-->
 </h2>
-
-
-
 
 
 <!-- In production use:
@@ -74,7 +80,6 @@
 <script src="bower_components/angular-payments/lib/angular-payments.min.js"></script>
 
 
-
 <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
 <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
 
@@ -82,7 +87,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <script type="text/javascript" src="bower_components/angular-ui-validate/dist/validate.js"></script>
-
 
 
 <script src="config.js"></script>
@@ -117,12 +121,6 @@
 
 <script src="components/inputMask/ui-mask.js"></script>
 <script src="components/socialLinks/socialLinks.js"></script>
-
-
-
-
-
-
 
 
 <script src="core/snippet.js"></script>

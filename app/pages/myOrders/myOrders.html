@@ -1,12 +1,12 @@
 
-<div class="container">
+<div class="container margin-top-20px">
     <div class="row">
         <div class="col-sm-3">
             <!-- Left column -->
             <ul class="nav nav-stacked">
                 <li class="nav-header">
                     <accordion>
-                        <accordion-group heading="訂單">
+                        <accordion-group heading="Orders">
                             <ul class="nav nav-stacked">
                                 <li><a ng-click="loadOrders(-65535,65535)"> All orders </a></li>
                                 <li><a ng-click="loadOrders(-0.5,1)"> Today </a></li>
@@ -48,8 +48,6 @@
         </div>
 
         <div class="col-sm-9">
-            <strong> 訂單</strong>
-            <hr>
 
             <div class="table-responsive">
                 <table class="table table-striped">

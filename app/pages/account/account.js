@@ -30,7 +30,7 @@ var newModule='myApp.account';
                     $scope.err = 'Please fill in all password fields';
                 }
                 else if( newPass !== confirm ) {
-                    $scope.err = 'New pass and confirm do not match';
+                    $scope.err = 'New password and confirm password do not match';
                 }
                 else {
                     Auth.$changePassword({email: profile.email, oldPassword: pass, newPassword: newPass})
@@ -57,7 +57,7 @@ var newModule='myApp.account';
                     .then(function() {
                         $scope.emailmsg = 'Email changed';
                     }, function(err) {
-                        $scope.emailerr = err;
+                        $scope.emailerr = 'Non-valid email';
                     });
             };
 
