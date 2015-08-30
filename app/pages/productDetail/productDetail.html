@@ -1,16 +1,51 @@
-<div ng-show="show">
-    <h2>{{productInfo.itemName}}</h2>
-    <form>
-        listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>
-        price:{{productInfo.price|currency : '$' : 2}}<br>
-        you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>
-        options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
-        description:{{productInfo.description}}<br>
-        total:{{productInfo.subTotal}}
-    </form>
-    <hr>
-    <ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>
-    <a ng-show="!loggedIn" href="#/login">log in to add items</a>
-    <button ng-click="keepShopping()">keep shopping</button>
-</div>
+<!--<div ng-show="show">-->
+    <!--<h2>{{productInfo.itemName}}</h2>-->
+    <!--<form>-->
+        <!--listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>-->
+        <!--price:{{productInfo.price|currency : '$' : 2}}<br>-->
+        <!--you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>-->
+        <!--options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>-->
+        <!--description:{{productInfo.description}}<br>-->
+        <!--total:{{productInfo.subTotal}}-->
+    <!--</form>-->
+    <!--<hr>-->
+    <!--<ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>-->
+    <!--<a ng-show="!loggedIn" href="#/login">log in to add items</a>-->
+    <!--<button ng-click="keepShopping()">keep shopping</button>-->
+<!--</div>-->
 
+<div ng-show="show" class="container marketing">
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="featurette">
+                <img class="featurette-image img-responsive pull-left padding-15px" src="http://placehold.it/180">
+                <h2 class="featurette-heading padding-15px"><span class="text-muted">{{productInfo.description}}</span></h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
+                <div class="panel-body">
+                    listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>
+                    price:{{productInfo.price|currency : '$' : 2}}<br>
+                    you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>
+                    options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
+                    <hr>
+                    <form>
+                        <ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>
+                        <a class="btn btn-sm btn-danger" ng-show="!loggedIn" href="#/login">log in to add items</a>
+                        <hr>
+                        <a class="btn btn-sm btn-warning" ng-click="keepShopping()">keep shopping</a>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>

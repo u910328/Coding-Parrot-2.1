@@ -19,6 +19,22 @@ var newModule='myApp.home';
 
         $scope.checkDetail=function(itemId){
             $location.path('/productDetail/'+itemId);
+        };
+
+        //carousel
+        $scope.myInterval = 2500;
+        $scope.noWrapSlides = false;
+        var slides = $scope.slides = [];
+        $scope.addSlide = function() {
+            var newWidth = 1200;
+            slides.push({
+                image: '//placehold.it/' + newWidth + 'X525',
+                text: ['雞腿 Chicken','豬腿 Pork','羊腿 Lamb'][slides.length % 10] + ' ' +
+                ['便當 Bento','便當 Bento','便當 Bento'][slides.length % 10]
+            });
+        };
+        for (var i=0; i<3; i++) {
+            $scope.addSlide();
         }
     });
 

@@ -1,9 +1,35 @@
 <h2>Home</h2>
 
-
-<div ng-repeat="(itemId, value) in productList">
-    <a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>
-    list price: USD {{value.listPrice|currency : '$' : 2}}<br>
-    price: USD {{value.price|currency : '$' : 2}}<br>
-    <hr>
+<div class="carousel slide">
+    <carousel interval="myInterval" no-wrap="noWrapSlides">
+        <slide ng-repeat="slide in slides" active="slide.active">
+            <img ng-src="{{slide.image}}" style="margin:auto;">
+            <div class="carousel-caption">
+                <!--<h4>Slide {{$index}}</h4>-->
+                <p>{{slide.text}}</p>
+            </div>
+        </slide>
+    </carousel>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div ng-repeat="(itemId, value) in productList" class="col-sm-4 col-xs-6">
+            <div ng-click="checkDetail(itemId)" class="panel panel-default">
+                <div class="panel-thumbnail"><img src="//placehold.it/450X300/DD3333/EE3333" class="img-responsive"></div>
+                <div class="panel-body">
+                    <p class="lead">{{value.itemName}}</p>
+                    <p>list price: USD {{value.listPrice|currency : '$' : 2}}</p>
+                    <p>price: USD {{value.price|currency : '$' : 2}}</p>
+                </div>
+            </div>
+        </div><!--/col-->
+    </div>
+</div>
+
+<!--<div ng-repeat="(itemId, value) in productList">-->
+<!--<a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>-->
+<!--list price: USD {{value.listPrice|currency : '$' : 2}}<br>-->
+<!--price: USD {{value.price|currency : '$' : 2}}<br>-->
+<!--<hr>-->
+<!--</div>-->
