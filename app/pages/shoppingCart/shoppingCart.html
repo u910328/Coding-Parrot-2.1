@@ -14,6 +14,7 @@
                    class="form-control"
                    datepicker-popup="{{format}}"
                    ng-model="dt" is-open="status.opened"
+                   ng-change="getDt()"
                    ng-focus="open($event)"
                    min-date="minDate"
                    max-date="'2050-06-22'"
@@ -27,7 +28,7 @@
                         class="glyphicon glyphicon-calendar"></i></button>
               </span>
         </p>
-        <timepicker ng-model="dt" hour-step="1" minute-step="15" show-meridian="true"></timepicker>
+        <timepicker ng-model="dt" hour-step="1" minute-step="15" show-meridian="true" min="minTime" max="maxTime"></timepicker>
         <br>
 
         <div>
