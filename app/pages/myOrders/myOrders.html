@@ -55,7 +55,7 @@
                     <tr>
                         <th>Date/Time</th>
                         <th>Quantity</th>
-                        <th>Total$</th>
+                        <th>Total</th>
                         <th>Stauts</th>
                         <th>Payment</th>
                     </tr>
@@ -68,7 +68,7 @@
                                 {{productInfo.itemName}}*{{productInfo.quantity}}
                             </div>
                         </td>
-                        <td>{{subTotal[order.$id]}}</td>
+                        <td>{{subTotal[order.$id]|currency : '$' : 2}}</td>
                         <td>
                             {{order.orderStatus}}
                         </td>

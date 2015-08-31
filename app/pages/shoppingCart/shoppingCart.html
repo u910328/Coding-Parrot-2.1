@@ -22,7 +22,7 @@
                         <div class="control-group">
                             <h5>Note:</h5>
                             <div class="controls">
-                                <input ng-model="note" type="text" class="form-control input-xlarge">
+                                <textarea class="form-control input-xlarge" ng-model="note" rows="2"></textarea>
                             </div>
                         </div>
                         <h5>Pick Up Time:</h5>
@@ -56,7 +56,7 @@
                                        ng-change="saveEmail(clientEmail.$value&&!notiemail.email.$error.email)">
 
                                 <h5>phone number:</h5>
-                                <input ng-model="clientPhone" type="text"
+                                <input  class="form-control" ng-model="clientPhone" type="text"
                                        ui-mask="(999) 999-9999"
                                        ng-change="savePhone()"/>
 

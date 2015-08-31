@@ -26,7 +26,7 @@
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
-                <div class="panel-body">
+                <div class="panel-body text-center">
                     listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>
                     price:{{productInfo.price|currency : '$' : 2}}<br>
                     you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>

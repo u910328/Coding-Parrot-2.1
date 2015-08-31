@@ -26,16 +26,18 @@
 
     <li ng-hide="loggedIn"><a href="#/login">login</a></li>
     <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
-
-    <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-    <li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>
-    <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
-    <li ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Drow down</a>
+    <li class="pull-right"  ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Hello, my friend!</a>
         <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
-            <li ><a href="#/account">My Info</a></li>
-            <li ><a href="#/myOrders">My orders</a></li>
+            <li ><a href="#/account">Your Info</a></li>
+            <li ><a href="#/myOrders">Your orders</a></li>
         </ul>
     </li>
+
+
+    <li class="pull-right" ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
+    <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
+    <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
+
 
 </ul>
 
@@ -43,19 +45,19 @@
 <!--<account-window is-open="isAccountOpen"></account-window>-->
 <!--<log-in-window is-open="isLogInOpen"></log-in-window>-->
 
-<h2>
-    <a social-twitter class="fa fa-twitter-square ng-isolate-scope"></a>
-    <a social-facebook class="fa fa-facebook-square ng-scope"></a>
-    <a social-gplus class="fa fa-google-plus-square ng-scope"></a>
-    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope"
-       media="http://lorempixel.com/100/100/nature/1"></a>
-    <a social-linkedin class="fa fa-linkedin-square ng-scope"></a>
-    <a social-stumbleupon class="fa fa-stumbleupon ng-scope"></a>
-    <a social-reddit class="fa fa-reddit-square ng-scope"></a>
-    <a social-vk class="fa fa-vk ng-scope"></a>
-    <!--<a social-ok>share on ok.ru</a>-->
-    <!--<a social-xing>share on xing</a>-->
-</h2>
+<!--<h3 class="pull-right">-->
+    <!--<a social-twitter class="fa fa-twitter-square ng-isolate-scope"></a>-->
+    <!--<a social-facebook class="fa fa-facebook-square ng-scope"></a>-->
+    <!--<a social-gplus class="fa fa-google-plus-square ng-scope"></a>-->
+    <!--<a social-pinterest class="fa fa-pinterest-square ng-isolate-scope"-->
+       <!--media="http://lorempixel.com/100/100/nature/1"></a>-->
+    <!--<a social-linkedin class="fa fa-linkedin-square ng-scope"></a>-->
+    <!--<a social-stumbleupon class="fa fa-stumbleupon ng-scope"></a>-->
+    <!--<a social-reddit class="fa fa-reddit-square ng-scope"></a>-->
+    <!--<a social-vk class="fa fa-vk ng-scope"></a>-->
+    <!--&lt;!&ndash;<a social-ok>share on ok.ru</a>&ndash;&gt;-->
+    <!--&lt;!&ndash;<a social-xing>share on xing</a>&ndash;&gt;-->
+<!--</h3>-->
 
 
 <!-- In production use:
@@ -94,7 +96,7 @@
 <!--<script src="pages/test/test.js"></script>-->
 <script src="pages/chat/chat.js"></script>
 <script src="pages/login/login.js"></script>
-<!--<script src="pages/account/account.js"></script>-->
+<script src="pages/account/account.js"></script>
 <script src="pages/productDetail/productDetail.js"></script>
 <script src="pages/home/home.js"></script>
 <script src="pages/shoppingCart/shoppingCart.js"></script>

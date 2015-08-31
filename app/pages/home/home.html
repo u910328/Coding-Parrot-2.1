@@ -16,7 +16,7 @@
     <div class="row">
         <div ng-repeat="(itemId, value) in productList" class="col-sm-4 col-xs-6">
             <div ng-click="checkDetail(itemId)" class="panel panel-default">
-                <div class="panel-thumbnail"><img src="//placehold.it/450X300/DD3333/EE3333" class="img-responsive"></div>
+                <div class="panel-thumbnail"><img ng-src="{{value.image}}" class="img-responsive"></div>
                 <div class="panel-body">
                     <p class="lead">{{value.itemName}}</p>
                     <p>list price: USD {{value.listPrice|currency : '$' : 2}}</p>
@@ -26,6 +26,20 @@
         </div><!--/col-->
     </div>
 </div>
+
+<h2 class="pull-right">
+    <a social-twitter class="fa fa-twitter-square ng-isolate-scope" style="color: #C3CDD7;"></a>
+    <a social-facebook class="fa fa-facebook-square ng-scope" style="color: #C3CDD7;"></a>
+    <a social-gplus class="fa fa-google-plus-square ng-scope" style="color: #C3CDD7;"></a>
+    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope"
+       media="http://lorempixel.com/100/100/nature/1" style="color: #C3CDD7;"></a>
+    <a social-linkedin class="fa fa-linkedin-square ng-scope" style="color: #C3CDD7;"></a>
+    <a social-stumbleupon class="fa fa-stumbleupon ng-scope" style="color: #C3CDD7;"></a>
+    <a social-reddit class="fa fa-reddit-square ng-scope" style="color: #C3CDD7;"></a>
+    <a social-vk class="fa fa-vk ng-scope" style="color: #C3CDD7;"></a>
+    <!--<a social-ok>share on ok.ru</a>-->
+    <!--<a social-xing>share on xing</a>-->
+</h2>
 
 <!--<div ng-repeat="(itemId, value) in productList">-->
 <!--<a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>-->
