@@ -34,19 +34,22 @@
 <div ng-view></div>
 <account-window is-open="isAccountOpen"></account-window>
 <log-in-window is-open="isLogInOpen"></log-in-window>
+<hr>
+<footer>
+    <h2>
+        <a social-twitter class="fa fa-twitter ng-isolate-scope" href=""></a>
+        <a social-facebook class="fa fa-facebook ng-scope" href=""></a>
+        <a social-gplus class="fa fa-google-plus ng-scope" href=""></a>
+        <a social-pinterest class="fa fa-pinterest ng-isolate-scope" media="http://lorempixel.com/100/100/nature/1" href=""></a>
+        <a social-linkedin class="fa fa-linkedin ng-scope" href=""></a>
+        <a social-stumbleupon class="fa fa-stumbleupon ng-scope" href=""></a>
+        <a social-reddit class="fa fa-reddit ng-scope" href=""></a>
+        <a social-vk class="fa fa-vk ng-scope" href=""></a>
+        <!--<a social-ok href="">share on ok.ru</a>-->
+        <!--<a social-xing href="">share on xing</a>-->
+    </h2>
+</footer>
 
-<h2>
-    <a social-twitter class="fa fa-twitter-square ng-isolate-scope"></a>
-    <a social-facebook class="fa fa-facebook-square ng-scope"></a>
-    <a social-gplus class="fa fa-google-plus-square ng-scope"></a>
-    <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope" media="http://lorempixel.com/100/100/nature/1"></a>
-    <a social-linkedin class="fa fa-linkedin-square ng-scope"></a>
-    <a social-stumbleupon class="fa fa-stumbleupon ng-scope"></a>
-    <a social-reddit class="fa fa-reddit-square ng-scope"></a>
-    <a social-vk class="fa fa-vk ng-scope"></a>
-    <!--<a social-ok>share on ok.ru</a>-->
-    <!--<a social-xing>share on xing</a>-->
-</h2>
 
 
 
@@ -57,20 +60,21 @@
 <script src="//cdn.firebase.com/js/client/2.2.x/firebase.js"></script>
 <script src="//cdn.firebase.com/libs/angularfire/1.0.x/angularfire.min.js"></script>
 -->
+<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
 <!--<script src="bower_components/angular/angular.js"></script>-->
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
 
 <script src="bower_components/angular-route/angular-route.js"></script>
-<script src="core/firebase-mod.js"></script>
+<!--<script src="core/firebase-mod.js"></script>-->
 <!--<script src="bower_components/firebase/firebase.js"></script>-->
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
 
 <!--<script src="bower_components/angular-stripe/release/angular-stripe.js"></script>-->
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script>
-    Stripe.setPublishableKey('pk_test_h8DUz8dP0QDdFpVQlKXYjks3');
-</script>
+<!--<script>-->
+    <!--Stripe.setPublishableKey('your_stripe_publishable_key');-->
+<!--</script>-->
 <script src="bower_components/angular-payments/lib/angular-payments.min.js"></script>
 
 
