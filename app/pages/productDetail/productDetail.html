@@ -14,12 +14,12 @@
     <!--<button ng-click="keepShopping()">keep shopping</button>-->
 <!--</div>-->
 
-<div ng-show="show" class="container marketing">
+<div ng-show="show" class="container marketing margin-top-20px">
 
     <div class="row">
         <div class="col-md-9">
             <div class="featurette">
-                <img class="featurette-image img-responsive pull-left padding-15px" src="http://placehold.it/180">
+                <img class="featurette-image img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 200px; height: 200px;">
                 <h2 class="featurette-heading padding-15px"><span class="text-muted">{{productInfo.description}}</span></h2>
             </div>
         </div>

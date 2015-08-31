@@ -1,52 +1,34 @@
-<h2>Thank you!</h2>
 
-<!--<div>-->
-    <!--date: {{date| date: 'short'}}<br>-->
-    <!--client name: {{invoice.clientName}}<br>-->
-    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <!--<div ng-repeat="(productId, productInfo) in invoice.products">-->
-        <!--Item name: {{productInfo.itemName}}<br>-->
-        <!--Price: {{productInfo.price}}<br>-->
-        <!--Quantity: {{productInfo.quantity}}<br>-->
-    <!--</div>-->
-    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <!--<br>-->
-    <!--status: received<br>-->
-    <!--pick-up time:{{invoice.schedule| date: 'short'}}<br>-->
-    <!--subtotal:{{subTotal}}<br>-->
-    <!--payment: {{invoice.payment.token? 'credit card': 'payment upon pickup'}}<br>-->
-    <!--note:{{invoice.note}}-->
 
-    <!--<hr>-->
-<!--</div>-->
-<!--<button ng-click="OK()">OK</button>-->
 
-<div class="container">
+<div class="container margin-top-20px">
     <div class="row">
         <div class="col-lg-8">
-            <form class="form-horizontal well">
-                <div class="control-group">
-                    <a href ng-click="">{{orderId}}</a><br>
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h2>Thank you!</h2>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">date: {{date}}</li>
+                        <li class="list-group-item">client name: {{invoice.clientName}}</li>
+                        <li class="list-group-item">client id: {{invoice.clientId}}</li>
+                        <li class="list-group-item">
+                            <div ng-repeat="(productId, productInfo) in invoice.products">
+                            {{productInfo.itemName}}({{productInfo.price|currency : '$' : 2}})*{{productInfo.quantity}}
+                            </div>
+                        </li>
+                        <li class="list-group-item">subtotal:{{subTotal|currency : '$' : 2}}</li>
+                        <li class="list-group-item">status: received</li>
+                        <li class="list-group-item">schedule:{{invoice.schedule| date: 'M/d/yy'}}/{{invoice.schedule| date: 'h:mm a'}}</li>
+                        <li class="list-group-item">payment: {{invoice.payment.token? 'credit card': 'upon pickup'}}</li>
 
-                    date: {{date}}<br>
-                    client name: {{invoice.clientName}}<br>
-                    client id: {{invoice.clientId}}<br>
+                    </ul>
                 </div>
-                <div class="control-group">
-                    <div ng-repeat="(productId, productInfo) in invoice.products">
-                        {{productInfo.itemName}}({{productInfo.price|currency : '$' : 2}})*{{productInfo.quantity}}
-                    </div>
+                <div class="panel-footer">
+                    <button class="btn btn-sm btn-primary" ng-click="OK()">OK</button>
                 </div>
-                <div class="control-group">
-                    status: received<br>
-                    schedule:{{invoice.schedule| date: 'M/d/yy'}}/{{invoice.schedule| date: 'h:mm a'}}<br>
-                    subtotal:{{subTotal|currency : '$' : 2}} <br>
-                    payment: {{invoice.payment.token? 'credit card': 'upon pickup'}}
-                </div>
-                <div class="form-actions">
-                    <button ng-click="OK()">OK</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
