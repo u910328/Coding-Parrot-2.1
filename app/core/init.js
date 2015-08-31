@@ -55,7 +55,12 @@
                         '$uid':user.uid
                     };
 
-                    $rootScope.user=user;
+                    $rootScope.userInfo=user;
+                    _ref=localFb.ref('config');
+                    _ref.child('payment/stripe/publishable_key').once('value',function(snap){
+                        Stripe.setPublishableKey(snap.val());
+                        console.log(snap.val());
+                    });
                     //Notification
                     //_ref=localFb.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
                     //$rootScope.notification=$firebaseArray(_ref);

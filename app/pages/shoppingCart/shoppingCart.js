@@ -13,7 +13,7 @@ var newModule = 'myApp.shoppingCart';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
+    app.controller(ctrlName, function (config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
         $scope.ngCart = ngCart;
         var cart = {products: {}};
@@ -28,7 +28,7 @@ var newModule = 'myApp.shoppingCart';
             ngCart.empty()
         };
 
-        $scope.paymentMethod='uponPickup';
+        $scope.paymentMethod = 'uponPickup';
 
 
         $scope.clientEmail = $firebaseObject(localFb.ref('users/' + user.uid + '/email'));
@@ -36,28 +36,44 @@ var newModule = 'myApp.shoppingCart';
             $scope.clientPhone = snap.val();
         });
 
-        var delayExe=new snippet.DelayExec(1000);
+        var delayExe = new snippet.DelayExec(1000);
         $scope.saveEmail = function (isValid) {
-            function onComplete(){
-                if(isValid) $scope.clientEmail.$save();
+            function onComplete() {
+                if (isValid) $scope.clientEmail.$save();
                 console.log($scope.clientEmail.$value)
             }
+
             delayExe.reset(onComplete)
         };
         $scope.savePhone = function () {
-            function onComplete(){
+            function onComplete() {
                 if ($scope.clientPhone) localFb.update('users/' + user.uid, false, {phone: $scope.clientPhone || null});
             }
+
             delayExe.reset(onComplete)
         };
 
-        $scope.number = '4242424242424242';
-        $scope.expiry = '11/16';
-        $scope.cvc = '123';
+        if (config.debug) {
+            $scope.number = '4242424242424242';
+            $scope.expiry = '11/16';
+            $scope.cvc = '123';
+        }
+
+        function ensureEnoughTimeToPrepare() {
+            if ($scope.dt.getTime() < (new Date()).getTime() + 30 * 60 * 1000) {
+                alert('Please pick a time at least 30 minutes from now.');
+                return false
+            } else {
+                return true
+            }
+        }
 
         $scope.checkOut = function () {
+            //確保有足夠時間準備
+            if (!ensureEnoughTimeToPrepare()) return;
+
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
-            if($scope.paymentMethod==='uponPickup') uploadOrder().then(function(){
+            if ($scope.paymentMethod === 'uponPickup') uploadOrder().then(function () {
                 $location.path('/invoice'); //成功後轉換至invoice頁面
                 $scope.emptyCart();
                 if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
@@ -65,7 +81,7 @@ var newModule = 'myApp.shoppingCart';
         };
 
         function getPaymentData(code, result) {
-            $scope.payment={};
+            $scope.payment = {};
             if (result.error) {
                 window.alert('it failed! error: ' + result.error.message);
             } else {
@@ -78,6 +94,7 @@ var newModule = 'myApp.shoppingCart';
         }
 
         $scope.stripeCallback = function (code, result) {
+            if (!ensureEnoughTimeToPrepare()) return;
             getPaymentData(code, result);
 
             //將payment provider取得的token加入其他資料一起上傳
@@ -130,8 +147,8 @@ var newModule = 'myApp.shoppingCart';
                 cart.products[item._id].itemId = item._id;
             });
 
-            var payment=$scope.payment||{};
-            payment.method=$scope.paymentMethod;
+            var payment = $scope.payment || {};
+            payment.method = $scope.paymentMethod;
 
             angular.extend(cart,
                 {
@@ -140,7 +157,7 @@ var newModule = 'myApp.shoppingCart';
                     clientEmail: $scope.clientEmail.$value || null,
                     clientPhone: $scope.clientPhone || null,
                     createdTime: Firebase.ServerValue.TIMESTAMP,
-                    note:$scope.note||null,
+                    note: $scope.note || null,
                     schedule: $scope.dt.getTime(),
                     orderStatus: 'received',
                     payment: payment,
@@ -151,6 +168,7 @@ var newModule = 'myApp.shoppingCart';
 
 
         function uploadOrder() {
+
             //整理order 資料
             prepareOrderData();
 
@@ -162,12 +180,12 @@ var newModule = 'myApp.shoppingCart';
                 clientPhone: '',
                 createdTime: '',
                 orderStatus: '',
-                note:'',
+                note: '',
                 //subTotal:'',        由主機端計算，防止人為竄改。
                 products: {
                     $productId: {
                         itemName: '',
-                        itemId:'',
+                        itemId: '',
                         quantity: '',
                         price: '',
                         selectedOption: ''
@@ -188,7 +206,7 @@ var newModule = 'myApp.shoppingCart';
             var userOderReceiptStructure = {
                 createdTime: '',
                 orderStatus: '',
-                note:'',
+                note: '',
                 products: {
                     $productId: {
                         itemId: '',
@@ -220,13 +238,29 @@ var newModule = 'myApp.shoppingCart';
         }
 
         //date picker
-        $scope.today = function () {
-            $scope.dt = new Date();
-        };
-        $scope.today();
+        //$scope.today = function () {
+        //    $scope.dt = new Date();
+        //};
+        //$scope.today();
+        $scope.dt= new Date();
 
-        $scope.dt.setHours(12);
-        $scope.dt.setMinutes(0);
+        $scope.getDt=function(){
+            var newDate=$scope.dt;
+            newDate.setMinutes(0);
+            newDate.setHours(10);
+            var todayBegin = newDate.getTime();
+
+            newDate.setHours(20);
+            var todayEnd = newDate.getTime();
+
+            $scope.dt.setHours(12);
+            $scope.dt.setMinutes(0);
+            $scope.minTime=todayBegin;
+            $scope.maxTime=todayEnd;
+        };
+        $scope.getDt();
+
+        $scope.minDate = $scope.dt;
 
 
         // Disable weekend selection
@@ -234,7 +268,6 @@ var newModule = 'myApp.shoppingCart';
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };
 
-        $scope.minDate = $scope.minDate ? null : new Date();
 
         $scope.open = function ($event) {
             $scope.status.opened = true;

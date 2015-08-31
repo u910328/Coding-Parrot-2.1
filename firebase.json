@@ -1,5 +1,5 @@
 {
-  "firebase": "lauchbox",
+  "firebase": "hojia",
   "public": "app",
   "ignore": [
     "firebase.json",
