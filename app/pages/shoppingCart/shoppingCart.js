@@ -13,7 +13,7 @@ var newModule = 'myApp.shoppingCart';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
+    app.controller(ctrlName, function (config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
         $scope.ngCart = ngCart;
         var cart = {products: {}};
@@ -51,9 +51,11 @@ var newModule = 'myApp.shoppingCart';
             delayExe.reset(onComplete)
         };
 
-        $scope.number = '4242424242424242';
-        $scope.expiry = '11/16';
-        $scope.cvc = '123';
+        if(config.debug){
+            $scope.number = '4242424242424242';
+            $scope.expiry = '11/16';
+            $scope.cvc = '123';
+        }
 
         $scope.checkOut = function () {
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行

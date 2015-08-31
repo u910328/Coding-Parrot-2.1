@@ -10,7 +10,7 @@ var newModule='myApp.objectGenerator';
         templateUrl='pages/objectGenerator/objectGenerator.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['ui.tree', 'firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, viewLogic, model) {
