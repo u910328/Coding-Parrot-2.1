@@ -1,189 +1,194 @@
-<tabset justified="true">
-    <tab heading="orders">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-3">
-                    <!-- Left column -->
+<div class="container">
 
-                    <ul class="nav nav-stacked">
-                        <li class="nav-header">
-                            <accordion>
-                                <accordion-group heading="Orders">
-                                    <ul class="nav nav-stacked">
-                                        <li><a ng-click="loadOrders(-65535,65535)"> All Orders </a></li>
-                                        <li><a ng-click="loadOrders(-0.5,1)"> Today </a></li>
-                                        <li><a ng-click="loadOrders(-0.5,3)"> In 3 days </a></li>
-                                        <li><a ng-click="loadOrders(7, 65535)"> Next Week </a></li>
-                                    </ul>
-                                </accordion-group>
-                            </accordion>
-                        </li>
-                    </ul>
+    <tabset justified="true">
+        <tab heading="orders">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!-- Left column -->
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h5>Search</h5></div>
-                        <div class="panel-body">
-                            <label>
-                                <input type="radio" ng-model="filterOpt.orderStatus" value="received">
-                                received
-                            </label> <br>
-                            <label>
-                                <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
-                                preparing
-                            </label> <br>
-                            <label>
-                                <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
-                                ready
-                            </label> <br>
+                        <ul class="nav nav-stacked">
+                            <li class="nav-header">
+                                <accordion>
+                                    <accordion-group heading="Orders">
+                                        <ul class="nav nav-stacked">
+                                            <li><a ng-click="loadOrders(-65535,65535)"> All Orders </a></li>
+                                            <li><a ng-click="loadOrders(-0.5,1)"> Today </a></li>
+                                            <li><a ng-click="loadOrders(-0.5,3)"> In 3 days </a></li>
+                                            <li><a ng-click="loadOrders(7, 65535)"> Next Week </a></li>
+                                        </ul>
+                                    </accordion-group>
+                                </accordion>
+                            </li>
+                        </ul>
 
-                            <hr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h5>Search</h5></div>
+                            <div class="panel-body">
+                                <label>
+                                    <input type="radio" ng-model="filterOpt.orderStatus" value="received">
+                                    received
+                                </label> <br>
+                                <label>
+                                    <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
+                                    preparing
+                                </label> <br>
+                                <label>
+                                    <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
+                                    ready
+                                </label> <br>
 
-                            <label>信用卡付款: <input type="checkbox" ng-model="isPaid"
-                                               ng-change="filterOpt['isPaid']= isPaid? 'succeeded':'uponPickup'">
-                            </label>
-                            <hr>
+                                <hr>
 
-                            <div ng-repeat="(productId, product) in products">
-                                <label>{{product.itemName}}: <input type="checkbox" ng-model="filterOpt[productId]"></label>
+                                <label>信用卡付款: <input type="checkbox" ng-model="isPaid"
+                                                     ng-change="filterOpt['isPaid']= isPaid? 'succeeded':'uponPickup'">
+                                </label>
+                                <hr>
+
+                                <div ng-repeat="(productId, product) in products">
+                                    <label>{{product.itemName}}: <input type="checkbox" ng-model="filterOpt[productId]"></label>
+                                </div>
+                                <br>
+
+                                <input class="form-control input-xlarge" ng-model="search" ng-change="refreshFilter()" placeholder="Seaching...">
+
+                                <hr>
+                                <button ng-click="filterOpt={}">clear</button>
+
                             </div>
-                            <br>
-
-                            <input ng-model="search" ng-change="refreshFilter()" placeholder="Seaching...">
-
-                            <hr>
-                            <button ng-click="filterOpt={}">clear</button>
-
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-9">
+                    <div class="col-sm-9">
 
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Date/Time</th>
-                                <th>Payment</th>
-                                <th>Note</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="order in allOrders||reverse"
-                                ng-init="orderStatus[order.$id]=order.orderStatus; calcSubTotal(order.$id, order.products, this)">
-                                <td>{{$index+1}}</td>
-                                <td>{{order.clientName}}</td>
-                                <td>
-                                    <div ng-repeat="(productId, productInfo) in order.products">
-                                        {{productInfo.itemName}}*{{productInfo.quantity}}
-                                    </div>
-                                </td>
-                                <td>
-                                    <select ng-options="status for status in statusOptions"
-                                            ng-model="orderStatus[order.$id]"
-                                            ng-change="changeOrderStatus(order.$id, order.clientId, orderStatus[order.$id])">
-                                    </select>
-                                </td>
-                                <td>{{subTotal[order.$id]|currency : '$' : 2}}</td>
-                                <td> {{order.schedule| date: 'M/d/yy'}}/{{order.schedule| date: 'h:mm a'}}</td>
-                                <td>{{order.payment.method}}{{order.payment.status=='succeeded'? ':paid':''}}</td>
-                                <td>{{order.note}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Date/Time</th>
+                                    <th>Payment</th>
+                                    <th>Note</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="order in allOrders||reverse"
+                                    ng-init="orderStatus[order.$id]=order.orderStatus; calcSubTotal(order.$id, order.products, this)">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{order.clientName}}</td>
+                                    <td>
+                                        <div ng-repeat="(productId, productInfo) in order.products">
+                                            {{productInfo.itemName}}*{{productInfo.quantity}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select ng-options="status for status in statusOptions"
+                                                ng-model="orderStatus[order.$id]"
+                                                ng-change="changeOrderStatus(order.$id, order.clientId, orderStatus[order.$id])">
+                                        </select>
+                                    </td>
+                                    <td>{{subTotal[order.$id]|currency : '$' : 2}}</td>
+                                    <td> {{order.schedule| date: 'M/d/yy'}}/{{order.schedule| date: 'h:mm a'}}</td>
+                                    <td>{{order.payment.method}}{{order.payment.status=='succeeded'? ':paid':''}}</td>
+                                    <td>{{order.note}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <!--/col-span-9-->
+                    <!--/col-span-9-->
 
+                </div>
             </div>
-        </div>
-    </tab>
-    <tab heading="products manger">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
+        </tab>
+        <tab heading="products manger">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
 
-                    <ul ng-show="!selectedProduct.itemId" class="breadcrumb">
-                        <li ng-repeat="(productId, product) in products">
-                            <a href="" ng-click="selectProduct(productId)">{{product.itemName}}</a>
-                            <a href="" ng-click="removeProduct(productId)">[X]</a>
-                        </li>
-                    </ul>
-
-
-                    <div class="breadcrumb">
-                        <button class="btn btn-sm btn-primary" ng-click="createProduct()">create new product</button>
-                        <button class="btn btn-sm btn-danger pull-right" ng-show="selectedProduct.itemId" ng-click="clearProduct()">X</button>
-                    </div>
+                        <ul ng-show="!selectedProduct.itemId" class="breadcrumb">
+                            <li ng-repeat="(productId, product) in products">
+                                <a href="" ng-click="selectProduct(productId)">{{product.itemName}}</a>
+                                <a href="" ng-click="removeProduct(productId)">[X]</a>
+                            </li>
+                        </ul>
 
 
-                    <form class="form-horizontal well" ng-show="selectedProduct.itemId" ng-submit="updateProduct()">
+                        <div class="breadcrumb">
+                            <button class="btn btn-sm btn-primary" ng-click="createProduct()">create new product</button>
+                            <button class="btn btn-sm btn-danger pull-right" ng-show="selectedProduct.itemId" ng-click="clearProduct()">X</button>
+                        </div>
 
 
-                        <div class="control-group">
-                            <div class="controls">
-                                <label>id:</label>
-                                <input type="text" class="form-control input-xlarge" required
-                                       ng-model="selectedProduct.itemId"/>
-                            </div>
+                        <form class="form-horizontal well" ng-show="selectedProduct.itemId" ng-submit="updateProduct()">
 
-                            <div class="controls">
-                                <label>name:</label>
-                                <input type="text" class="form-control input-xlarge" required
-                                       ng-model="selectedProduct.itemName"/>
-                            </div>
 
-                            <div class="controls">
-                                <label>image:</label>
-                                <input type="text" class="form-control input-xlarge" required
-                                       ng-model="selectedProduct.image"/>
-                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <label>id:</label>
+                                    <input type="text" class="form-control input-xlarge" required
+                                           ng-model="selectedProduct.itemId"/>
+                                </div>
 
-                            <div class="controls">
-                                <label>description:</label>
+                                <div class="controls">
+                                    <label>name:</label>
+                                    <input type="text" class="form-control input-xlarge" required
+                                           ng-model="selectedProduct.itemName"/>
+                                </div>
+
+                                <div class="controls">
+                                    <label>image:</label>
+                                    <input type="text" class="form-control input-xlarge" required
+                                           ng-model="selectedProduct.image"/>
+                                </div>
+
+                                <div class="controls">
+                                    <label>description:</label>
                             <textarea type="text" class="form-control input-xlarge" required
                                       ng-model="selectedProduct.description"></textarea>
-                            </div>
-
-                            <div class="controls">
-                                <label>list price:</label>
-                                <input type="text" class="form-control input-xlarge" required
-                                       ng-model="selectedProduct.listPrice"/>
-                            </div>
-
-                            <div class="controls">
-                                <label>price:</label>
-                                <input type="text" class="form-control input-xlarge" required
-                                       ng-model="selectedProduct.price"/>
-                            </div>
-
-                            <div class="controls">
-                                <label>options:</label>
-
-                                <div ng-repeat="option in selectedProduct.options track by $index">
-                                    {{$index+1}}: <input type="text" class="form-control input-xlarge" required
-                                                         ng-model="selectedProduct.options[$index]"
-                                                         ng-model-options="{debounce:1000}"><br>
                                 </div>
-                                <a href="" ng-click="addOpt()">[+]</a>
-                                <a ng-hide="selectedProduct.options.length===0" href="" ng-click="removeOpt()">[X]</a>
+
+                                <div class="controls">
+                                    <label>list price:</label>
+                                    <input type="text" class="form-control input-xlarge" required
+                                           ng-model="selectedProduct.listPrice"/>
+                                </div>
+
+                                <div class="controls">
+                                    <label>price:</label>
+                                    <input type="text" class="form-control input-xlarge" required
+                                           ng-model="selectedProduct.price"/>
+                                </div>
+
+                                <div class="controls">
+                                    <label>options:</label>
+
+                                    <div ng-repeat="option in selectedProduct.options track by $index">
+                                        {{$index+1}}: <input type="text" class="form-control input-xlarge" required
+                                                             ng-model="selectedProduct.options[$index]"
+                                                             ng-model-options="{debounce:1000}"><br>
+                                    </div>
+                                    <a href="" ng-click="addOpt()">[+]</a>
+                                    <a ng-hide="selectedProduct.options.length===0" href="" ng-click="removeOpt()">[X]</a>
+                                </div>
+
+                                <div class="controls">
+                                    <input type="submit" value="Update">
+                                </div>
+
                             </div>
 
-                            <div class="controls">
-                                <input type="submit" value="Update">
-                            </div>
-
-                        </div>
-
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </tab>
-</tabset>
+        </tab>
+    </tabset>
+</div>
+
+
 

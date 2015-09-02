@@ -3,7 +3,7 @@
 
 <div class="container margin-top-20px">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default text-center">
                 <div class="panel-heading">
                     <h2>Thank you!</h2>
@@ -12,7 +12,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">date: {{date}}</li>
                         <li class="list-group-item">client name: {{invoice.clientName}}</li>
-                        <li class="list-group-item">client id: {{invoice.clientId}}</li>
+                        <!--<li class="list-group-item">client id: {{invoice.clientId}}</li>-->
                         <li class="list-group-item">
                             <div ng-repeat="(productId, productInfo) in invoice.products">
                             {{productInfo.itemName}}({{productInfo.price|currency : '$' : 2}})*{{productInfo.quantity}}

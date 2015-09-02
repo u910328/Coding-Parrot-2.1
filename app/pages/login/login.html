@@ -14,13 +14,13 @@
                     <input class="form-control input-xlarge"  type="password" ng-model="pass"/>
                 </label>
                 <label ng-cloak ng-show="createMode">
-                    <span>confirm pass</span>
+                    <span>confirm password</span>
                     <input class="form-control input-xlarge"  type="password" ng-model="confirm"/>
                 </label>
-                <button ng-click="login(email, pass)" ng-hide="createMode">Log In</button>
-                <button ng-click="createMode = true" ng-hide="createMode">Register</button>
-                <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
-                <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+                <button class="btn btn-sm btn-primary" ng-click="login(email, pass)" ng-hide="createMode">Log In</button>
+                <button class="btn btn-sm btn-default" ng-click="createMode = true" ng-hide="createMode">Register</button>
+                <button class="btn btn-sm btn-default" ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
+                <button class="btn btn-sm btn-default" ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
                 <hr>
 
                 <a class="btn btn-block btn-social btn-facebook" ng-click="loginWithProvider('facebook')">

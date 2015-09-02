@@ -17,9 +17,6 @@ var newModule='myApp.home';
         var fbObj=new localFb.FbObj('products');
         $scope.productList=$firebaseObject(fbObj.ref());
 
-        $scope.checkDetail=function(itemId){
-            $location.path('/productDetail/'+itemId);
-        };
 
         //carousel
         $scope.myInterval = 2500;

@@ -1,32 +1,34 @@
 
-<h2>Account</h2>
 
-<div class="container">
+<div class="container margin-top-20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <form class="form-horizontal well">
-                <div class="control-group pull-right">
-                    <button class="btn btn-sm btn-danger" ng-click="logout()">Log Out</button>
-                </div>
+            <form name="accountInfo" class="form-horizontal well">
 
-                <div class="control-group">
+                <div class="control-group text-center">
                     <img src="{{profile.profileImageURL}}" height="200" width="200">
                 </div>
 
                 <div class="control-group">
                     <label>Name:</label>
-                    <input class="form-control input-xlarge" type="text" name="name" ng-model="profile.name"/>
+                    <input class="form-control input-xlarge" type="text" name="name"
+                           ng-model="profile.name" ng-change="popSaved()"
+                           ng-model-options="{debounce:1000}">
                 </div>
 
-                <div class="control-group" ng-show="user.provider==='password'">
-                    <label>Email:</label>
-                    <input class="form-control input-xlarge" ng-model="profile.email" placeholder="profile.email">
+
+                <div class="control-group">
+                    <label>Contact Email:</label>
+                    <input class="form-control input-xlarge" ng-model="profile.email"
+                           ng-change="popSaved()"
+                           ng-model-options="{debounce:1000}"
+                           name="email"
+                           type="email">
+
+                    <span ng-show="accountInfo.email.$error.email">INVALID_EMAIL</span>
                 </div>
 
-                <div class="control-group" ng-hide="user.provider==='password'">
-                    <label>Email:</label>
-                    <input class="form-control input-xlarge" ng-model="profile.email">
-                </div>
+                <br>
 
                 <div class="control-group" ng-show="user.provider==='password'">
 
@@ -54,8 +56,10 @@
                     <p class="good" ng-show="msg">{{msg}}</p>
                 </div>
 
+                <br>
+
                 <div class="control-group" ng-show="user.provider==='password'">
-                    <legend>Change Email</legend>
+                    <legend>Change Account Email</legend>
 
                     <label>
                         <span>New Email:</span>
@@ -72,6 +76,10 @@
                     <p class="error" ng-show="emailerr">{{emailerr}}</p>
 
                     <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
+                </div>
+                <hr>
+                <div class="form-actions">
+                    <button class="btn btn-large btn-danger" ng-click="logout()">Log Out</button>
                 </div>
             </form>
         </div>

@@ -9,16 +9,24 @@ var newModule='myApp.account';
 
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-    app.controller(ctrlName, ['$scope', 'Auth', 'fbutil', 'user', '$location', '$firebaseObject',
-        function($scope, Auth, fbutil, user, $location, $firebaseObject) {
+    app.controller(ctrlName, ['$scope', 'ngNotify', 'Auth', 'fbutil', 'user', '$location', '$firebaseObject',
+        function($scope, ngNotify,  Auth, fbutil, user, $location, $firebaseObject) {
             var unbind;
             // create a 3-way binding with the user profile object in Firebase
             var profile = $firebaseObject(fbutil.ref('users', user.uid));
             profile.$bindTo($scope, 'profile').then(function(ub) {unbind = ub});
 
+            ngNotify.config({});
+
+            $scope.popSaved=function(){
+                ngNotify({message:'Saved', duration: 2000})
+            };
+
             Auth.$onAuth(function(user){
-                if( !user&&unbind ) { unbind(); }
-                profile.$destroy();
+                if( !user&&unbind ) {
+                    unbind();
+                    profile.$destroy();
+                }
             });
             // expose logout function to scope
             $scope.logout = function() {

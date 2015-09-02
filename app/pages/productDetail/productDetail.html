@@ -19,17 +19,19 @@
     <div class="row">
         <div class="col-md-9">
             <div class="featurette">
-                <img class="featurette-image img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 200px; height: 200px;">
-                <h2 class="featurette-heading padding-15px"><span class="text-muted">{{productInfo.description}}</span></h2>
+                <img class="featurette-image img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 320px; height: 200px;">
+                <h2 class="featurette-heading">
+                    <span class="text-muted pull-right" style="display:block; width:350px; word-wrap:break-word;">{{productInfo.description}}</span>
+                </h2>
             </div>
         </div>
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
                 <div class="panel-body text-center">
-                    listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>
-                    price:{{productInfo.price|currency : '$' : 2}}<br>
-                    you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>
+                    <p style="text-decoration: line-through;">listPrice:{{productInfo.listPrice|currency : '$' : 2}}</p>
+                    <p>price:{{productInfo.price|currency : '$' : 2}}</p>
+                    <p>you save: {{1-productInfo.price/productInfo.listPrice| percentage}}</p>
                     options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
                     <hr>
                     <form>
