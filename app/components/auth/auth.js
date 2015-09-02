@@ -129,13 +129,11 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
         return Auth;
     }])
 //following belong to accountWindow
-    .controller('AccountWindowCtrl', ['$scope', 'Auth', 'fbutil', '$location', '$firebaseObject',
-        function ($scope, Auth, fbutil, $location, $firebaseObject) {
+    .controller('AccountWindowCtrl', ['$rootScope', '$scope', 'Auth', 'fbutil', '$location', '$firebaseObject',
+        function ($rootScope, $scope, Auth, fbutil, $location, $firebaseObject) {
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
                 if (user) {
                     init(user)
-                } else {
-                    $scope.isOpen = false
                 }
             });
 
@@ -157,6 +155,7 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
                     Auth.$unauth();
                     $location.path('/login');
                 };
+                $rootScope.logout=$scope.logout; //TODO:用比較好的方法expose log out
 
                 $scope.changePassword = function (pass, confirm, newPass) {
                     resetMessages();
@@ -208,9 +207,7 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
         return {
             restrict: 'E',
             controller: 'AccountWindowCtrl',
-            scope: {
-                isOpen: '='
-            },
+            scope: {},
             transclude: false,
             templateUrl: function (element, attrs) {
                 if (typeof attrs.templateUrl == 'undefined') {
@@ -224,9 +221,7 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
 //login window
     .controller('LogInWindowCtrl', ['$scope', 'Auth', '$location', 'fbutil', 'snippet', 'localFb', function ($scope, Auth, $location, fbutil, snippet, localFb) {
         Auth.$onAuth(function (user) { //app.js也有同樣的用法
-            if (user) {
-                $scope.isOpen=false;
-            } else {
+            if (!user) {
                 $scope.email = null;
                 $scope.pass = null;
                 $scope.confirm = null;
@@ -293,9 +288,7 @@ angular.module('firebase.auth', ['firebase', 'firebase.utils'])
         return {
             restrict: 'E',
             controller: 'LogInWindowCtrl',
-            scope: {
-                isOpen: '='
-            },
+            scope: {},
             transclude: false,
             templateUrl: function (element, attrs) {
                 if (typeof attrs.templateUrl == 'undefined') {

@@ -43,11 +43,6 @@ Status: {{selectedOrder.orderStatus}}-->
     </label>
 </form>
 
-<label>雞腿: <input type="checkbox" ng-model="bd1Selected" ng-change="filterOpt['雞']=!filterOpt['雞']"></label>
-<label>豬排: <input type="checkbox" ng-model="bd2Selected" ng-change="filterOpt['豬']=!filterOpt['豬']"></label>
-<label>羊腿: <input type="checkbox" ng-model="bd3Selected" ng-change="filterOpt['羊']=!filterOpt['羊']"></label>
-<br>
-
 search:<input ng-model="search" ng-change="refreshFilter()">
 <hr>
 

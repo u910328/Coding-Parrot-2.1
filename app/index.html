@@ -32,8 +32,8 @@
 </ul>
 
 <div ng-view></div>
-<account-window is-open="isAccountOpen"></account-window>
-<log-in-window is-open="isLogInOpen"></log-in-window>
+<account-window ng-show="isAccountOpen"></account-window>
+<log-in-window ng-show="isLogInOpen"></log-in-window>
 <hr>
 <footer>
     <h2>

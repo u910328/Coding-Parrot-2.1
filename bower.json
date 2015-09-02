@@ -15,7 +15,7 @@
     "angularfire": "~1.0.0",
     "mockfirebase": "~0.10.3",
     "angular-bootstrap":"0.13.3",
-    "angular-payments":"~0.1.1",
+    "angular-payments":"https://github.com/laurihy/angular-payments.git",
     "angular-ui-bootstrap":"0.13.3",
     "angular-ui-validate":"1.1.1",
     "ng-cart":"1.0.0"

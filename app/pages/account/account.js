@@ -23,6 +23,7 @@ var newModule='myApp.account';
                 Auth.$unauth();
                 $location.path('/login');
             };
+            $rootScope.logout= $scope.logout;
 
             $scope.changePassword = function(pass, confirm, newPass) {
                 resetMessages();
