@@ -1,27 +1,42 @@
-
 <h2>Login</h2>
 
-<form class="form-horizontal well">
-    <label>
-        <span>email</span>
-        <input type="text" ng-model="email" />
-    </label>
-    <label>
-        <span>password</span>
-        <input type="password" ng-model="pass" />
-    </label>
-    <label ng-cloak ng-show="createMode">
-        <span>confirm pass</span>
-        <input type="password" ng-model="confirm" />
-    </label>
-    <button ng-click="login(email, pass)" ng-hide="createMode">Log In</button>
-    <button ng-click="createMode = true" ng-hide="createMode">Register</button>
-    <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
-    <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
-    <hr>
-    <button ng-click="loginWithProvider('facebook')">Log in with Facebook</button>
-    <button ng-click="loginWithProvider('google')">Log in with Google</button>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-    <p ng-show="err" class="error">{{err}}</p>
-</form>
+            <form class="form-horizontal well">
+                <label>
+                    <span>email</span>
+                    <input class="form-control input-xlarge"  type="text" ng-model="email"/>
+                </label>
+                <label>
+                    <span>password</span>
+                    <input class="form-control input-xlarge"  type="password" ng-model="pass"/>
+                </label>
+                <label ng-cloak ng-show="createMode">
+                    <span>confirm pass</span>
+                    <input class="form-control input-xlarge"  type="password" ng-model="confirm"/>
+                </label>
+                <button ng-click="login(email, pass)" ng-hide="createMode">Log In</button>
+                <button ng-click="createMode = true" ng-hide="createMode">Register</button>
+                <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
+                <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+                <hr>
+
+                <a class="btn btn-block btn-social btn-facebook" ng-click="loginWithProvider('facebook')">
+                    <i class="fa fa-facebook"></i> Sign in with Facebook
+                </a>
+                <br>
+                <a class="btn btn-block btn-social btn-google" ng-click="loginWithProvider('google')">
+                    <i class="fa fa-google"></i> Sign in with Google
+                </a>
+
+                <p ng-show="err" class="error">{{err}}</p>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 

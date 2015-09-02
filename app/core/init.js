@@ -9,7 +9,7 @@
 
             return {}
         }])
-        .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
+        .run(function($rootScope, $location, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             $rootScope.debug=config.debug;
 
             //custom code
@@ -46,6 +46,11 @@
 
             $rootScope.$on('ngCart:change', refreshTotalItems);
             refreshTotalItems();
+
+            $rootScope.logout=function(){
+                Auth.$unauth();
+                $location.path('/login');
+            };
 
             var _ref;
             Auth.$onAuth(function(user) { //app.js也有同樣的用法

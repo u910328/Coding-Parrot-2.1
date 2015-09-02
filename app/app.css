@@ -45,6 +45,10 @@ body {
     margin-top: 20px;
 }
 
+.non-underlines{
+    text-decoration: none; !important
+}
+
 .padding-15px{
     padding: 15px;
 }
@@ -80,3 +84,6 @@ fieldset {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
+
+
+

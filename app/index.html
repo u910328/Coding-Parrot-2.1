@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
     <link rel="stylesheet" href="app.css"/>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+    <link rel="stylesheet" href="bootstrap-social.css"/>
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body ng-cloak>
@@ -18,23 +19,24 @@
     {{broadcast.msg}}
 </alert>
 <ul class="nav nav-tabs">
-    <li><a href="#/home"><i class="glyphicon glyphicon-home"></i> Hojia!!!</a></li>
+    <li><a href="#/home"><i class="fa fa-home fa-fw fa-2x"></i> Hojia!!!</a></li>
     <!--<li><a href="#/chat">chat</a></li>-->
     <!--<li><a href="#/products">products</a></li>-->
     <!--<li><a href="#/allOrders">all orders</a></li>-->
     <li ng-show="debug"><a href="#/backEnd">backend</a></li>
 
-    <li ng-hide="loggedIn"><a href="#/login">login</a></li>
+    <li class="pull-right" ng-hide="loggedIn"><a href="#/login">login</a></li>
     <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
-    <li class="pull-right"  ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Hello, {{userInfo[userInfo.provider].displayName||userInfo[userInfo.provider].email}} <i class="glyphicon glyphicon-user"></i> <span class="caret"></span></a>
+    <li class="pull-right"  ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Hello, {{userInfo[userInfo.provider].displayName||userInfo[userInfo.provider].email}} <i class="fa fa-user fa-2x"></i> <span class="caret"></span></a>
         <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
             <li ><a href="#/account">Your Info</a></li>
             <li ><a href="#/myOrders">Your orders</a></li>
+            <li><a ng-click="logout()">Log Out</a></li>
         </ul>
     </li>
 
 
-    <li class="pull-right" ng-show="loggedIn"><a href="#/shoppingCart"><i class="glyphicon glyphicon-shopping-cart"></i>[{{cartTotalItems}}]</a></li>
+    <li class="pull-right" ng-show="loggedIn"><a href="#/shoppingCart"><i class="fa fa-shopping-cart fa-2x"></i> <span class="badge" style="background-color: #FFB300;">{{cartTotalItems}}</span> Cart</a></li>
     <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
     <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
 

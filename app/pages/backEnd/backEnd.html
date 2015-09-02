@@ -38,20 +38,17 @@
 
                             <hr>
 
-                            <label>已付款: <input type="checkbox" ng-model="isPaid"
+                            <label>信用卡付款: <input type="checkbox" ng-model="isPaid"
                                                ng-change="filterOpt['isPaid']= isPaid? 'succeeded':'uponPickup'">
                             </label>
                             <hr>
 
-                            <label>雞腿: <input type="checkbox" ng-model="bd1Selected"
-                                              ng-change="filterOpt['雞']=!filterOpt['雞']"></label>
-                            <label>豬排: <input type="checkbox" ng-model="bd2Selected"
-                                              ng-change="filterOpt['豬']=!filterOpt['豬']"></label>
-                            <label>羊腿: <input type="checkbox" ng-model="bd3Selected"
-                                              ng-change="filterOpt['羊']=!filterOpt['羊']"></label>
+                            <div ng-repeat="(productId, product) in products">
+                                <label>{{product.itemName}}: <input type="checkbox" ng-model="filterOpt[productId]"></label>
+                            </div>
                             <br>
 
-                            <input ng-model="search" ng-change="refreshFilter()">
+                            <input ng-model="search" ng-change="refreshFilter()" placeholder="Seaching...">
 
                             <hr>
                             <button ng-click="filterOpt={}">clear</button>
