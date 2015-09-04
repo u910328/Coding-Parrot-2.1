@@ -1,2 +1,27 @@
-<h2>pageSeed</h2>
-<button ng-click="test()">test</button>
+
+<div class="container-fluid margin-top-20px">
+    <div class="row">
+        <div class="col-md-12">
+            <img class="col-md-4 img-responsive pull-left padding-15px" ng-src="{{about.story.imageurl}}" style="width: 320px; height: 200px;">
+            <h2>
+                <span class="col-md-8 text-muted pull-right" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.story.history}}</span>
+            </h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>
+                <span class="col-md-8 text-muted pull-left" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.chef.info}}</span>
+            </h2>
+            <img class="col-md-4 img-responsive pull-right padding-15px" ng-src="{{about.chef.imageurl}}" style="width: 320px; height: 200px;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <img class="col-md-3 img-responsive pull-left padding-15px" ng-src="{{about.welcomemsg.imageurl}}" style="width: 320px; height: 200px;">
+            <h2>
+                <span class="col-md-6 text-muted pull-right" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.welcomemsg.text}}</span>
+            </h2>
+        </div>
+    </div>
+</div>

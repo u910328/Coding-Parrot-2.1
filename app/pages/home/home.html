@@ -1,9 +1,9 @@
 <!--<h2>Home</h2>-->
-<div>
-    <div class="carousel slide">
+
+<div class="carousel slide">
         <carousel interval="myInterval" no-wrap="noWrapSlides">
             <slide ng-repeat="slide in slides" active="slide.active">
-                <img ng-src="{{slide.image}}" style="margin:auto;">
+                <img ng-src="{{slide.image}}" style="margin:auto; min-width: 100%; height: calc(100%- 400px);">
                 <div class="carousel-caption">
                     <p>{{slide.text}}</p>
                 </div>
@@ -11,9 +11,9 @@
         </carousel>
     </div>
 
-    <div class="container">
+<div class="container-fluid" style="margin: 20px;">
         <div class="row">
-            <a ng-href="{{'#/productDetail/'+itemId}}" ng-repeat="(itemId, value) in productList" class="col-sm-4 col-xs-6" style="text-decoration: none;">
+            <a ng-href="{{'#/productDetail/'+itemId}}" ng-repeat="(itemId, value) in productList" class="text-center col-xs-6 col-sm-4" style="max-width: 350px; padding:12px; text-decoration: none;">
                 <div class="panel panel-default" style="width: 300px; height: 350px;">
                     <div class="panel-thumbnail"><img ng-src="{{value.image}}" class="img-responsive text-center" style="height: 190px;"></div>
                     <div class="panel-body">
@@ -22,30 +22,15 @@
                         <p>price: USD {{value.price|currency : '$' : 2}}</p>
                     </div>
                 </div>
-            </a><!--/col-->
+            </a>
         </div>
-    </div>
-
-    <h2 class="pull-right" style="margin-right: 10px;">
-        <a social-twitter class="fa fa-twitter-square ng-isolate-scope" style="color: #C3CDD7; text-decoration: none;" href=""></a>
-        <a social-facebook class="fa fa-facebook-square ng-scope" style="color: #C3CDD7; text-decoration: none;" href=""></a>
-        <a social-gplus class="fa fa-google-plus-square ng-scope" style="color: #C3CDD7; text-decoration: none;" href="""></a>
-        <a social-pinterest class="fa fa-pinterest-square ng-isolate-scope"
-           media="http://lorempixel.com/100/100/nature/1" style="color: #C3CDD7; text-decoration: none;" href=""></a>
-        <a social-linkedin class="fa fa-linkedin-square ng-scope" style="color: #C3CDD7; text-decoration: none;" href=""></a>
-        <a social-stumbleupon class="fa fa-stumbleupon ng-scope" style="color: #C3CDD7; text-decoration: none;" href=""></a>
-        <a social-reddit class="fa fa-reddit-square ng-scope" style="color: #C3CDD7;text-decoration: none;" href=""></a>
-        <a social-vk class="fa fa-vk ng-scope" style="color: #C3CDD7;text-decoration: none;" href=""></a>
-        <!--<a social-ok>share on ok.ru</a>-->
-        <!--<a social-xing>share on xing</a>-->
-    </h2>
 </div>
 
 
 
-<!--<div ng-repeat="(itemId, value) in productList">-->
-<!--<a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>-->
-<!--list price: USD {{value.listPrice|currency : '$' : 2}}<br>-->
-<!--price: USD {{value.price|currency : '$' : 2}}<br>-->
-<!--<hr>-->
-<!--</div>-->
+
+
+
+
+
+

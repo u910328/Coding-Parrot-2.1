@@ -1,6 +1,6 @@
 
 
-<div class="container margin-top-20px">
+<div class="container-fluid margin-top-20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <form name="accountInfo" class="form-horizontal well">
@@ -77,8 +77,7 @@
 
                     <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
                 </div>
-                <hr>
-                <div class="form-actions">
+                <div class="control-group">
                     <button class="btn btn-large btn-danger" ng-click="logout()">Log Out</button>
                 </div>
             </form>
@@ -87,75 +86,3 @@
 </div>
 
 
-
-<!--<form>-->
-    <!--<fieldset>-->
-        <!--<img src="{{profile.profileImageURL}}" height="200" width="200">-->
-
-        <!--<label>-->
-            <!--<span>Name:</span>-->
-            <!--<input type="text" name="name" ng-model="profile.name"/>-->
-        <!--</label>-->
-
-        <!--<label ng-show="user.provider==='password'">-->
-            <!--<span>Email:</span>-->
-            <!--<br />{{profile.email}}-->
-        <!--</label>-->
-        <!--<label ng-hide="user.provider==='password'">-->
-            <!--<span>Email:</span>-->
-            <!--<input ng-model="profile.email">-->
-        <!--</label>-->
-    <!--</fieldset>-->
-<!--</form>-->
-
-<!--&lt;!&ndash;只有email pass登入的看得到&ndash;&gt;-->
-<!--<div ng-show="user.provider==='password'">-->
-    <!--<form>-->
-        <!--<fieldset>-->
-            <!--<legend>Change Password</legend>-->
-
-            <!--<label>-->
-                <!--<span>Old Password:</span>-->
-                <!--<input type="password" ng-keypress="clear()" ng-model="oldpass"/>-->
-            <!--</label>-->
-
-            <!--<label>-->
-                <!--<span>New Password:</span>-->
-                <!--<input type="password" ng-keypress="clear()" ng-model="newpass"/>-->
-            <!--</label>-->
-
-            <!--<label>-->
-                <!--<span>Confirm New Password:</span>-->
-                <!--<input type="password" ng-keypress="clear()" ng-model="confirm"/>-->
-            <!--</label>-->
-
-            <!--<button ng-click="changePassword(oldpass, newpass, confirm)">change password</button>-->
-
-            <!--<p class="error" ng-show="err">{{err}}</p>-->
-            <!--<p class="good" ng-show="msg">{{msg}}</p>-->
-        <!--</fieldset>-->
-    <!--</form>-->
-
-    <!--<form>-->
-        <!--<fieldset>-->
-            <!--<legend>Change Email</legend>-->
-
-            <!--<label>-->
-                <!--<span>New Email:</span>-->
-                <!--<input type="text" ng-keypress="clear()" ng-model="newEmail"/>-->
-            <!--</label>-->
-
-            <!--<label>-->
-                <!--<span>Password:</span>-->
-                <!--<input type="password" ng-keypress="clear()" ng-model="pass"/>-->
-            <!--</label>-->
-
-            <!--<button ng-click="changeEmail(pass, newEmail)">update email</button>-->
-
-            <!--<p class="error" ng-show="emailerr">{{emailerr}}</p>-->
-            <!--<p class="good" ng-show="emailmsg">{{emailmsg}}</p>-->
-        <!--</fieldset>-->
-    <!--</form>-->
-<!--</div>-->
-
-<!--<button ng-click="logout()">Log Out</button>-->

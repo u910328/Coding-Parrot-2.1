@@ -1,31 +1,16 @@
-<!--<div ng-show="show">-->
-    <!--<h2>{{productInfo.itemName}}</h2>-->
-    <!--<form>-->
-        <!--listPrice:{{productInfo.listPrice|currency : '$' : 2}}<br>-->
-        <!--price:{{productInfo.price|currency : '$' : 2}}<br>-->
-        <!--you save: {{1-productInfo.price/productInfo.listPrice| percentage}}<br>-->
-        <!--options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>-->
-        <!--description:{{productInfo.description}}<br>-->
-        <!--total:{{productInfo.subTotal}}-->
-    <!--</form>-->
-    <!--<hr>-->
-    <!--<ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>-->
-    <!--<a ng-show="!loggedIn" href="#/login">log in to add items</a>-->
-    <!--<button ng-click="keepShopping()">keep shopping</button>-->
-<!--</div>-->
 
-<div ng-show="show" class="container marketing margin-top-20px">
+<div ng-show="show" class="container-fluid marketing margin-top-20px">
 
     <div class="row">
-        <div class="col-md-9">
-            <div class="featurette">
-                <img class="featurette-image img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 320px; height: 200px;">
-                <h2 class="featurette-heading">
-                    <span class="text-muted pull-right" style="display:block; width:350px; word-wrap:break-word;">{{productInfo.description}}</span>
+        <div class="col-md-9" style="min-width: calc(100% - 400px);">
+
+                <img class="img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 320px; height: 200px;">
+                <h2>
+                    <span class="col-md-6 text-muted" style="display:block; min-width:calc(100% - 350px); word-wrap:break-word;">{{productInfo.description}}</span>
                 </h2>
-            </div>
+
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" style="max-width: 400px;">
             <div class="panel panel-default">
                 <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
                 <div class="panel-body text-center">

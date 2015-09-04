@@ -1,13 +1,13 @@
 //Step 1: name the new module.
-var newModule='myApp.aboutUS';
+var newModule='myApp.contact';
 
 (function (angular) {
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/aboutUS',
-        ctrlName='aboutUSCtrl',
-        templateUrl='pages/aboutUS/aboutUS.html';
+    var route='/contact',
+        ctrlName='contactCtrl',
+        templateUrl='pages/contact/contact.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
@@ -15,7 +15,7 @@ var newModule='myApp.aboutUS';
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, viewLogic, model,  $firebaseObject, fbutil) {
         //create your own controller here
-        $scope.about = $firebaseObject(fbutil.ref('about'));
+        $scope.contact = $firebaseObject(fbutil.ref('contact'));
     });
 
 //Step 5: config providers.

@@ -1,12 +1,21 @@
 /* app css stylesheet */
+html, body{
+    height: 100%;
+}
 
-body {
-    margin: 10px;
+html{
+    height: 100%;
+}
+
+body{
+    min-height: 100%;
 }
 
 .carousel {
     margin-bottom: 30px;
 }
+
+
 
 .menu {
     list-style: none;
@@ -84,6 +93,5 @@ fieldset {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
-
 
 
