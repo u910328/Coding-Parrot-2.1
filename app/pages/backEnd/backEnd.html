@@ -8,19 +8,19 @@
                     <ul class="nav nav-stacked">
                         <li class="nav-header">
                             <accordion>
-                                <accordion-group heading="Orders">
+                                <accordion-group heading="Orders" class="text-center">
                                     <ul class="nav nav-stacked">
-                                        <li><a ng-click="loadOrders(-65535,65535)"> All Orders </a></li>
-                                        <li><a ng-click="loadOrders(-0.5,1)"> Today </a></li>
-                                        <li><a ng-click="loadOrders(-0.5,3)"> In 3 days </a></li>
-                                        <li><a ng-click="loadOrders(7, 65535)"> Next Week </a></li>
+                                        <li><a ng-click="loadOrders(-65535,65535)" href=""> All Orders </a></li>
+                                        <li><a ng-click="loadOrders(-0.5,1)" href=""> Today </a></li>
+                                        <li><a ng-click="loadOrders(-0.5,3)" href=""> Next 3 days </a></li>
+                                        <li><a ng-click="loadOrders(7, 65535)" href=""> Next Week </a></li>
                                     </ul>
                                 </accordion-group>
                             </accordion>
                         </li>
                     </ul>
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default text-center">
                         <div class="panel-heading"><h5>Search</h5></div>
                         <div class="panel-body">
                             <label>
