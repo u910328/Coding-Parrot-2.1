@@ -1,45 +1,36 @@
 
 <div class="container-fluid margin-top-20px" style="min-height: calc(100% - 98px);">
     <div class="row">
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <div class="panel panel-default">
-                 <div class="panel-heading">
-                    <h2>Hojia</h2>
-                 </div>
                  <div class="panel-body">
                      <h3><i class="fa fa-phone"></i> phone:</h3>{{contact.phone}} <br>
                      <hr>
-                     <h3><i class="fa fa-home"></i> address:</h3>{{contact.address.text}}<br>
-                     <img class="col-md-4 img-responsive" ng-src="{{contact.address.imageurl}}" style="width: 320px; height: 200px;"><br>
-                 </div>
-                 <div class="panel-footer" style="background-color: white">
                      <h3><i class="fa fa-envelope"></i> email:</h3><a href="mailto:{{contact.email}}">{{contact.email}}</a>
+
                  </div>
              </div>
         </div>
 
-        <div class="col-md-8">
-            <form class="form-horizontal well text-center" style="background-color: white;">
-
-                <div class="control-group">
-                  <lable>
-                      resevation hours:
-                  </lable>
-                    <h2>{{contact.hours.reservation}}</h2>
+        <div class="col-md-6 text-center">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>resrvation hour:</h3>{{contact.hours.reservation}} <br>
+                    <hr>
+                    <h3>pickup time:</h3>{{contact.hours.pickup}}
                 </div>
-                <hr>
-                <div class="control-group">
-                    <lable>
-                        pickup:
-                    </lable>
-                    <h2>{{contact.hours.pickup}}</h2>
-                </div>
+            </div>
 
-            </form>
         </div>
-
-        <div class="col-md-4">
-
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3><i class="fa fa-home"></i> address:</h3>{{contact.address.text}}<br>
+                    <img class="col-md-4 img-responsive col-md-offset-4" style="width: 320px; height: 200px;" ng-src="{{contact.address.imageurl}}">
+                </div>
+            </div>
         </div>
     </div>
 </div>

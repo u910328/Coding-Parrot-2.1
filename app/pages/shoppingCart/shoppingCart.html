@@ -65,50 +65,50 @@
                                 <label>upon pickup
                                     <input type="radio" ng-model="paymentMethod" value="uponPickup">
                                 </label>
-                                <label>online:
-                                    <input type="radio" ng-model="paymentMethod" value="online">
-                                </label>
+                                <!--<label>online:-->
+                                    <!--<input type="radio" ng-model="paymentMethod" value="online">-->
+                                <!--</label>-->
 
                             </form>
                             <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
                         </div>
 
-                        <div class="control-group">
-                            <form ng-show="paymentMethod==='online'" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
-                                <div ng-show="payOnline"></div>
-                                <div class="controls">
-                                    <label for="">Card number</label>
-                                    <input type="text" class="input-block-level" ng-model="number" payments-validate="card"
-                                           payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
-                                </div>
+                        <!--<div class="control-group">-->
+                            <!--<form ng-show="paymentMethod==='online'" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">-->
+                                <!--<div ng-show="payOnline"></div>-->
+                                <!--<div class="controls">-->
+                                    <!--<label for="">Card number</label>-->
+                                    <!--<input type="text" class="input-block-level" ng-model="number" payments-validate="card"-->
+                                           <!--payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>-->
+                                <!--</div>-->
 
-                                <div class="controls">
-                                    <label for="">Expiry</label>
-                                    <input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry"
-                                           payments-format="expiry"/>
-                                </div>
+                                <!--<div class="controls">-->
+                                    <!--<label for="">Expiry</label>-->
+                                    <!--<input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry"-->
+                                           <!--payments-format="expiry"/>-->
+                                <!--</div>-->
 
-                                <div class="controls">
-                                    <label for="">Name on card </label>
-                                    <input type="text" class="input-block-level">
-                                </div>
+                                <!--<div class="controls">-->
+                                    <!--<label for="">Name on card </label>-->
+                                    <!--<input type="text" class="input-block-level">-->
+                                <!--</div>-->
 
-                                <div class="controls">
-                                    <label for="">CVC</label>
-                                    <input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc"
-                                           payments-format="cvc" payments-type-model="type"/>
-                                </div>
+                                <!--<div class="controls">-->
+                                    <!--<label for="">CVC</label>-->
+                                    <!--<input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc"-->
+                                           <!--payments-format="cvc" payments-type-model="type"/>-->
+                                <!--</div>-->
 
-                                 <br>
-                                <div class="controls">
-                                    <button type="submit" class="btn btn-danger btn-large pull-right">Submit</button>
-                                    <!--<input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">-->
-                                    <button class="btn btn-warning btn-large" ng-click="keepShopping()">shop more</button>
-                                </div>
-                            </form>
+                                 <!--<br>-->
+                                <!--<div class="controls">-->
+                                    <!--<button type="submit" class="btn btn-danger btn-large pull-right">Submit</button>-->
+                                    <!--&lt;!&ndash;<input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">&ndash;&gt;-->
+                                    <!--<button class="btn btn-warning btn-large" ng-click="keepShopping()">shop more</button>-->
+                                <!--</div>-->
+                            <!--</form>-->
 
 
-                        </div>
+                        <!--</div>-->
 
                         <div class="control-group">
 
