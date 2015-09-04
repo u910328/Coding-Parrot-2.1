@@ -7,7 +7,7 @@ var newModule='myApp.termofUse';
 //Step 2: set route, ctrlName and templateUrl.
     var route='/termofUse',
         ctrlName='termofUseCtrl',
-        templateUrl='pages/termofUse/termofUSe.html';
+        templateUrl='pages/termofUse/termofUse.html';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
