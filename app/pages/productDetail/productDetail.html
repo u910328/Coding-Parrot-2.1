@@ -2,15 +2,17 @@
 <div ng-show="show" class="container-fluid marketing margin-top-20px">
 
     <div class="row">
-        <div class="col-md-9" style="min-width: calc(100% - 400px);">
-
-                <img class="img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 320px; height: 200px;">
-                <h2>
-                    <span class="col-md-6 text-muted" style="display:block; min-width:calc(100% - 350px); word-wrap:break-word;">{{productInfo.description}}</span>
-                </h2>
-
+        <div class="col-md-9" style="min-width: calc(100% - 400px); display: block;">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img class="img-responsive pull-left padding-15px" ng-src="{{productInfo.image}}" style="width: 320px; height: 200px;">
+                    <h2>
+                        <span class="col-md-6 text-muted" style="display:block; min-width:calc(100% - 350px); word-wrap:break-word;">{{productInfo.description}}</span>
+                    </h2>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3" style="max-width: 400px;">
+        <div class="col-md-3" style="max-width: 400px; display: block;">
             <div class="panel panel-default">
                 <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
                 <div class="panel-body text-center">
