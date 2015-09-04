@@ -25,15 +25,15 @@
                         <div class="panel-body">
                             <label>
                                 <input type="radio" ng-model="filterOpt.orderStatus" value="received">
-                                received
+                                Received
                             </label> <br>
                             <label>
                                 <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
-                                preparing
+                                Preparing
                             </label> <br>
                             <label>
                                 <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
-                                ready
+                                Ready
                             </label> <br>
 
                             <hr>
@@ -46,8 +46,8 @@
                             <div ng-repeat="(productId, product) in products">
                                 <label>{{product.itemName}}: <input type="checkbox" ng-model="filterOpt[productId]"></label>
                             </div>
-                            <br>
 
+                            <hr>
                             <input class="form-control input-xlarge" ng-model="search" ng-change="refreshFilter()" placeholder="Seaching...">
 
                             <hr>

@@ -16,16 +16,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h4>{{productInfo.itemName}}</h4></div>
                 <div class="panel-body text-center">
-                    <p style="text-decoration: line-through;">listPrice:{{productInfo.listPrice|currency : '$' : 2}}</p>
-                    <p>price:{{productInfo.price|currency : '$' : 2}}</p>
-                    <p>you save: {{1-productInfo.price/productInfo.listPrice| percentage}}</p>
-                    options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
+                    <p style="text-decoration: line-through;">List Price:{{productInfo.listPrice|currency : '$' : 2}}</p>
+                    <p>Price:{{productInfo.price|currency : '$' : 2}}</p>
+                    <p>You save: {{1-productInfo.price/productInfo.listPrice| percentage}}</p>
+                    Options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
                     <hr>
                     <form>
                         <ngcart-addtocart ng-show="loggedIn" id="{{ productInfo.itemId }}" name="{{ productInfo.itemName }}" price="{{ productInfo.price }}" quantity="{{productInfo.quantity}}" quantity-max="30" data="productInfo">Add</ngcart-addtocart>
-                        <a class="btn btn-sm btn-danger" ng-show="!loggedIn" href="#/login">log in to add items</a>
+                        <a class="btn btn-sm btn-danger" ng-show="!loggedIn" href="#/login">Please Log in to add items</a>
                         <hr>
-                        <a class="btn btn-sm btn-warning" ng-click="keepShopping()">keep shopping</a>
+                        <a class="btn btn-sm btn-warning" ng-click="keepShopping()">Keep shopping</a>
                     </form>
 
                 </div>

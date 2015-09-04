@@ -23,21 +23,19 @@
                 <div class="panel-body">
                     <label>
                         <input type="radio" ng-model="filterOpt.orderStatus" value="received">
-                        received
+                        Received
                     </label> <br>
                     <label>
                         <input type="radio" ng-model="filterOpt.orderStatus" value="preparing">
-                        preparing
+                        Preparing
                     </label> <br>
                     <label>
                         <input type="radio" ng-model="filterOpt.orderStatus" value="ready">
-                        ready
+                        Ready
                     </label> <br>
 
                     <hr>
 
-
-                    <br>
 
                     <input class="form-control input-xlarge" ng-model="search" ng-change="refreshFilter()" placeholder="Seaching..." >
 
@@ -55,7 +53,7 @@
                         <th>Quantity</th>
                         <th>Total</th>
                         <th>Stauts</th>
-                        <th>Payment</th>
+                        <!--<th>Payment</th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -70,7 +68,7 @@
                         <td>
                             {{order.orderStatus}}
                         </td>
-                        <td>{{order.payment.method}}{{order.payment.status=='succeeded'? ':paid':''}}</td>
+                        <!--<td>{{order.payment.method}}{{order.payment.status=='succeeded'? ':paid':''}}</td>-->
                     </tr>
                     </tbody>
                 </table>
