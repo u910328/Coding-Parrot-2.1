@@ -13,10 +13,13 @@ var newModule='myApp.home';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, $firebaseArray, $location, viewLogic, model, snippet, localFb) {
+    app.controller(ctrlName, function ($scope, $firebaseObject, $firebaseArray, $location, viewLogic, model, snippet, localFb, fbutil) {
         var fbObj=new localFb.FbObj('products');
         $scope.productList=$firebaseObject(fbObj.ref());
 
+
+        //home-image
+        $scope.homeImage = $firebaseObject(fbutil.ref('config/home'));
 
         //carousel
         $scope.myInterval = 2500;
