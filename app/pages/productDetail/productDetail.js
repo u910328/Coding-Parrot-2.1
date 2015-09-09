@@ -1,38 +1,34 @@
-//Step 1: name the new module.
 var newModule = 'myApp.productDetail';
 (function (angular) {
     "use strict";
 
-//Step 2: set route, ctrlName and templateUrl.
-    var route = '/productDetail/:pid',
+    var state='productDetail',
+        url = '/productDetail/:pid',
         ctrlName = 'ProductDetailCtrl',
         templateUrl = 'pages/productDetail/productDetail.html';
 
-//Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module(newModule, []);
 
-//Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, user, $firebaseObject, localFb, $location, $routeParams, model, snippet, ngCart) {
-        var productId = $routeParams.pid;
-        $scope.show=false;
-        $scope.user=user;
-        $scope.productInfo={quantity:1};
-        localFb.load('products/'+productId, 'products.'+productId,{scope:$scope},function(){
-            $scope.productInfo =model.products[productId];
+    app.controller(ctrlName, function ($scope, user, $firebaseObject, localFb, $location, $stateParams, model) {
+        var productId = $stateParams.pid;
+        $scope.show = false;
+        $scope.user = user;
+        $scope.productInfo = {quantity: 1};
+        localFb.load('products/' + productId, 'products.' + productId, {scope: $scope}, function () {
+            $scope.productInfo = model.products[productId];
             angular.extend($scope.productInfo,
                 {
-                    quantity:1,
-                    itemId:$routeParams.pid
+                    quantity: 1,
+                    itemId: productId
                 }
             );
-            $scope.show=true;
+            $scope.show = true;
         });
 
 
-
-      /*  $scope.setOption = function () {
-            $scope.productInfo.selectedOption;
-        };*/
+        /*  $scope.setOption = function () {
+         $scope.productInfo.selectedOption;
+         };*/
 
         //$scope.productInfo.selectedOption = $scope.productInfo.options[1];
 
@@ -50,15 +46,12 @@ var newModule = 'myApp.productDetail';
     });
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+    app.config(['$stateProvider', function ($stateProvider) {
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName,
             resolve: {
-                // forces the page to wait for this promise to resolve before controller is loaded
-                // the controller can then inject `user` as a dependency. This could also be done
-                // in the controller, but this makes things cleaner (controller doesn't need to worry
-                // about auth status or timing of accessing data or displaying elements)
                 user: ['Auth', function (Auth) {
                     return Auth.$waitForAuth();
                 }]

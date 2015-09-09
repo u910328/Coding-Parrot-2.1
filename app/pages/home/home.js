@@ -5,30 +5,26 @@ var newModule='myApp.home';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/home',
+    var state='home',
+        url='/home',
         ctrlName='HomeCtrl',
         templateUrl='pages/home/home.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseObject, $location, viewLogic, model, snippet, localFb) {
         var fbObj=new localFb.FbObj('products');
         $scope.productList=$firebaseObject(fbObj.ref());
-
-        $scope.checkDetail=function(itemId){
-            $location.path('/productDetail/'+itemId);
-        }
     });
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+    app.config(['$stateProvider',function($stateProvider){
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName
-        }).otherwise({
-            redirectTo: 'home'
         });
     }]);
 

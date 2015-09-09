@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My AngularJS App</title>
+    <title>My App</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
@@ -16,22 +16,27 @@
 
 <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">{{broadcast.msg}}</alert>
 <ul class="menu">
-    <li><a href="#/home">home</a></li>
-    <!--<li><a href="#/chat">chat</a></li>-->
-    <!--<li><a href="#/products">products</a></li>-->
-    <!--<li><a href="#/allOrders">all orders</a></li>-->
+    <li><a ui-sref="home">home</a></li>
+    <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
+    <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
+    <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
     <li ng-show="debug"><a href="#/backEnd">backend</a></li>
+    <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
 
-    <li ng-hide="loggedIn"><a href="#/login">login</a></li>
+
+    <!--<li><a ui-sref="test">Test</a></li>-->
+    <!--<li><a href="#/chat">chat</a></li>-->
+    <!--<li><a href="#/allOrders">all orders</a></li>-->
+
     <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
 
-    <li ng-show="loggedIn"><a href="#/shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-    <li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>
-    <!--<li><a href="#/objectGenerator">objectGenerator</a></li>-->
+    <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
+
 
 </ul>
 
 <div ng-view></div>
+<section ui-view></section>
 <account-window ng-show="isAccountOpen"></account-window>
 <log-in-window ng-show="isLogInOpen"></log-in-window>
 <hr>
@@ -65,7 +70,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
 
-<script src="bower_components/angular-route/angular-route.js"></script>
 <!--<script src="core/firebase-mod.js"></script>-->
 <!--<script src="bower_components/firebase/firebase.js"></script>-->
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
@@ -76,6 +80,8 @@
     <!--Stripe.setPublishableKey('your_stripe_publishable_key');-->
 <!--</script>-->
 <script src="bower_components/angular-payments/lib/angular-payments.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+
 
 
 
@@ -92,16 +98,17 @@
 <script src="config.js"></script>
 
 <!--<script src="pages/test/test.js"></script>-->
-<script src="pages/chat/chat.js"></script>
+<!--<script src="pages/chat/chat.js"></script>-->
 <script src="pages/login/login.js"></script>
-<!--<script src="pages/account/account.js"></script>-->
+
+<script src="pages/account/account.js"></script>
 <script src="pages/productDetail/productDetail.js"></script>
 <script src="pages/home/home.js"></script>
 <script src="pages/shoppingCart/shoppingCart.js"></script>
 <script src="pages/myOrders/myOrders.js"></script>
 <script src="pages/backEnd/backEnd.js"></script>
 
-<!--<script src="pages/allOrders/allOrders.js"></script>-->
+<script src="pages/test/test.js"></script>
 <script src="pages/invoice/invoice.js"></script>
 <script src="pages/error/error.js"></script>
 

@@ -4,15 +4,13 @@ var newModule = 'myApp.shoppingCart';
 (function (angular) {
     "use strict";
 
-//Step 2: set route, ctrlName and templateUrl.
-    var route = '/shoppingCart',
+    var state='shoppingCart',
+        url = '/shoppingCart',
         ctrlName = 'ShoppingCartCtrl',
         templateUrl = 'pages/shoppingCart/shoppingCart.html';
 
-//Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
+    var app = angular.module(newModule, []);
 
-//Step 4: construct a controller.
     app.controller(ctrlName, function (config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
         $scope.ngCart = ngCart;
@@ -286,9 +284,9 @@ var newModule = 'myApp.shoppingCart';
 
     });
 
-//Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+    app.config(['$stateProvider', function ($stateProvider) {
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName,
             resolve: {

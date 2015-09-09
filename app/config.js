@@ -5,15 +5,16 @@ angular.module('myApp.config', [])
 
     // version of this seed app is compatible with angularFire 1.0.0
     // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
-    .constant('version', '2.1.0')
+    .constant('version', '2.3.0')
 
     // where to redirect users if they need to authenticate (see security.js)
-    .constant('loginRedirectPath', '/login')
+    .constant('loginRedirectState', 'login')
+
 
     // your Firebase data URL goes here, no trailing slash
     .constant('FBURL', 'https://lauchbox.firebaseio.com')
     .constant('config', {
-        debug:false,
+        debug:true,
         shipping:0,
         taxRate:0
     })
@@ -35,6 +36,7 @@ var appDI=[
     'ngNotify',
     'ui.mask',
     'ui.bootstrap',
+    'ui.router',
     'angularPayments',
     'socialLinks',
 

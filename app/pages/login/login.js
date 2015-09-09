@@ -5,19 +5,24 @@ var newModule='myApp.login';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/login',
+    var state='login',
+        url='/login',
         ctrlName='LoginCtrl',
         templateUrl='pages/login/login.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', 'Auth', '$location', 'fbutil', 'snippet', 'localFb', function($scope, Auth, $location, fbutil, snippet, localFb) {
+    app.controller(ctrlName, ['$scope', 'Auth', '$state', 'fbutil', 'snippet', 'localFb', function($scope, Auth, $state, fbutil, snippet, localFb) {
         $scope.email = null;
         $scope.pass = null;
         $scope.confirm = null;
         $scope.createMode = false;
+
+        function redirectTo(state){
+            $state.transitionTo(state);
+        }
 
         function showError(err) {
             $scope.err = snippet.errMessage(err);
@@ -27,7 +32,7 @@ var newModule='myApp.login';
             $scope.err = null;
             Auth.$authWithPassword({ email: email, password: pass }, {rememberMe: true})
                 .then(function(/* user */) {
-                    $location.path('/home');
+                    redirectTo('home');
                 }, showError);
         };
 
@@ -45,7 +50,7 @@ var newModule='myApp.login';
                     .then(Auth.createAccount)
                     .then(function(/* user */) {
                         // redirect to home
-                        $location.path('/home');
+                        redirectTo('home');
                     }, showError);
             }
         };
@@ -66,7 +71,7 @@ var newModule='myApp.login';
         $scope.loginWithProvider=function(provider, opt){
             Auth.loginWithProvider(provider, opt)
                 .then(function(user) {
-                    $location.path('/home');
+                    redirectTo('home');
                     return Auth.checkIfAccountExistOnFb(user)
                 }, showError)
                 .then(Auth.createAccount, showError)
@@ -75,12 +80,12 @@ var newModule='myApp.login';
     }]);
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, { // user whenAuthenticated instead of when if you need this page can only be seen by logged in user. user who did not log in will be redirected to the default route. (loginRedirectPath in config.js)
+    app.config(['$stateProvider',function($stateProvider){
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName
         });
     }]);
-
 })(angular);
 appDI.push(newModule);

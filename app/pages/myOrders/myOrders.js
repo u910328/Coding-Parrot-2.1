@@ -5,12 +5,13 @@ var newModule='myApp.myOrders';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/myOrders',
+    var state='myOrders',
+        url='/myOrders',
         ctrlName='MyOrdersCtrl',
         templateUrl='pages/myOrders/myOrders.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
+    var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function (user, $scope, $firebaseArray, model, localFb, snippet, $location) {
@@ -62,14 +63,15 @@ var newModule='myApp.myOrders';
     });
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.whenAuthenticated(route, {
+    app.config(['$stateProvider', function ($stateProvider) {
+        $stateProvider.stateAuthenticated(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName,
             resolve: {
-              user: ['Auth', function (Auth) {
-                return Auth.$waitForAuth();
-              }]
+                user: ['Auth', function (Auth) {
+                    return Auth.$waitForAuth();
+                }]
             }
         });
     }]);

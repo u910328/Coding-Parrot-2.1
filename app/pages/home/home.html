@@ -2,7 +2,7 @@
 
 
 <div ng-repeat="(itemId, value) in productList">
-    <a href ng-click="checkDetail(itemId)">{{value.itemName}}</a><br>
+    <a ui-sref="productDetail({pid: itemId})">{{value.itemName}}</a><br>
     list price: USD {{value.listPrice|currency : '$' : 2}}<br>
     price: USD {{value.price|currency : '$' : 2}}<br>
     <hr>

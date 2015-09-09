@@ -5,12 +5,13 @@ var newModule='myApp.invoice';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route='/invoice',
+    var state='invoice',
+        url='/invoice',
         ctrlName='InvoiceCtrl',
         templateUrl='pages/invoice/invoice.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
+    var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
@@ -25,10 +26,16 @@ var newModule='myApp.invoice';
     });
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+    app.config(['$stateProvider', function ($stateProvider) {
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
-            controller: ctrlName
+            controller: ctrlName,
+            resolve: {
+                user: ['Auth', function (Auth) {
+                    return Auth.$waitForAuth();
+                }]
+            }
         });
     }]);
 

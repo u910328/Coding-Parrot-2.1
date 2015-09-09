@@ -5,12 +5,13 @@ var newModule = 'myApp.backEnd';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route = '/backEnd',
+    var state = 'backEnd',
+        url='/backEnd',
         ctrlName = 'BackEndCtrl',
         templateUrl = 'pages/backEnd/backEnd.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model', 'core.localFb']);
+    var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location, $filter) {
@@ -130,8 +131,9 @@ var newModule = 'myApp.backEnd';
     });
 
 //Step 5: config providers.
-    app.config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when(route, {
+    app.config(['$stateProvider',function($stateProvider){
+        $stateProvider.state(state, {
+            url: url,
             templateUrl: templateUrl,
             controller: ctrlName
         });
