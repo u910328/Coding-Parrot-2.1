@@ -4,14 +4,14 @@ var newModule = 'myApp.shoppingCart';
 (function (angular) {
     "use strict";
 
-    var state='shoppingCart',
+    var state = 'shoppingCart',
         url = '/shoppingCart',
         ctrlName = 'ShoppingCartCtrl',
         templateUrl = 'pages/shoppingCart/shoppingCart.html';
 
     var app = angular.module(newModule, []);
 
-    app.controller(ctrlName, function (config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
+    app.controller(ctrlName, function ($q, config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
 
         $scope.ngCart = ngCart;
         var cart = {products: {}};
@@ -232,7 +232,17 @@ var newModule = 'myApp.shoppingCart';
             model.invoice = angular.extend({}, cart);
 
             //批次上傳
-            return localFb.batchUpdate(batchOrderData, true)
+            var def=$q.defer();
+            localFb.$communicate({
+                request: batchOrderData,
+                response: ['users/$uid/orderHistory/$orderId/payment/status']
+            })
+                .then(function (res) {
+                    console.log('test', JSON.stringify(res));
+                    def.resolve(res);
+                });
+            return def.promise;
+            //return localFb.batchUpdate(batchOrderData, true)
         }
 
         //date picker
@@ -240,10 +250,10 @@ var newModule = 'myApp.shoppingCart';
         //    $scope.dt = new Date();
         //};
         //$scope.today();
-        $scope.dt= new Date();
+        $scope.dt = new Date();
 
-        $scope.getDt=function(){
-            var newDate=$scope.dt;
+        $scope.getDt = function () {
+            var newDate = $scope.dt;
             newDate.setMinutes(0);
             newDate.setHours(10);
             var todayBegin = newDate.getTime();
@@ -253,8 +263,8 @@ var newModule = 'myApp.shoppingCart';
 
             $scope.dt.setHours(12);
             $scope.dt.setMinutes(0);
-            $scope.minTime=todayBegin;
-            $scope.maxTime=todayEnd;
+            $scope.minTime = todayBegin;
+            $scope.maxTime = todayEnd;
         };
         $scope.getDt();
 

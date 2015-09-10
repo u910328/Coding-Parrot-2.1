@@ -1,0 +1,23 @@
+{
+  "name": "freeC-seed",
+  "description": "A free e-commerce template",
+  "version": "1.0.0",
+  "homepage": "https://github.com/firebase/angularfire-seed",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.3.8",
+    "angular-route": "~1.3.8",
+    "angular-loader": "~1.3.8",
+    "angular-mocks": "~1.3.8",
+    "html5-boilerplate": "~4.3.0",
+    "firebase": "2.2.9",
+    "angularfire": "~1.0.0",
+    "mockfirebase": "~0.10.3",
+    "angular-bootstrap":"0.13.3",
+    "angular-payments":"https://github.com/laurihy/angular-payments.git",
+    "angular-ui-bootstrap":"0.13.3",
+    "angular-ui-validate":"1.1.1",
+    "ng-cart":"1.0.0"
+  }
+}

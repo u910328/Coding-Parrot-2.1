@@ -379,17 +379,17 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             return JSON.parse(contentString);
         }
 
-        function WaitUntil(conditionNum, onComplete, argArr){
+        function WaitUntil(conditionNum, onComplete, context){
             var that=this;
             this.satisfiedCondition=0;
             this.resolve=function(){
                 that.satisfiedCondition++;
                 if(that.satisfiedCondition===conditionNum){
-                    onComplete.apply(null, argArr||[])
+                    onComplete.apply(context||null)
                 }
             };
             if(conditionNum===0){
-                onComplete.apply(null, argArr||[])
+                onComplete.apply(context||null)
             }
         }
 
