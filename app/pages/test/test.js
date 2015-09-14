@@ -10,16 +10,29 @@ var newModule = 'myApp.test';
         templateUrl = 'pages/test/test.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
+    var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', 'fbutil', 'localFb', 'authData', 'snippet', 'elasticSearch', function ($scope, fbutil, localFb, authData, snippet, elasticSearch) {
-        $scope.authData=authData;
+    app.controller(ctrlName, ['$scope', 'fbutil', 'localFb', 'snippet', 'elasticSearch', function ($scope, fbutil, localFb, authData, snippet, elasticSearch) {
+        $scope.loaded=function(value){
+            console.log(value);
+        };
+        $scope.test= function () {
+            localFb.getMultipleRefVal({
+                path1:'test/path1',
+                path2:'test/path2/&path1',
+                path3:'test/path3/&path1/&path2'
+            }).then(function(res){
+                $scope.result=res
+            })
+        };
+        $scope.path='products';
+        $scope.id='bd_001';
     }]);
 
 //Step 5: config providers.
     app.config(function($stateProvider){
-            $stateProvider.stateAuthenticated('test', {
+            $stateProvider.state('test', {
                 templateUrl: templateUrl,
                 controller: ctrlName
             });

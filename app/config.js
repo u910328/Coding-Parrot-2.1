@@ -32,6 +32,7 @@ angular.module('myApp.config', [])
 
 var appDI=[
     'ngCart',
+    'ngFirebase',
     'ngAnimate',
     'ngNotify',
     'ui.mask',

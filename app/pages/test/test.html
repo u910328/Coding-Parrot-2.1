@@ -1,2 +1,25 @@
 <h2>Test</h2>
-{{authData}}
+
+<br>
+<h3>repeat test</h3>
+loaded test result={{result}}
+<div ng-firebase="{{path}}" loaded="loaded($value)">
+    <div ng-repeat="item in $value">
+        {{item.itemName}}
+    </div>
+</div>
+<br>
+<h3>dynamic refUrl test</h3>
+<div ng-firebase="products/{{id}}">
+    {{$value}}{{$error}}
+</div>
+<br>
+<h3>$function test</h3>
+<div ng-firebase="products/{{id}}">
+    <input ng-model="$value.description" ng-change="$value.$save()">
+</div>
+<br>
+<h3>primitive value test</h3>
+<div ng-firebase="products/{{id}}/itemName">
+    {{$value}}{{$error}}
+</div>

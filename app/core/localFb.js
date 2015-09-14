@@ -12,7 +12,8 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             params: {},
             databases: {},
             ref: ref,
-            $communicate:$communicate
+            $communicate:$communicate,
+            getMultipleRefVal:getMultipleRefVal
         };
 
         var activeRefUrl = {};
@@ -357,6 +358,53 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                     def.reject(err);
                 });
             }
+            return def.promise
+        }
+
+        function getMultipleRefVal(refs, opt){
+            var _opt=opt? opt:{};
+
+            var res={},
+                params={},
+                onComplete={},
+                onGoingRef={},
+                def = $q.defer(),
+                refNum= Object.keys(refs).length,
+                indicator=_opt.indicator||'&',
+                currentRefs=angular.extend({},refs),
+                waitUntil = new snippet.WaitUntil(refNum, function () {
+                    def.resolve(res)
+                });
+
+            for(var key in refs){
+                onGoingRef[key]=false;
+            }
+
+            function iterate(){
+                currentRefs=snippet.replaceParamsInObj(currentRefs, params);
+                for(var key in onGoingRef){
+                    if(onGoingRef.hasOwnProperty(key)&&currentRefs[key].indexOf(indicator)===-1&&!onGoingRef[key]){
+
+                        onComplete[key]=new (function(key){
+                            return function (snap){
+                                if(typeof snap.val()==='string') {
+
+                                    params[indicator+key]=snap.val();
+
+                                }
+                                res[key]=snap.val();
+                                delete onGoingRef[key];
+                                waitUntil.resolve();
+                                iterate();
+                            }
+                        })(key);
+
+                        onGoingRef[key]=true;
+                        localFb.ref(currentRefs[key]).once('value', onComplete[key])
+                    }
+                }
+            }
+            iterate();
             return def.promise
         }
 
