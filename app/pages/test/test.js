@@ -19,6 +19,7 @@ var newModule = 'myApp.test';
 
         $scope.loaded=function(value){
             console.log(value);
+            $scope.isLoaded=true
         };
 
         $scope.from='https://lauchbox.firebaseio.com/products';
@@ -42,10 +43,6 @@ var newModule = 'myApp.test';
                 $scope.result=res
             })
         };
-
-        $scope.changeid=function(id){
-            $scope.id=id
-        }
     }]);
 
 //Step 5: config providers.

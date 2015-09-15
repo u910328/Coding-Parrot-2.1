@@ -1,9 +1,11 @@
 <h2>Home</h2>
 
-
-<div ng-repeat="(itemId, value) in productList">
-    <a ui-sref="productDetail({pid: itemId})">{{value.itemName}}</a><br>
-    list price: USD {{value.listPrice|currency : '$' : 2}}<br>
-    price: USD {{value.price|currency : '$' : 2}}<br>
-    <hr>
+<div ng-firebase="products">
+    <div ng-repeat="(itemId, item) in $value">
+        <a ui-sref="productDetail({pid: itemId})">{{item.itemName}}</a><br>
+        list price: USD {{item.listPrice|currency : '$' : 2}}<br>
+        price: USD {{item.price|currency : '$' : 2}}<br>
+        <hr>
+    </div>
 </div>
+

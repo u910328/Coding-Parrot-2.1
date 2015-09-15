@@ -4,6 +4,7 @@
 move:<input ng-model="from"><input ng-model="to"><button ng-click="move(from,to)">move</button>
 <h3>repeat test</h3>
 <div ng-firebase="{{path}}" loaded="loaded($value)" loading="<h2>loading</h2>">
+    isLoaded={{isLoaded}}<br>
     <div ng-repeat="item in $value">
         {{item.itemName}}
     </div>
@@ -13,7 +14,7 @@ move:<input ng-model="from"><input ng-model="to"><button ng-click="move(from,to)
 <div ng-firebase="products/{{id}}">
     {{$value}}{{$error}}
 </div>
-<button ng-click="changeid('bd_001')">change id to bd_001</button><button ng-click="changeid('bd_002')">change id to bd_002</button>
+<button ng-click="id='bd_001'">change id to bd_001</button><button ng-click="id='bd_002'">change id to bd_002</button>
 <br>
 <h3>function test</h3>
 <div ng-firebase="products/bd_001">

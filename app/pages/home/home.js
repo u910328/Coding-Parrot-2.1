@@ -14,9 +14,7 @@ var newModule='myApp.home';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, $location, viewLogic, model, snippet, localFb) {
-        var fbObj=new localFb.FbObj('products');
-        $scope.productList=$firebaseObject(fbObj.ref());
+    app.controller(ctrlName, function () {
     });
 
 //Step 5: config providers.
