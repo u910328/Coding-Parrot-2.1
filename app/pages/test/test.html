@@ -1,9 +1,9 @@
 <h2>Test</h2>
 
 <br>
+move:<input ng-model="from"><input ng-model="to"><button ng-click="move(from,to)">move</button>
 <h3>repeat test</h3>
-loaded test result={{result}}
-<div ng-firebase="{{path}}" loaded="loaded($value)">
+<div ng-firebase="{{path}}" loaded="loaded($value)" loading="<h2>loading</h2>">
     <div ng-repeat="item in $value">
         {{item.itemName}}
     </div>
@@ -14,12 +14,16 @@ loaded test result={{result}}
     {{$value}}{{$error}}
 </div>
 <br>
-<h3>$function test</h3>
-<div ng-firebase="products/{{id}}">
-    <input ng-model="$value.description" ng-change="$value.$save()">
+<h3>function test</h3>
+<div ng-firebase="products/bd_001">
+    <input ng-model="$value.description" ng-change="updateDescription($firebaseObject)">
 </div>
 <br>
 <h3>primitive value test</h3>
 <div ng-firebase="products/{{id}}/itemName">
     {{$value}}{{$error}}
 </div>
+
+<h3>get multiple dependent refUrl values</h3>
+test result={{result}}<br>
+<button ng-click="getMultipleRefVal()">getMultipleRefVal</button>

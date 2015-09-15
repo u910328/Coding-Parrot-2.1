@@ -13,7 +13,8 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             databases: {},
             ref: ref,
             $communicate:$communicate,
-            getMultipleRefVal:getMultipleRefVal
+            getMultipleRefVal:getMultipleRefVal,
+            move:move
         };
 
         var activeRefUrl = {};
@@ -316,6 +317,14 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             return def.promise
         }
 
+        function move(from, to){
+            var sourceRef=new Firebase(from),
+                targetRef=new Firebase(to);
+            sourceRef.once('value', function(snap){
+                targetRef.update(snap.val());
+            })
+        }
+
         function $communicate(opt) {
             var res = {}, def = $q.defer();
             if (typeof opt !== 'object') return;
@@ -388,7 +397,6 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                         onComplete[key]=new (function(key){
                             return function (snap){
                                 if(typeof snap.val()==='string') {
-
                                     params[indicator+key]=snap.val();
 
                                 }
@@ -400,7 +408,7 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
                         })(key);
 
                         onGoingRef[key]=true;
-                        localFb.ref(currentRefs[key]).once('value', onComplete[key])
+                        ref(currentRefs[key]).once('value', onComplete[key])
                     }
                 }
             }
