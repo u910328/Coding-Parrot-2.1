@@ -42,13 +42,18 @@ var newModule = 'myApp.test';
                 $scope.result=res
             })
         };
+
+        $scope.changeid=function(id){
+            $scope.id=id
+        }
     }]);
 
 //Step 5: config providers.
     app.config(function($stateProvider){
             $stateProvider.state('test', {
                 templateUrl: templateUrl,
-                controller: ctrlName
+                controller: ctrlName,
+                url:'/test'
             });
         });
 
