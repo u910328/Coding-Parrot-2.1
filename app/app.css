@@ -15,7 +15,13 @@ body{
     margin-bottom: 30px;
 }
 
+div.ui-scrollpoint {
+    background: yellow;
+}
 
+.blue.ui-scrollpoint{
+    background: blue;
+}
 
 .menu {
     list-style: none;

@@ -35,6 +35,7 @@ var appDI=[
     'ngNotify',
     'ui.mask',
     'ui.bootstrap',
+    'ui.scrollpoint',
     'angularPayments',
     'socialLinks',
 
