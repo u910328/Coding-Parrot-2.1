@@ -68,6 +68,10 @@ div.ui-scrollpoint {
     padding: 15px;
 }
 
+.padding-top-20px{
+    padding-top: 20px;
+}
+
 p.status {
     color: red;
 }

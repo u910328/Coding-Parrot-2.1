@@ -17,6 +17,8 @@ var newModule='myApp.home';
         var fbObj=new localFb.FbObj('products');
         $scope.productList=$firebaseObject(fbObj.ref());
         $scope.about = $firebaseObject(fbutil.ref('about'));
+        $scope.contact = $firebaseObject(fbutil.ref('contact'));
+
 
         //home-image
         $scope.homeImage = $firebaseObject(fbutil.ref('config/home'));
