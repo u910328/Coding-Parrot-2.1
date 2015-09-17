@@ -21,15 +21,14 @@
 <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
     {{broadcast.msg}}
 </alert>
-<ul class="nav nav-tabs">
-    <li><a href="#/home"><img src="image/home.jpg" style="width: 28px; height: 28px;"> Hojia!!!</a></li>
+<ul class="nav nav-tabs" style="background-color: #C6EBF1;">
+    <li><a href="#/home"> <i class="fa fa-home fa-2x"></i> Hojia!!!</a></li>
     <!--<li><a href="#/chat">chat</a></li>-->
     <!--<li><a href="#/products">products</a></li>-->
     <!--<li><a href="#/allOrders">all orders</a></li>-->
     <li ng-show="debug"><a href="#/backEnd">backend</a></li>
 
-    <li class="pull-right" ng-hide="loggedIn"><a href="#/login" style=" color: #f2f2f2;"><i class="fa fa-user fa-2x"
-                                                                                            style=" color: #F5F5F5;"></i>
+    <li class="pull-right" ng-hide="loggedIn"><a href="#/login" ><i class="fa fa-user fa-2x"></i>
         login</a></li>
     <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
     <li class="pull-right" ng-show="loggedIn" dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Hello,
@@ -54,43 +53,43 @@
 </div>
 
 
-<footer>
+<footer style="padding-top: 10px; background-color: #F24443;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 pull-left" style="min-width: 50%; display: block;">
-                <a href="#/aboutUS" style="text-decoration: none;">About</a>
-                ·
-                <a href="#/termofUse" style="text-decoration: none;">Terms</a>
-                ·
-                <a href="#/contact" style="text-decoration: none;">Contact</a>
+                <a href="#/aboutUS" style="text-decoration: none; color:#f1f1f1;">About</a>
+                <span style="color:#f1f1f1;">·</span>
+                <a href="#/termofUse" style="text-decoration: none; color:#f1f1f1;">Terms</a>
+                <span style="color:#f1f1f1;">·</span>
+                <a href="#/contact" style="text-decoration: none; color:#f1f1f1;">Contact</a>
             </div>
 
             <div class="col-md-6" style="min-width: 50%; display: block;">
                 <div class="pull-right">
                     <a social-twitter custom-url="https://hojia.firebaseapp.com/#/home"
                        class="fa-2x fa fa-twitter-square ng-isolate-scope"
-                       style="color: #C3CDD7; text-decoration: none;" href=""></a>
+                       style="color: #f1f1f1; text-decoration: none;" href=""></a>
                     <a social-facebook custom-url="https://hojia.firebaseapp.com/#/home"
-                       class="fa-2x fa fa-facebook-square ng-scope" style="color: #C3CDD7; text-decoration: none;"
+                       class="fa-2x fa fa-facebook-square ng-scope" style="color: #f1f1f1; text-decoration: none;"
                        href=""></a>
                     <a social-gplus custom-url="https://hojia.firebaseapp.com/#/home"
-                       class="fa-2x fa fa-google-plus-square ng-scope" style="color: #C3CDD7; text-decoration: none;"
+                       class="fa-2x fa fa-google-plus-square ng-scope" style="color: #f1f1f1; text-decoration: none;"
                        href=""></a>
                     <a social-pinterest custom-url="https://hojia.firebaseapp.com/#/home"
                        class="fa-2x fa fa-pinterest-square ng-isolate-scope"
-                       media="http://lorempixel.com/100/100/nature/1" style="color: #C3CDD7; text-decoration: none;"
+                       media="http://lorempixel.com/100/100/nature/1" style="color: #f1f1f1; text-decoration: none;"
                        href=""></a>
                     <a social-linkedin custom-url="https://hojia.firebaseapp.com/#/home"
-                       class="fa-2x fa fa-linkedin-square ng-scope" style="color: #C3CDD7; text-decoration: none;"
+                       class="fa-2x fa fa-linkedin-square ng-scope" style="color: #f1f1f1; text-decoration: none;"
                        href=""></a>
                     <a social-stumbleupon custom-url="https://hojia.firebaseapp.com/#/home"
-                       class="fa-2x fa fa-stumbleupon ng-scope" style="color: #C3CDD7; text-decoration: none;"
+                       class="fa-2x fa fa-stumbleupon ng-scope" style="color: #f1f1f1; text-decoration: none;"
                        href=""></a>
                     <a social-reddit custom-url="https://hojia.firebaseapp.com/#/home"
-                       class="fa-2x fa fa-reddit-square ng-scope" style="color: #C3CDD7;text-decoration: none;"
+                       class="fa-2x fa fa-reddit-square ng-scope" style="color: #f1f1f1;text-decoration: none;"
                        href=""></a>
                     <a social-vk custom-url="https://hojia.firebaseapp.com/#/home" class="fa-2x fa fa-vk ng-scope"
-                       style="color: #C3CDD7;text-decoration: none;" href=""></a>
+                       style="color: #FFFFFF;text-decoration: none;" href=""></a>
 
 
                 </div>
@@ -100,7 +99,7 @@
         </div>
 
         <div class="row">
-            <div class="text-center">
+            <div class="text-center" style="color: #FFFFFF;">
                 Copyright &copy 2015 I Min Lin. All rights reserved
             </div>
         </div>

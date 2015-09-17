@@ -22,7 +22,7 @@
 
 
 
-<div class="container-fluid" style="padding: 0;">
+<div class="container-fluid" style="padding: 0; background-color: #F1EEEA;">
     <div class="row" style="margin: 0; padding: 0;">
        <div class="col-xs-6 col-sm-4" ng-repeat="(itemId, value) in productList" style="width: 300px; margin: 2%; padding: 0;">
           <div class="row" style="margin: 0; padding: 0;">
@@ -44,6 +44,14 @@
           </div>
 
        </div>
+        <div class="col-md-12 text-center">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3><i class="fa fa-home"></i> address:</h3>{{contact.address.text}}<br>
+                    <img style="width: 320px; height: 200px; text-align: center;" ng-src="{{contact.address.imageurl}}">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
