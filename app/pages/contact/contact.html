@@ -1,6 +1,6 @@
 
-<div class="container-fluid margin-top-20px" style="min-height: calc(100% - 98px);">
-    <div class="row">
+<div class="container-fluid" style="min-height: calc(100% - 98px); background-color: #F1EEEA;">
+    <div class="row" style="margin: 2%;">
         <div class="col-md-6 text-center">
             <div class="panel panel-default">
                  <div class="panel-body">
@@ -23,14 +23,10 @@
 
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h3><i class="fa fa-home"></i> address:</h3>{{contact.address.text}}<br>
-                    <img class="img-responsive" style="text-align: center;" ng-src="{{contact.address.imageurl}}">
-                </div>
-            </div>
+    <div class="row" style="padding-left: 15px; padding-right: 15px; background-color: #FFFFFF; margin: 0;" >
+        <div class="col-md-12 col-xs-12 col-sm-12 text-center" style=" padding-bottom: 3%;">
+            <h3><i class="fa fa-home"></i> Pickup location: </h3>{{contact.address.text}}<br>
+            <img class="img-responsive" style="margin-right: auto; margin-left: auto;" ng-src="{{contact.address.imageurl}}">
         </div>
     </div>
 </div>

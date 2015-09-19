@@ -1,27 +1,26 @@
 
-<div class="container-fluid margin-top-20px">
-    <div class="row">
-        <div class="col-md-12">
-            <img class="col-md-4 img-responsive pull-left padding-15px" ng-src="{{about.story.imageurl}}" style="width: 320px; height: 200px;">
-            <h2>
-                <span class="col-md-8 text-muted pull-right" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.story.history}}</span>
-            </h2>
-        </div>
+<div class="container-fluid" style="background-color: #F1EEEA;">
+    <div class="row" style="margin-left: auto; margin-right: auto;">
+        <img class="col-md-4 img-responsive padding-15px" ng-src="{{about.story.imageurl}}" style="width: 320px; height: 200px; padding-left: auto; padding-right: auto;" >
+        <div class="col-md-8 text-muted" style="display:block; min-width: 73%; word-wrap:break-word;"><h2>{{about.story.history}}</h2></div>
+
     </div>
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row" style="margin-left: auto; margin-right: auto;">
+        <div class="col-md-8 text-muted" style="min-width: 73%;  padding-left: auto; padding-right: auto; display:block; word-wrap:break-word;">
             <h2>
-                <span class="col-md-8 text-muted pull-left" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.chef.info}}</span>
+                {{about.chef.info}}
             </h2>
-            <img class="col-md-4 img-responsive pull-right padding-15px" ng-src="{{about.chef.imageurl}}" style="width: 320px; height: 200px;">
         </div>
+
+        <img class="col-md-4 img-responsive padding-15px" ng-src="{{about.chef.imageurl}}" style="width: 320px; height: 200px;">
+
     </div>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <img class="col-md-3 img-responsive pull-left padding-15px" ng-src="{{about.welcomemsg.imageurl}}" style="width: 320px; height: 200px;">
-            <h2>
-                <span class="col-md-6 text-muted pull-right" style="display:block; min-width:calc(100% - 450px); word-wrap:break-word;">{{about.welcomemsg.text}}</span>
-            </h2>
+    <div class="row" style="margin-left: auto; margin-right: auto;">
+        <img class="col-md-6 img-responsive padding-15px" ng-src="{{about.welcomemsg.imageurl}}" style="padding-left: auto; padding-right: auto;width: 320px; height: 200px;">
+
+        <div class="col-md-6 text-muted" style="min-width: 73%; display:block; word-wrap:break-word;">
+            <h1 class="text-center"> {{about.welcomemsg.text}}</h1>
         </div>
+
     </div>
 </div>
