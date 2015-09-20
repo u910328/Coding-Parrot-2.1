@@ -11,15 +11,9 @@ var newModule = 'myApp.shoppingCart';
 
     var app = angular.module(newModule, []);
 
-    app.controller(ctrlName, function ($q, config, user, $scope, model, localFb, snippet, $location, ngCart, $firebaseObject) {
-
+    app.controller(ctrlName, function ($q, config, user, $scope, model, localFb, snippet, $state, ngCart, $firebaseObject) {
         $scope.ngCart = ngCart;
         var cart = {products: {}};
-
-
-        $scope.keepShopping = function () {
-            $location.path('/products')
-        };
 
         $scope.emptyCart = function () {
             ngCart.empty();  //清空購物車, ngCart 要清兩次才會清空
@@ -57,7 +51,11 @@ var newModule = 'myApp.shoppingCart';
             $scope.cvc = '123';
         }
 
-        function ensureEnoughTimeToPrepare() {
+        function isTimeValid() {
+            if(( $scope.dt.getDay() === 0 || $scope.dt.getDay() === 6 )){
+                alert('Please pick a weekday.');
+                return false
+            }
             if ($scope.dt.getTime() < (new Date()).getTime() + 30 * 60 * 1000) {
                 alert('Please pick a time at least 30 minutes from now.');
                 return false
@@ -68,11 +66,11 @@ var newModule = 'myApp.shoppingCart';
 
         $scope.checkOut = function () {
             //確保有足夠時間準備
-            if (!ensureEnoughTimeToPrepare()) return;
+            if (!isTimeValid()) return;
 
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
-            if ($scope.paymentMethod === 'uponPickup') uploadOrder().then(function () {
-                $location.path('/invoice'); //成功後轉換至invoice頁面
+            if ($scope.paymentMethod === 'uponPickup') uploadOrder('uponPickup').then(function () {
+                $state.go('invoice'); //成功後轉換至invoice頁面
                 $scope.emptyCart();
                 if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
             });
@@ -91,48 +89,47 @@ var newModule = 'myApp.shoppingCart';
             }
         }
 
+        function errorHandler(errorId, type, message) {
+            model.error[errorId] = {
+                type: type,
+                message: message
+            };
+            $state.go('error', {errorId: errorId});
+            console.log('an error has occurred:' + message);
+            if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
+        }
+
         $scope.stripeCallback = function (code, result) {
             if (!ensureEnoughTimeToPrepare()) return;
             getPaymentData(code, result);
 
+            var timeout = setTimeout(function () {
+                $scope.waiting = false;
+                errorHandler(errorId, 'timeout', 'timeout');
+            }, 5000);
+
             //將payment provider取得的token加入其他資料一起上傳
-            uploadOrder()
+            uploadOrder('creditCard')
                 .then(function (res) {
                     var orderId = res.params['$orderId'];
                     console.log('orderId is ' + orderId);
 
-                    function errorHandler(errorId, type, message) {
-                        model.error[errorId] = {
-                            type: type,
-                            message: message
-                        };
-                        $location.path('/error/' + errorId);
-                        console.log('an error has occurred:' + message);
+                    var errorId = (new Date()).getTime();
+
+
+                    clearTimeout(timeout);
+
+                    if (res.isCharged === 'succeeded') {
+                        $state.go('invoice'); //成功後轉換至invoice頁面
+                        console.log('transaction succeeded');
+                        $scope.emptyCart();
                         if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
+                    } else {
+                        errorHandler(errorId, 'transaction failed', res.isCharged);
                     }
+                    $scope.waiting = false;
 
-                    var errorId = (new Date()).getTime(),
-                        timeout = setTimeout(function () {
-                            $scope.waiting = false;
-                            errorHandler(errorId, 'timeout', 'timeout');
-                        }, 5000);
 
-                    var reportRef = localFb.ref('users/' + user.uid + '/orderHistory/' + orderId + '/payment/status');
-                    reportRef.on('value', function (snap) {
-                        if (snap.val() === null) return;
-
-                        clearTimeout(timeout);
-
-                        if (snap.val() === 'succeeded') {
-                            $location.path('/invoice'); //成功後轉換至invoice頁面
-                            console.log('transaction ' + snap.val());
-                            $scope.emptyCart();
-                            if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
-                        } else {
-                            errorHandler(errorId, 'transaction failed', snap.val().message);
-                        }
-                        $scope.waiting = false;
-                    });
                 }, function (err) {
                     console.log(JSON.stringify(err)); //上傳失敗產生警告
                 });
@@ -165,7 +162,7 @@ var newModule = 'myApp.shoppingCart';
         }
 
 
-        function uploadOrder() {
+        function uploadOrder(type) {
 
             //整理order 資料
             prepareOrderData();
@@ -232,66 +229,42 @@ var newModule = 'myApp.shoppingCart';
             model.invoice = angular.extend({}, cart);
 
             //批次上傳
-            var def=$q.defer();
-            localFb.$communicate({
+            return localFb.$communicate({
                 request: batchOrderData,
-                response: ['users/$uid/orderHistory/$orderId/payment/status']
-            })
-                .then(function (res) {
-                    console.log('test', JSON.stringify(res));
-                    def.resolve(res);
-                });
-            return def.promise;
-            //return localFb.batchUpdate(batchOrderData, true)
+                response: type === 'uponPickup' ? false : {isCharged: 'users/$uid/orderHistory/$orderId/payment/status'}
+            });
         }
 
         //date picker
-        //$scope.today = function () {
-        //    $scope.dt = new Date();
-        //};
-        //$scope.today();
+
         $scope.dt = new Date();
-
-        $scope.getDt = function () {
-            var newDate = $scope.dt;
-            newDate.setMinutes(0);
-            newDate.setHours(10);
-            var todayBegin = newDate.getTime();
-
-            newDate.setHours(20);
-            var todayEnd = newDate.getTime();
-
-            $scope.dt.setHours(12);
-            $scope.dt.setMinutes(0);
-            $scope.minTime = todayBegin;
-            $scope.maxTime = todayEnd;
-        };
-        $scope.getDt();
-
+        $scope.hour=12;
+        $scope.minute=0;
         $scope.minDate = $scope.dt;
+        $scope.maxDate = new Date(
+            $scope.dt.getFullYear(),
+            $scope.dt.getMonth() + 2,
+            $scope.dt.getDate());
+
+        $scope.changeDt = function () {
+            $scope.hour=12;
+            $scope.dt.setHours(12);
+            $scope.minute=0;
+            $scope.dt.setMinutes(0);
+        };
+        $scope.changeDt();
+
+        $scope.changeTime= function(){
+            $scope.dt.setHours($scope.hour);
+            $scope.dt.setMinutes($scope.minute);
+        };
+
 
 
         // Disable weekend selection
         $scope.disabled = function (date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };
-
-
-        $scope.open = function ($event) {
-            $scope.status.opened = true;
-        };
-
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
-        $scope.format = 'yyyy/MM/dd';
-
-        $scope.status = {
-            opened: false
-        };
-
     });
 
     app.config(['$stateProvider', function ($stateProvider) {

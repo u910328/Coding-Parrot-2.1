@@ -5,6 +5,7 @@
         <a ui-sref="productDetail({pid: itemId})">{{item.itemName}}</a><br>
         list price: USD {{item.listPrice|currency : '$' : 2}}<br>
         price: USD {{item.price|currency : '$' : 2}}<br>
+        <img ng-src="{{item.image}}">
         <hr>
     </div>
 </div>

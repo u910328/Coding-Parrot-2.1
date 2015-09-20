@@ -9,8 +9,19 @@
 
             return {}
         }])
-        .run(function($rootScope, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
+        .config(function($mdIconProvider) {
+            $mdIconProvider
+                .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+        })
+        .run(function($rootScope, $mdSidenav, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             $rootScope.debug=config.debug;
+            if(config.debug) console.log('debug mode');
+
+            $rootScope.toggleSidenav = function(menuId) {
+                $mdSidenav(menuId).toggle();
+            };
+
+
 
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){
@@ -34,7 +45,7 @@
             //};
 
             //template
-            if(config.debug) console.log('debug mode');
+
 
             ngCart.setShipping(config.shipping);
             ngCart.setTaxRate(config.taxRate);

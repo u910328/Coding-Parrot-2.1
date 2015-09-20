@@ -7,7 +7,8 @@ angular.module('ngFirebase', [])
             transclude: true,
             scope: {
                 ngFirebase: '@',
-                loading: '@'
+                loading: '@',
+                pure:'@'
             },
             link: function (scope, element, attrs, ctrl, transcludeFn) {
                 function init(){
@@ -20,7 +21,15 @@ angular.module('ngFirebase', [])
                         transcludeFn(function (clone, trclScope) {
                             element.append(clone);
                             if (dataOrError === obj) {
-                                trclScope.$value = dataOrError.$value ? dataOrError.$value : dataOrError;
+                                if(scope.pure){
+                                    var pureValue={};
+                                    angular.forEach(dataOrError, function(subValue,key){
+                                        pureValue[key]=subValue
+                                    });
+                                    trclScope.$value=dataOrError.$value? dataOrError.$value:pureValue;
+                                } else {
+                                    trclScope.$value = dataOrError.$value ? dataOrError.$value : dataOrError;
+                                }
                                 trclScope.$firebaseObject = dataOrError;
                                 trclScope.$eval(attrs.loaded);
                             } else {

@@ -9,26 +9,24 @@
     <div ng-hide="!ngCart.getTotalItems()">
         Note:<textarea ng-model="note"></textarea><br>
         Pick up:
-        <p class="input-group">
-            <input type="text" style="background-color: white" readonly="readonly"
-                   class="form-control"
-                   datepicker-popup="{{format}}"
-                   ng-model="dt" is-open="status.opened"
-                   ng-change="getDt()"
-                   ng-focus="open($event)"
-                   min-date="minDate"
-                   max-date="'2050-06-22'"
-                   datepicker-options="dateOptions"
-                   date-disabled="disabled(date, mode)"
-                   ng-required="true"
-                   close-text="Close"
-                   datepicker-popup-template-url="template/datepicker/popupMod.html"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i
-                        class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-        </p>
-        <timepicker ng-model="dt" hour-step="1" minute-step="15" show-meridian="true" min="minTime" max="maxTime"></timepicker>
+        <md-datepicker ng-model="dt"
+                       ng-change="changeDt()"
+                       md-min-date="minDate"
+                       md-max-date="maxDate"></md-datepicker>
+        <md-input-container>
+            <label>hour</label>
+            <md-select ng-model="hour" ng-change="changeTime()">
+                <md-option ng-repeat="hr in [10,11,12,13,14,15,16,17,18,19,20]" value="{{hr}}">{{hr}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container>
+            <label>minute</label>
+            <md-select ng-model="minute" ng-change="changeTime()">
+                <md-option ng-repeat="min in [0,15,30,45]" value="{{min}}">{{min}}</md-option>
+            </md-select>
+        </md-input-container>
+
+
         <br>
 
         <div>
@@ -83,14 +81,14 @@
             <div class="span4">
                 <button type="submit" class="btn btn-primary btn-large">Submit</button>
                 <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
-                <button class="btn btn-primary btn-large" ng-click="keepShopping()">shop more</button>
+                <button class="btn btn-primary btn-large" ui-sref="home">shop more</button>
             </div>
         </form>
         <form ng-show="paymentMethod==='uponPickup'" ng-submit="checkOut()">
             <div class="span4">
                 <button type="submit" class="btn btn-primary btn-large">Submit</button>
                 <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
-                <button class="btn btn-primary btn-large" ng-click="keepShopping()">shop more</button>
+                <button class="btn btn-primary btn-large" ui-sref="home">shop more</button>
 
             </div>
         </form>

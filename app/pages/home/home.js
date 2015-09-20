@@ -14,7 +14,8 @@ var newModule='myApp.home';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function () {
+    app.controller(ctrlName, function ($scope) {
+
     });
 
 //Step 5: config providers.

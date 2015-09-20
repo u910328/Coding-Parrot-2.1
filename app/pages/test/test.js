@@ -13,7 +13,7 @@ var newModule = 'myApp.test';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope','$timeout', 'fbutil', 'localFb', 'snippet', 'elasticSearch', function ($scope, $timeout, fbutil, localFb, authData, snippet, elasticSearch) {
+    app.controller(ctrlName, ['$scope','$state','$timeout', 'fbutil', 'localFb', 'snippet', 'elasticSearch', function ($scope, $state, $timeout, fbutil, localFb, authData, snippet, elasticSearch) {
         $scope.path='products';
         $scope.id='bd_001';
 

@@ -330,6 +330,10 @@ angular.module('core.localFb', ['firebase', 'myApp.config'])
             if (typeof opt !== 'object') return;
 
             batchUpdate(opt.request, true).then(function (resolveVal) {
+                if(!opt.response) {
+                    def.resolve(resolveVal);
+                    return
+                }
                 angular.extend(res, resolveVal);
                 var resUrlArr= snippet.replaceParamsInObj(opt.response, resolveVal.params);
 
