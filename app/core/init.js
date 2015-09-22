@@ -9,10 +9,6 @@
 
             return {}
         }])
-        .config(function($mdIconProvider) {
-            $mdIconProvider
-                .defaultIconSet('img/icons/sets/core-icons.svg', 24);
-        })
         .run(function($rootScope, $mdSidenav, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
             $rootScope.debug=config.debug;
             if(config.debug) console.log('debug mode');

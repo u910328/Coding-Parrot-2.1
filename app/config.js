@@ -18,6 +18,10 @@ angular.module('myApp.config', [])
         shipping:0,
         taxRate:0
     })
+    .config(function($mdIconProvider) {
+        $mdIconProvider
+            .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+    })
 
     // double check that the app has been configured before running it and blowing up space and time
     .run(['FBURL', '$timeout', function (FBURL, $timeout) {
@@ -41,6 +45,7 @@ var appDI=[
     'ui.router',
     'angularPayments',
     'socialLinks',
+    'ui.scrollpoint',
 
     'myApp.config',
     'myApp.security',

@@ -5,7 +5,8 @@ var newModule = 'myApp.test';
     "use strict";
 
 //Step 2: set route, ctrlName and templateUrl.
-    var route = '/test',
+    var state = 'test',
+        url='/test',
         ctrlName = 'TestCtrl',
         templateUrl = 'pages/test/test.html';
 
@@ -47,10 +48,10 @@ var newModule = 'myApp.test';
 
 //Step 5: config providers.
     app.config(function($stateProvider){
-            $stateProvider.state('test', {
+            $stateProvider.state(state, {
                 templateUrl: templateUrl,
                 controller: ctrlName,
-                url:'/test'
+                url:url
             });
         });
 

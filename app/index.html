@@ -47,12 +47,27 @@
         <md-toolbar-filler layout layout-align="center center">
             <i class="material-icons">face</i>
         </md-toolbar-filler>
+        <ul class="menu">
+            <li><a ui-sref="home">home</a></li>
+            <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
+            <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
+            <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
+            <li ng-show="debug"><a href="#/backEnd">backend</a></li>
+            <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
+
+
+            <li><a ui-sref="test">Test</a></li>
+            <li><a ui-sref="test2">Test2</a></li>
+
+        </ul>
     </div>
 </md-toolbar>
 
 <div layout="row" flex>
+    <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
+                <!--md-is-locked-open="$mdMedia('gt-sm')">-->
     <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
-                md-is-locked-open="$mdMedia('gt-sm')">
+                md-swipe-left="toggleSidenav('left')">
         <ul>
             <li><a ui-sref="home">home</a></li>
             <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
@@ -76,10 +91,11 @@
     </md-sidenav>
     <div layout="column" flex id="content">
         <md-content layout="column" flex class="md-padding">
-            <section ui-view></section>
         </md-content>
     </div>
 </div>
+<section ui-view></section>
+
 
 
 <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
@@ -158,6 +174,8 @@
 <script src="pages/backEnd/backEnd.js"></script>
 
 <script src="pages/test/test.js"></script>
+<script src="pages/test2/test2.js"></script>
+
 <script src="pages/invoice/invoice.js"></script>
 <script src="pages/error/error.js"></script>
 
@@ -178,6 +196,8 @@
 
 <script src="components/inputMask/ui-mask.js"></script>
 <script src="components/socialLinks/socialLinks.js"></script>
+<script src="components/scrollpoint/scrollpoint.js"></script>
+
 
 
 <script src="core/snippet.js"></script>
