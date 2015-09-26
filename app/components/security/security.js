@@ -1,12 +1,13 @@
+var newModule='myApp.security';
+
 (function (angular) {
     "use strict";
 
     // when $routeProvider.whenAuthenticated() is called, the path is stored in this list
     // to be used by authRequired() in the services below
-    var securedRoutes = [],
-        securedStates = [];
+    var securedStates = [];
 
-    angular.module('myApp.security', ['ui.router', 'firebase.auth', 'myApp.config'])
+    angular.module(newModule, ['ui.router', 'firebase.auth', 'myApp.config'])
 
         .config(['$urlRouterProvider', function ($urlRouterProvider) {
             // routes which are not in our map are redirected to 'home'
@@ -67,3 +68,5 @@
         ]);
 
 })(angular);
+
+if(appDI) appDI.push(newModule);

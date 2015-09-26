@@ -14,55 +14,47 @@ angular.module('myApp.config', [])
     // your Firebase data URL goes here, no trailing slash
     .constant('FBURL', 'https://lauchbox.firebaseio.com')
     .constant('config', {
-        debug:true,
-        shipping:0,
-        taxRate:0
+        debug: true,
+        shipping: 0,
+        taxRate: 0
     })
-    .config(function($mdIconProvider) {
+    .config(function ($mdIconProvider) {
         $mdIconProvider
             .defaultIconSet('img/icons/sets/core-icons.svg', 24);
     })
 
     // double check that the app has been configured before running it and blowing up space and time
-    .run(['FBURL', '$timeout', function (FBURL, $timeout) {
+    .run(['FBURL', '$timeout', '$http', function (FBURL, $timeout, $http) {
         if (FBURL.match('//INSTANCE.firebaseio.com')) {
             angular.element(document.body).html('<h1>Please configure app/config.js before running!</h1>');
             $timeout(function () {
                 angular.element(document.body).removeClass('hide');
             }, 250);
         }
+
     }]);
 
 
-var appDI=[
+var appDI = [
     'ngMaterial',
     'ngCart',
     'ngFirebase',
     'ngAnimate',
     'ngNotify',
     'ui.mask',
-    'ui.bootstrap',
     'ui.router',
     'angularPayments',
     'socialLinks',
     'ui.scrollpoint',
 
-    'myApp.config',
-    'myApp.security',
-
-    'core.viewLogic',
-    'core.model',
-    'core.binder',
-    'core.driver',
-    'core.action',
-    'core.init',
-    'core.elasticSearch'
+    'myApp.config'
+    //'myApp.security'
 ];
 
 function randomString(length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 
-    if (! length) {
+    if (!length) {
         length = Math.floor(Math.random() * chars.length);
     }
 

@@ -9,7 +9,7 @@ var newModule = 'myApp.productDetail';
 
     var app = angular.module(newModule, []);
 
-    app.controller(ctrlName, function ($scope, user, $firebaseObject, localFb, $location, $stateParams, model) {
+    app.controller(ctrlName, function ($scope, user, $firebaseObject, $firebase, $location, $stateParams) {
         var productId = $stateParams.pid;
         $scope.id = productId;
         $scope.user = user;

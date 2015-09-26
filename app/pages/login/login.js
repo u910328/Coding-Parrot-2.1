@@ -15,7 +15,7 @@ var newModule='myApp.login';
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', 'Auth', '$state', 'fbutil', 'snippet', 'localFb', function($scope, Auth, $state, fbutil, snippet, localFb) {
+    app.controller(ctrlName, ['$scope', 'Auth', '$state', 'fbutil', 'snippet', '$firebase', function($scope, Auth, $state, fbutil, snippet, $firebase) {
         $scope.email = null;
         $scope.pass = null;
         $scope.confirm = null;

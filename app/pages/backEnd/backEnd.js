@@ -14,12 +14,12 @@ var newModule = 'myApp.backEnd';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, localFb, snippet, $location, $filter) {
+    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, $firebase, snippet) {
         //to show orders
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
                 day = 24 * 60 * 60 * 1000;
-            var ref = localFb.ref('orders').orderByChild('schedule').startAt(now + startDay * day).endAt(now + endDay * day);
+            var ref = $firebase.ref('orders').orderByChild('schedule').startAt(now + startDay * day).endAt(now + endDay * day);
 
             $scope.allOrdersSrc = $firebaseArray(ref);
         };
@@ -59,7 +59,7 @@ var newModule = 'myApp.backEnd';
                     set: true
                 }
             ];
-            localFb.batchUpdate(values, true).then(function () {
+            $firebase.batchUpdate(values, true).then(function () {
             }, function (err) {
                 console.log(JSON.stringify(err));
             });
@@ -84,12 +84,12 @@ var newModule = 'myApp.backEnd';
                     set: true
                 }
             ];
-            localFb.batchUpdate(values, true).then(function(){
+            $firebase.batchUpdate(values, true).then(function(){
                 $scope.refreshFilter();
             })
         };
         //to add/remove new products
-        $scope.products=$firebaseObject(localFb.ref('products'));
+        $scope.products=$firebaseObject($firebase.ref('products'));
         $scope.addOpt=function(){
             var arr=$scope.selectedProduct.options;
             $scope.selectedProduct.options[arr.length]=''

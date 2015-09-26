@@ -1,7 +1,7 @@
 var newModule='core.$firebase';
 angular.module(newModule, ['firebase', 'myApp.config'])
     .factory('$firebase', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, snippet) {
-        var localFb = {
+        var $firebase = {
             FbObj: FbObj,
             load: load,
             update: update,
@@ -19,7 +19,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
         var activeRefUrl = {};
 
         function FbObj(refUrl, opt) {
-            var dbOpt = opt || {}, db = localFb.databases[refUrl.split("@")[1]] || {};
+            var dbOpt = opt || {}, db = $firebase.databases[refUrl.split("@")[1]] || {};
 
             function isDbOnline() {
                 if (dbOpt.keepOnline !== undefined) return !!dbOpt.keepOnline;
@@ -94,7 +94,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
             if(objectRepo[refUrl]){
                 return objectRepo[refUrl]
             } else {
-                objectRepo[refUrl]=$firebaseObject(localFb.ref(refUrl));
+                objectRepo[refUrl]=$firebaseObject(ref(refUrl));
                 return objectRepo[refUrl]
             }
         }
@@ -222,11 +222,11 @@ angular.module(newModule, ['firebase', 'myApp.config'])
 
         function batchUpdate(values, isConsecutive) {
             var def = $q.defer();
-            var onCompletes = [], refUrlParams = snippet.cloneObject(localFb.params);
+            var onCompletes = [], refUrlParams = snippet.cloneObject($firebase.params);
 
             function update(i) {
                 var ithOnComplete = (isConsecutive) ? onCompletes[i] : values[i].onComplete;
-                var params = localFb.update(values[i].refUrl, values[i].value, ithOnComplete, values[i].set, refUrlParams).params;
+                var params = $firebase.update(values[i].refUrl, values[i].value, ithOnComplete, values[i].set, refUrlParams).params;
                 refUrlParams = angular.extend(refUrlParams, params);
             }
 
@@ -316,11 +316,11 @@ angular.module(newModule, ['firebase', 'myApp.config'])
                 });
 
             for (var key in refs) {
-                localFb.ref(refs[key]).on('value', function (snap) {
+                ref(refs[key]).on('value', function (snap) {
                     if(res[key]!==undefined){
                         res[key]=snap.val();
                         waitUntil.resolve();
-                        localFb.ref(refs[key]).off();
+                        ref(refs[key]).off();
                     } else {
                         res[key] = snap.val(); //server hasn't change the data.
                     }
@@ -378,7 +378,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
             return def.promise
         }
 
-        return localFb
+        return $firebase
     }]);
 
 if(appDI) appDI.push(newModule);

@@ -67,14 +67,6 @@
 
 
                 <li><a ui-sref="test">Test</a></li>
-                <!--<li><a href="#/chat">chat</a></li>-->
-                <!--<li><a href="#/allOrders">all orders</a></li>-->
-
-                <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
-
-                <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
-
-
             </ul>
 
         </md-sidenav>
@@ -84,15 +76,6 @@
         </div>
     </div>
 
-
-
-    <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
-        {{broadcast.msg}}
-    </alert>
-
-    <!--<account-window ng-show="isAccountOpen"></account-window>-->
-    <!--<log-in-window ng-show="isLogInOpen"></log-in-window>-->
-    <hr>
 </div>
 <footer>
     <h2>
@@ -105,87 +88,46 @@
         <a social-stumbleupon class="fa fa-stumbleupon ng-scope" href=""></a>
         <a social-reddit class="fa fa-reddit ng-scope" href=""></a>
         <a social-vk class="fa fa-vk ng-scope" href=""></a>
-        <!--<a social-ok href="">share on ok.ru</a>-->
-        <!--<a social-xing href="">share on xing</a>-->
     </h2>
 </footer>
 
-<script type="text/javascript">
-    window.onload = function () {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
-        document.getElementsByTagName("head")[0].appendChild(script);
-    };
-    function DisplayIP(response) {
-        console.log("Your IP Address is " + response.ip);
-    }
-</script>
 
 
 
-
-<!-- In production use:
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.x/angular.min.js"></script>
-<script src="//cdn.firebase.com/js/client/2.2.x/firebase.js"></script>
-<script src="//cdn.firebase.com/libs/angularfire/1.0.x/angularfire.min.js"></script>
--->
-<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
-<!--<script src="core/firebase-mod.js"></script>-->
-<!--<script src="bower_components/firebase/firebase.js"></script>-->
+<!-- In production use:  -->
 
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
-<!--<script src="bower_components/angular/angular.js"></script>-->
+
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-aria.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.3.0/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+<!--<script src="bower_components/angularfire/dist/angularfire.js"></script>-->
 
-
-<script src="bower_components/angularfire/dist/angularfire.js"></script>
-
-<!--<script src="bower_components/angular-stripe/release/angular-stripe.js"></script>-->
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <!--<script>-->
 <!--Stripe.setPublishableKey('your_stripe_publishable_key');-->
 <!--</script>-->
+
+
+
 <script src="bower_components/angular-payments/lib/angular-payments.min.js"></script>
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 
-
-<!--<link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">-->
-<!--<script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>-->
-
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.3.js"></script>
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
 
 <script type="text/javascript" src="bower_components/angular-ui-validate/dist/validate.js"></script>
 
 
 <script src="config.js"></script>
 
-<!--<script src="pages/test/test.js"></script>-->
-<!--<script src="pages/chat/chat.js"></script>-->
-<script src="pages/login/login.js"></script>
 
-<script src="pages/account/account.js"></script>
-<script src="pages/productDetail/productDetail.js"></script>
-<script src="pages/home/home.js"></script>
-<script src="pages/shoppingCart/shoppingCart.js"></script>
-<script src="pages/myOrders/myOrders.js"></script>
-<script src="pages/backEnd/backEnd.js"></script>
-
-<script src="pages/test/test.js"></script>
-<script src="pages/test2/test2.js"></script>
-
-<script src="pages/invoice/invoice.js"></script>
-<script src="pages/error/error.js"></script>
+<!--<script data-main="main" src="require.js"></script>-->
 
 
-<!--<script src="pages/objectGenerator/objectGenerator.js"></script>-->
 
-<script src="app.js"></script>
 <script src="components/appversion/appversion-directive.js"></script>
 <script src="components/auth/auth.js"></script>
 <script src="components/firebase.utils/firebase.utils.js"></script>
@@ -202,17 +144,26 @@
 <script src="components/scrollpoint/scrollpoint.js"></script>
 
 
-
 <script src="core/snippet.js"></script>
-<script src="core/viewLogic.js"></script>
 <script src="core/model.js"></script>
-<script src="core/localFb.js"></script>
-<script src="core/binder.js"></script>
-<script src="core/driver.js"></script>
-<script src="core/action.js"></script>
+<script src="core/$firebase.js"></script>
 <script src="core/init.js"></script>
 <script src="core/linkFn.js"></script>
 <script src="core/elasticSearch.js"></script>
+
+<script src="pages/login/login.js"></script>
+<script src="pages/account/account.js"></script>
+<script src="pages/productDetail/productDetail.js"></script>
+<script src="pages/home/home.js"></script>
+<script src="pages/shoppingCart/shoppingCart.js"></script>
+<script src="pages/myOrders/myOrders.js"></script>
+<script src="pages/backEnd/backEnd.js"></script>
+<script src="pages/test/test.js"></script>
+<script src="pages/test2/test2.js"></script>
+<script src="pages/invoice/invoice.js"></script>
+<script src="pages/error/error.js"></script>
+
+<script src="app.js"></script>
 
 
 </body>

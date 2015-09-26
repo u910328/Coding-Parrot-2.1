@@ -11,7 +11,7 @@ var newModule = 'myApp.shoppingCart';
 
     var app = angular.module(newModule, []);
 
-    app.controller(ctrlName, function ($q, config, user, $scope, model, localFb, snippet, $state, ngCart, $firebaseObject) {
+    app.controller(ctrlName, function ($q, config, user, $scope, model, $firebase, snippet, $state, ngCart, $firebaseObject) {
         $scope.ngCart = ngCart;
         var cart = {products: {}};
 
@@ -23,8 +23,8 @@ var newModule = 'myApp.shoppingCart';
         $scope.paymentMethod = 'uponPickup';
 
 
-        $scope.clientEmail = $firebaseObject(localFb.ref('users/' + user.uid + '/email'));
-        localFb.ref('users/' + user.uid + '/phone').on('value', function (snap) {
+        $scope.clientEmail = $firebaseObject($firebase.ref('users/' + user.uid + '/email'));
+        $firebase.ref('users/' + user.uid + '/phone').on('value', function (snap) {
             $scope.clientPhone = snap.val();
         });
 
@@ -39,7 +39,7 @@ var newModule = 'myApp.shoppingCart';
         };
         $scope.savePhone = function () {
             function onComplete() {
-                if ($scope.clientPhone) localFb.update('users/' + user.uid, false, {phone: $scope.clientPhone || null});
+                if ($scope.clientPhone) $firebase.update('users/' + user.uid, {phone: $scope.clientPhone || null});
             }
 
             delayExe.reset(onComplete)
@@ -229,7 +229,7 @@ var newModule = 'myApp.shoppingCart';
             model.invoice = angular.extend({}, cart);
 
             //批次上傳
-            return localFb.$communicate({
+            return $firebase.$communicate({
                 request: batchOrderData,
                 response: type === 'uponPickup' ? false : {isCharged: 'users/$uid/orderHistory/$orderId/payment/status'}
             });

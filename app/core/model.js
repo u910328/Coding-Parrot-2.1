@@ -1,4 +1,5 @@
-angular.module('core.model', ['firebase', 'myApp.config'])
+var newModule='core.model';
+angular.module(newModule, ['firebase', 'myApp.config'])
     .factory('model', ['config','fbutil','$q','snippet',function (config, fbutil, $q, snippet) {
         var model={
             update:update,
@@ -75,3 +76,5 @@ angular.module('core.model', ['firebase', 'myApp.config'])
 
         return model
     }]);
+
+if(appDI) appDI.push(newModule);

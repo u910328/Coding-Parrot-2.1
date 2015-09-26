@@ -14,7 +14,7 @@ var newModule = 'myApp.test';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope','$state','$timeout', 'fbutil', 'localFb', 'snippet', 'elasticSearch', function ($scope, $state, $timeout, fbutil, localFb, authData, snippet, elasticSearch) {
+    app.controller(ctrlName, ['$scope','$state','$timeout', 'fbutil', '$firebase', 'snippet', 'elasticSearch', function ($scope, $state, $timeout, fbutil, $firebase, authData, snippet, elasticSearch) {
         $scope.path='products';
         $scope.id='bd_001';
 
@@ -27,7 +27,7 @@ var newModule = 'myApp.test';
         $scope.to='https://lauchbox2.firebaseio.com/products';
 
         $scope.move=function(from,to){
-            localFb.move(from,to)
+            $firebase.move(from,to)
         };
 
         $scope.updateDescription= function (firebaseObject) {
@@ -36,7 +36,7 @@ var newModule = 'myApp.test';
         };
 
         $scope.getMultipleRefVal= function () {
-            localFb.getMultipleRefVal({
+            $firebase.getMultipleRefVal({
                 path1:'test/path1',
                 path2:'test/path2/&path1',
                 path3:'test/path3/&path1/&path2'

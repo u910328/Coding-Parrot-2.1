@@ -15,7 +15,7 @@ var newModule = randomString(8);
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', '$state','$timeout', 'fbutil', 'localFb', 'snippet', 'elasticSearch', function ($scope, $state, $timeout, fbutil, localFb, authData, snippet, elasticSearch) {
+    app.controller(ctrlName, ['$scope', '$state','$timeout', 'fbutil', '$firebase', 'snippet', function ($scope, $state, $timeout, fbutil, $firebase, authData, snippet) {
     }]);
 
 //Step 5: config providers.

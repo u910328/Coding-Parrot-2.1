@@ -1,6 +1,7 @@
+var newModule='firebase.utils';
 
 // a simple wrapper on Firebase and AngularFire to simplify deps and keep things DRY
-angular.module('firebase.utils', ['firebase', 'myApp.config'])
+angular.module(newModule, ['firebase', 'myApp.config'])
    .factory('fbutil', ['$window', 'FBURL', '$q', function($window, FBURL, $q) {
       "use strict";
 
@@ -62,3 +63,4 @@ angular.module('firebase.utils', ['firebase', 'myApp.config'])
       }
    }]);
 
+if(appDI) appDI.push(newModule);

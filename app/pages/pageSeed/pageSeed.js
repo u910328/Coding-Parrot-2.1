@@ -14,8 +14,8 @@ var newModule = randomString(8);
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
-//Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, viewLogic, model) {
+//Step 4: construct a controller. Notice that $scope is required, don't delete it.
+    app.controller(ctrlName, function ($scope) {
         //create your own controller here
     });
 
@@ -37,18 +37,16 @@ var newModule = randomString(8);
         });
     }]);
 
-    if(directiveName){
-        app.directive(directiveName, ['$controller', function($controller){
+    if (directiveName) {
+        app.directive(directiveName, ['linkFn', function (linkFn) {
             return {
                 restrict: 'E',
                 templateUrl: templateUrl,
-                scope:{
-                    initparams:'@'
+                scope: {
+                    initparams: '@'
                 },
-                link: function (scope, iElement, iAttrs) {
-                    scope.$watch('initparams', function(){
-                        $controller(ctrlName, {$scope: scope});
-                    })
+                link: function(scope){
+                    linkFn.pagePlusDirective(scope, ctrlName, resolve);
                 }
             };
         }]);

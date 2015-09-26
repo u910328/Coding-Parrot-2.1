@@ -1,8 +1,8 @@
 {
-  "name": "freeC-seed",
-  "description": "A free e-commerce template",
+  "name": "Obsidian",
+  "description": "A free web-app template",
   "version": "1.0.0",
-  "homepage": "https://github.com/firebase/angularfire-seed",
+  "homepage": "https://github.com/u910328/Obsidian",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -14,9 +14,9 @@
     "firebase": "2.2.9",
     "angularfire": "~1.0.0",
     "mockfirebase": "~0.10.3",
-    "angular-bootstrap":"0.13.3",
+    //    "angular-bootstrap":"0.13.3",
     "angular-payments":"https://github.com/laurihy/angular-payments.git",
-    "angular-ui-bootstrap":"0.13.3",
+    //    "angular-ui-bootstrap":"0.13.3",
     "angular-ui-validate":"1.1.1",
     "ng-cart":"1.0.0"
   }

@@ -14,7 +14,7 @@ var newModule='myApp.invoice';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, model, localFb, snippet, $location) {
+    app.controller(ctrlName, function ($scope, $firebaseObject, model, $firebase, snippet, $location) {
 
         $scope.invoice=model.invoice;
         $scope.subTotal=model.calcSubTotal('', model.invoice.products);

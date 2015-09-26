@@ -14,9 +14,9 @@ var newModule='myApp.myOrders';
     var app = angular.module(newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, $firebaseArray, model, localFb, snippet, $location) {
+    app.controller(ctrlName, function (user, $scope, $firebaseArray, model, $firebase, snippet) {
 
-        //var fbObj=new localFb.FbObj('users/'+user.uid+'/orderHistory');
+        //var fbObj=new $firebase.FbObj('users/'+user.uid+'/orderHistory');
 
         //$scope.loadOrders=function(n){
         //    var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
@@ -30,7 +30,7 @@ var newModule='myApp.myOrders';
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
                 day = 24 * 60 * 60 * 1000;
-            var ref = localFb.ref('users/'+user.uid+'/orderHistory').orderByChild('createdTime').startAt(now + startDay * day).endAt(now + endDay * day);
+            var ref = $firebase.ref('users/'+user.uid+'/orderHistory').orderByChild('createdTime').startAt(now + startDay * day).endAt(now + endDay * day);
 
             $scope.myOrdersSrc = $firebaseArray(ref);
         };

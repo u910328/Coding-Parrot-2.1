@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('ngFirebase', [])
-    .directive('ngFirebase', ['$firebaseObject', 'localFb', function ($firebaseObject, localFb) {
-        return {//TODO: cache firebase data to localFb
+    .directive('ngFirebase', ['$firebase', function ($firebase) {
+        return {
             restrict: 'A',
             transclude: true,
             scope: {
@@ -12,7 +12,7 @@ angular.module('ngFirebase', [])
             },
             link: function (scope, element, attrs, ctrl, transcludeFn) {
                 function init(){
-                    var obj = localFb.$object(scope.ngFirebase);
+                    var obj = $firebase.$object(scope.ngFirebase);
                     element.append(scope.loading);
                     obj.$loaded(appendTransclude, appendTransclude);
 

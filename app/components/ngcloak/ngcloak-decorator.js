@@ -1,3 +1,4 @@
+var newModule='myApp.ngcloakDecorator';
 
 /**
  * Wraps ng-cloak so that, instead of simply waiting for Angular to compile, it waits until
@@ -7,7 +8,7 @@
  *    <div ng-cloak>Authentication has resolved.</div>
  * </code>
  */
-angular.module('myApp')
+angular.module(newModule,[])
   .config(['$provide', function($provide) {
     // adapt ng-cloak to wait for auth before it does its magic
     $provide.decorator('ngCloakDirective', ['$delegate', 'Auth',
@@ -25,3 +26,5 @@ angular.module('myApp')
         return $delegate;
       }]);
   }]);
+
+if(appDI) appDI.push(newModule);

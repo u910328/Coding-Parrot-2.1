@@ -1,6 +1,6 @@
 var newModule='core.snippet';
 
-angular.module('core.snippet', ['firebase', 'myApp.config'])
+angular.module(newModule, ['firebase', 'myApp.config'])
     .factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
 
         function isArray(someVar){

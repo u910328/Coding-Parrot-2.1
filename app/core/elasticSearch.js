@@ -1,8 +1,10 @@
+var newModule='core.elasticSearch';
+
 //credit to katowulf: https://github.com/firebase/flashlight
 
 (function (angular){
-    angular.module('core.elasticSearch', ['firebase', 'myApp.config', 'firebase.auth', 'core.localFb','core.model','core.snippet','ngCart','ui.bootstrap'])
-        .factory('elasticSearch', ['FBURL','Auth','localFb','$q','$rootScope',function(FBURL, Auth, localFb, $q, $rootScope) {
+    angular.module(newModule, [])
+        .factory('elasticSearch', ['FBURL','Auth','$q','$rootScope',function(FBURL, Auth, $q, $rootScope) {
             function doSearch(scope, index, type, query) {
                 scope=scope||$rootScope;
                 var ref = new Firebase(FBURL+'/search');
@@ -41,3 +43,4 @@
 })(angular);
 
 // display search results
+if(appDI) appDI.push(newModule);

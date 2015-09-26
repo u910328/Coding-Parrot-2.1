@@ -1,6 +1,7 @@
+var newModule='core.init';
 (function (angular){
-    angular.module('core.init', ['firebase', 'myApp.config', 'firebase.auth', 'core.localFb','core.model','core.snippet','ngCart','ui.bootstrap'])
-        .factory('init', ['Auth','localFb','$q','model',function(Auth, localFb, $q, model) {
+    angular.module(newModule, ['firebase', 'myApp.config'])
+        .factory('init', ['Auth','$q','model',function(Auth, $q, model) {
             //function logInMain(){}
             //function getDbName(){}
             //function getIdentity(){}
@@ -9,15 +10,18 @@
 
             return {}
         }])
-        .run(function($rootScope, $mdSidenav, $q, Auth, localFb, model, init, snippet, config, ngCart, ngNotify, $firebaseArray){
+        .run(function($rootScope, $http, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart){
+            //get geoip
+            $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function(response){
+                console.log(response)
+            });
+
             $rootScope.debug=config.debug;
             if(config.debug) console.log('debug mode');
 
             $rootScope.toggleSidenav = function(menuId) {
                 $mdSidenav(menuId).toggle();
             };
-
-
 
             //custom code
             model.calcSubTotal=function(orderId, productsInfo, scope){
@@ -31,14 +35,6 @@
                 }
                 return subTotal;
             };
-
-            //$rootScope.broadcasts={};
-            //$rootScope.addBroadcast=function(broadcast){
-            //    angular.extend($rootScope.broadcasts, broadcast);
-            //};
-            //$rootScope.closeBroadcast = function(index) {
-            //    delete $rootScope.broadcasts[index];
-            //};
 
             //template
 
@@ -58,17 +54,17 @@
             Auth.$onAuth(function(user) { //app.js也有同樣的用法
                 if(user) {
                     console.log('user', user);
-                    localFb.params={
+                    $firebase.params={
                         '$uid':user.uid
                     };
 
                     $rootScope.user=user;
-                    _ref=localFb.ref('config');
+                    _ref=$firebase.ref('config');
                     _ref.child('payment/stripe/publishable_key').once('value',function(snap){
                         Stripe.setPublishableKey(snap.val());
                     });
                     //Notification
-                    //_ref=localFb.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
+                    //_ref=$firebase.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
                     //$rootScope.notification=$firebaseArray(_ref);
                     //
                     //$rootScope.$watch('notification',function(obj){
@@ -79,8 +75,9 @@
                 } else {
                     if(_ref ) _ref.off();
                     console.log('no user', user);
-                    localFb.params={};
+                    $firebase.params={};
                 }
             });
         });
 })(angular);
+if(appDI) appDI.push(newModule);
