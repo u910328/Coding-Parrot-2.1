@@ -18,93 +18,82 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
-<body ng-cloak layout="column">
+<body ng-cloak>
+<div layout="column">
 
-<script type="text/javascript">
-    window.onload = function () {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
-        document.getElementsByTagName("head")[0].appendChild(script);
-    };
-    function DisplayIP(response) {
-        console.log("Your IP Address is " + response.ip);
-    }
-</script>
+    <md-toolbar layout="row">
+        <div class="md-toolbar-tools">
+            <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
+                <md-icon aria-label="Menu"
+                         md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+            </md-button>
+            <h1>Obsidian v1.0</h1>
+        </div>
+    </md-toolbar>
+    <md-toolbar class="md-menu-toolbar" hide-sm>
+        <div layout="row">
+            <!--<md-toolbar-filler layout layout-align="center center">-->
+            <!--<i class="material-icons">face</i>-->
+            <!--</md-toolbar-filler>-->
+            <ul class="menu">
+                <li><a ui-sref="home">home</a></li>
+                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
+                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
+                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
+                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
+                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
 
 
-<md-toolbar layout="row">
-    <div class="md-toolbar-tools">
-        <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
-            <md-icon aria-label="Menu"
-                     md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
-        </md-button>
-        <h1>Obsidian v1.0</h1>
+                <li><a ui-sref="test">Test</a></li>
+                <li><a ui-sref="test2">Test2</a></li>
+
+            </ul>
+        </div>
+    </md-toolbar>
+    <section ui-view></section>
+
+    <div layout="row" flex>
+        <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
+        <!--md-is-locked-open="$mdMedia('gt-sm')">-->
+        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
+                    md-swipe-left="toggleSidenav('left')">
+            <ul>
+                <li><a ui-sref="home">home</a></li>
+                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
+                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
+                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
+                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
+                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
+
+
+                <li><a ui-sref="test">Test</a></li>
+                <!--<li><a href="#/chat">chat</a></li>-->
+                <!--<li><a href="#/allOrders">all orders</a></li>-->
+
+                <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
+
+                <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
+
+
+            </ul>
+
+        </md-sidenav>
+        <div layout="column" flex id="content">
+            <md-content layout="column" flex class="md-padding">
+            </md-content>
+        </div>
     </div>
-</md-toolbar>
-<md-toolbar class="md-menu-toolbar" hide-sm>
-    <div layout="row">
-        <md-toolbar-filler layout layout-align="center center">
-            <i class="material-icons">face</i>
-        </md-toolbar-filler>
-        <ul class="menu">
-            <li><a ui-sref="home">home</a></li>
-            <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-            <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-            <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-            <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-            <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
 
 
-            <li><a ui-sref="test">Test</a></li>
-            <li><a ui-sref="test2">Test2</a></li>
 
-        </ul>
-    </div>
-</md-toolbar>
+    <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
+        {{broadcast.msg}}
+    </alert>
 
-<div layout="row" flex>
-    <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
-                <!--md-is-locked-open="$mdMedia('gt-sm')">-->
-    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
-                md-swipe-left="toggleSidenav('left')">
-        <ul>
-            <li><a ui-sref="home">home</a></li>
-            <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-            <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-            <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-            <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-            <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
-
-
-            <li><a ui-sref="test">Test</a></li>
-            <!--<li><a href="#/chat">chat</a></li>-->
-            <!--<li><a href="#/allOrders">all orders</a></li>-->
-
-            <!--<li ng-hide="loggedIn" ng-click="isLogInOpen=!isLogInOpen"><a href="">login</a></li>-->
-
-            <!--<li ng-show="loggedIn" ng-click="isAccountOpen=!isAccountOpen"><a href="">account</a></li>-->
-
-
-        </ul>
-
-    </md-sidenav>
-    <div layout="column" flex id="content">
-        <md-content layout="column" flex class="md-padding">
-        </md-content>
-    </div>
+    <!--<account-window ng-show="isAccountOpen"></account-window>-->
+    <!--<log-in-window ng-show="isLogInOpen"></log-in-window>-->
+    <hr>
 </div>
-<section ui-view></section>
-
-
-
-<alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
-    {{broadcast.msg}}
-</alert>
-
-<!--<account-window ng-show="isAccountOpen"></account-window>-->
-<!--<log-in-window ng-show="isLogInOpen"></log-in-window>-->
-<hr>
 <footer>
     <h2>
         <a social-twitter class="fa fa-twitter ng-isolate-scope" href=""></a>
@@ -120,6 +109,20 @@
         <!--<a social-xing href="">share on xing</a>-->
     </h2>
 </footer>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
+        document.getElementsByTagName("head")[0].appendChild(script);
+    };
+    function DisplayIP(response) {
+        console.log("Your IP Address is " + response.ip);
+    }
+</script>
+
+
 
 
 <!-- In production use:
@@ -208,6 +211,7 @@
 <script src="core/driver.js"></script>
 <script src="core/action.js"></script>
 <script src="core/init.js"></script>
+<script src="core/linkFn.js"></script>
 <script src="core/elasticSearch.js"></script>
 
 

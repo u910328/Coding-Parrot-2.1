@@ -12,8 +12,8 @@ angular.module('ngFirebase', [])
             },
             link: function (scope, element, attrs, ctrl, transcludeFn) {
                 function init(){
+                    var obj = localFb.$object(scope.ngFirebase);
                     element.append(scope.loading);
-                    var obj = $firebaseObject(localFb.ref(scope.ngFirebase));
                     obj.$loaded(appendTransclude, appendTransclude);
 
                     function appendTransclude(dataOrError) {
@@ -33,7 +33,8 @@ angular.module('ngFirebase', [])
                                 trclScope.$firebaseObject = dataOrError;
                                 trclScope.$eval(attrs.loaded);
                             } else {
-                                trclScope.$error = dataOrError
+                                trclScope.$error = dataOrError;
+                                obj.$destroy();
                             }
                         })
                     }

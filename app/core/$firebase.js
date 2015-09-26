@@ -1,6 +1,6 @@
-var newModule='core.localFb';
+var newModule='core.$firebase';
 angular.module(newModule, ['firebase', 'myApp.config'])
-    .factory('localFb', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'model', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, model, snippet) {
+    .factory('$firebase', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, snippet) {
         var localFb = {
             FbObj: FbObj,
             load: load,
@@ -113,26 +113,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
         }
 
 
-        function updateModel(modelPath, value, key, eventType) {
-            switch (eventType) {
-                case "child_added":
-                    if (modelPath) model.update(modelPath + "." + key, value);
-                    break;
-                case "child_removed":
-                    if (modelPath) model.update(modelPath + "." + key, null);
-                    break;
-                case "child_changed":
-                    if (modelPath) model.update(modelPath + "." + key, value);
-                    break;
-                case "child_moved":
-                    break;
-                default:
-                    if (modelPath) model.update(modelPath, value);
-            }
-        }
-
-
-        function load(refUrl, modelPath, rule, extraOnComplete, finalOnComplete) {
+        function load(refUrl, rule, extraOnComplete, finalOnComplete) {
             var fbObj = new FbObj(refUrl),
                 query = rule && rule["query"] ? "." + rule["query"] : "",
                 isSync = rule && rule["isSync"] || true,
@@ -151,7 +132,6 @@ angular.module(newModule, ['firebase', 'myApp.config'])
                 var that = this, sync;
 
                 function onComplete1(snap, prevChildName, digestCb) {
-                    updateModel(modelPath, snap.val(), snap.key(), eventType);
                     if (config.debug) console.log('load complete', JSON.stringify(snap.val()));
 
                     digest.reset(function () {
@@ -193,7 +173,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
             eval(refObj.evalString);
         }
 
-        function update(refUrl, modelPath, value, onComplete, actionObj, removePrev, refUrlParams) {
+        function update(refUrl, value, onComplete, removePrev, refUrlParams) {
             var def = $q.defer();
             var replacedRefUrl = snippet.replaceParamsInString(refUrl, refUrlParams);
             var fbObj = new FbObj(replacedRefUrl), ref = fbObj.ref(), type = removePrev ? 'set' : 'update';
@@ -215,11 +195,6 @@ angular.module(newModule, ['firebase', 'myApp.config'])
 
             fbObj.goOnline();
 
-            if (actionObj) {
-                actionObj.lastParam = fbObj.params;
-                actionObj.replace('updateFbArr', fbObj.params);
-            }
-
             ref[type](value, function (error) {
                 if (onComplete) onComplete.apply(null, [error]);
                 if (error) {
@@ -229,7 +204,6 @@ angular.module(newModule, ['firebase', 'myApp.config'])
                     if (config.debug) {
                         console.log("Update success: " + refUrl)
                     }
-                    if (modelPath) updateModel(modelPath, value);
                     def.resolve();
                 }
                 fbObj.goOffline();
@@ -240,8 +214,8 @@ angular.module(newModule, ['firebase', 'myApp.config'])
             return def.promise
         }
 
-        function set(refUrl, modelPath, value, onComplete, actionObj, refUrlParams) {
-            update(refUrl, modelPath, value, onComplete, actionObj, true, refUrlParams);
+        function set(refUrl, value, onComplete, refUrlParams) {
+            update(refUrl, value, onComplete, true, refUrlParams);
         }
 
 //TODO: Transaction
@@ -252,7 +226,7 @@ angular.module(newModule, ['firebase', 'myApp.config'])
 
             function update(i) {
                 var ithOnComplete = (isConsecutive) ? onCompletes[i] : values[i].onComplete;
-                var params = localFb.update(values[i].refUrl, values[i].modelPath, values[i].value, ithOnComplete, values[i].actionObj, values[i].set, refUrlParams).params;
+                var params = localFb.update(values[i].refUrl, values[i].value, ithOnComplete, values[i].set, refUrlParams).params;
                 refUrlParams = angular.extend(refUrlParams, params);
             }
 

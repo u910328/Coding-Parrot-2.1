@@ -8,7 +8,8 @@ var newModule='myApp.login';
     var state='login',
         url='/login',
         ctrlName='LoginCtrl',
-        templateUrl='pages/login/login.html';
+        templateUrl='pages/login/login.html',
+        directiveName='obLogin';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
@@ -87,5 +88,20 @@ var newModule='myApp.login';
             controller: ctrlName
         });
     }]);
+
+    if (directiveName) {
+        app.directive(directiveName, ['linkFn', function (linkFn) {
+            return {
+                restrict: 'E',
+                templateUrl: templateUrl,
+                scope: {
+                    initparams: '@'
+                },
+                link: function(scope){
+                    linkFn.pagePlusDirective(scope, ctrlName, resolve);
+                }
+            };
+        }]);
+    }
 })(angular);
 appDI.push(newModule);

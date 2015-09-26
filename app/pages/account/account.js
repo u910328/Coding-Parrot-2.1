@@ -6,7 +6,13 @@ var newModule = 'myApp.account';
     var state = 'account',
         url = '/account',
         ctrlName = 'AccountCtrl',
-        templateUrl = 'pages/account/account.html';
+        templateUrl = 'pages/account/account.html',
+        resolve = {
+            user: ['Auth', function (Auth) {
+                return Auth.$waitForAuth();
+            }]
+        },
+        directiveName = 'obAccount';
 
     var app = angular.module(newModule, []);
 
@@ -81,13 +87,24 @@ var newModule = 'myApp.account';
             url: url,
             templateUrl: templateUrl,
             controller: ctrlName,
-            resolve: {
-                user: ['Auth', function (Auth) {
-                    return Auth.$waitForAuth();
-                }]
-            }
+            resolve: resolve
         });
     }]);
+
+    if (directiveName) {
+        app.directive(directiveName, ['linkFn', function (linkFn) {
+            return {
+                restrict: 'E',
+                templateUrl: templateUrl,
+                scope: {
+                    initparams: '@'
+                },
+                link: function(scope){
+                    linkFn.pagePlusDirective(scope, ctrlName, resolve);
+                }
+            };
+        }]);
+    }
 
 })(angular);
 appDI.push(newModule);

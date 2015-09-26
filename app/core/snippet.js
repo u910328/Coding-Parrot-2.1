@@ -1,3 +1,5 @@
+var newModule='core.snippet';
+
 angular.module('core.snippet', ['firebase', 'myApp.config'])
     .factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
 
@@ -468,3 +470,5 @@ angular.module('core.snippet', ['firebase', 'myApp.config'])
             ucfirst:ucfirst
         }
     }]);
+
+if(appDI) appDI.push(newModule);

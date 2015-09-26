@@ -1,5 +1,5 @@
-//Step 1: name the new module.
-var newModule='myApp.pageSeed';
+//Step 1: name the new module or use a random id.
+var newModule = randomString(8);
 
 (function (angular) {
     "use strict";
@@ -8,7 +8,8 @@ var newModule='myApp.pageSeed';
     var state='pageSeed',
         url='/pageSeed',
         ctrlName='PageSeedCtrl',
-        templateUrl='pages/pageSeed/pageSeed.html';
+        templateUrl='pages/pageSeed/pageSeed.html',
+        directiveName='';
 
 //Step 3: write down dependency injection.
     var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
@@ -35,6 +36,23 @@ var newModule='myApp.pageSeed';
             }
         });
     }]);
+
+    if(directiveName){
+        app.directive(directiveName, ['$controller', function($controller){
+            return {
+                restrict: 'E',
+                templateUrl: templateUrl,
+                scope:{
+                    initparams:'@'
+                },
+                link: function (scope, iElement, iAttrs) {
+                    scope.$watch('initparams', function(){
+                        $controller(ctrlName, {$scope: scope});
+                    })
+                }
+            };
+        }]);
+    }
 
 })(angular);
 appDI.push(newModule);
