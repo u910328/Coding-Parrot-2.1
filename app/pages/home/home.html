@@ -1,18 +1,21 @@
 <div layout-gt-sm="row" layout-sm="column" layout-wrap layout-padding ng-firebase="products">
-    <div flex-md="33" flex-gt-md="25" ng-repeat="(itemId, item) in $value">
+    <div flex-sm="50" flex-gt-sm="33" ng-repeat="(itemId, item) in $value">
         <md-content class="md-padding" layout-align="center center">
             <a ui-sref="productDetail({pid: itemId})" style="text-decoration: none;">
                 <md-card>
-                    <md-card-title>
-                       <h3>{{item.itemName}}</h3>
-                    </md-card-title>
+                    <!--<md-card-title>-->
+                       <!--<h3>{{item.itemName}}</h3>-->
+                    <!--</md-card-title>-->
                     <img class="md-card-image" alt="Washed Out" ng-src="{{item.image}}">
                     <md-card-content layout-align="center center">
-                        <p>{{item.itemName}}</p>
-                        <p style="text-decoration: line-through;">list price: USD {{item.listPrice|currency : '$' : 2}}
-                            </p>
-                        <p>price: USD {{item.price|currency : '$' : 2}}</p>
+                        <p>{{item.itemName}} <br>
+                        list price: USD {{item.listPrice|currency : '$' : 2}} <br>
+                        price: USD {{item.price|currency : '$' : 2}}</p>
                     </md-card-content>
+                    <div class="md-actions" layout="row" layout-align="end center">
+                        <md-button>Action 1</md-button>
+                        <md-button>Action 2</md-button>
+                    </div>
                 </md-card>
             </a>
         </md-content>
