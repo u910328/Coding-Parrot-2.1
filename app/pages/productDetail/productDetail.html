@@ -17,7 +17,7 @@
                         <div class="panel-body text-center">
                             <p style="text-decoration: line-through;">List Price:{{productInfo.listPrice|currency : '$' : 2}}</p>
                             <p>Price:{{productInfo.price|currency : '$' : 2}}</p>
-                            <p>You save: {{1-productInfo.price/productInfo.listPrice| percentage}}</p>
+                            <p>You save: {{1-productInfo.price/productInfo.listPrice| percentage:0}}</p>
                             Options:<select ng-options="option for option in productInfo.options" ng-model="productInfo.selectedOption" ng-change="setOption()"></select><br>
                             <hr>
                             <form>
