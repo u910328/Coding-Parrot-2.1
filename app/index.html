@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My App</title>
+    <title>Obsidian 1.1</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -18,65 +18,85 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
-<body ng-cloak>
-<div layout="column">
-
-    <md-toolbar layout="row">
-        <div class="md-toolbar-tools">
-            <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
-                <md-icon aria-label="Menu"
-                         md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
-            </md-button>
-            <h1>Obsidian v1.0</h1>
-        </div>
-    </md-toolbar>
-    <md-toolbar class="md-menu-toolbar" hide-sm>
-        <div layout="row">
-            <!--<md-toolbar-filler layout layout-align="center center">-->
-            <!--<i class="material-icons">face</i>-->
-            <!--</md-toolbar-filler>-->
-            <ul class="menu">
-                <li><a ui-sref="home">home</a></li>
-                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
+<body ng-cloak layout="column" layout-sm="column">
 
 
-                <li><a ui-sref="test">Test</a></li>
-                <li><a ui-sref="test2">Test2</a></li>
+<script type="text/javascript">
+    window.onload = function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
+        document.getElementsByTagName("head")[0].appendChild(script);
+    };
+    function DisplayIP(response) {
+        console.log("Your IP Address is " + response.ip);
+    }
+</script>
 
-            </ul>
-        </div>
-    </md-toolbar>
-    <section ui-view></section>
-
-    <div layout="row" flex>
-        <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
-        <!--md-is-locked-open="$mdMedia('gt-sm')">-->
-        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
-                    md-swipe-left="toggleSidenav('left')">
-            <ul>
-                <li><a ui-sref="home">home</a></li>
-                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
-
-
-                <li><a ui-sref="test">Test</a></li>
-            </ul>
-
-        </md-sidenav>
-        <div layout="column" flex id="content">
-            <md-content layout="column" flex class="md-padding">
-            </md-content>
-        </div>
+<md-toolbar layout="row">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
+            <md-icon aria-label="Menu"
+                     md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+        </md-button>
+        <h1>Obsidian v1.0</h1>
     </div>
+</md-toolbar>
+<md-toolbar class="md-menu-toolbar" hide-sm>
+    <div layout="row">
+        <md-toolbar-filler layout layout-align="center center" style="height: 48px;">
+            <i class="material-icons">face</i>
+        </md-toolbar-filler>
+        <md-menu-bar>
+            <md-button ui-sref="home">home</md-button>
+            <md-button ng-hide="loggedIn" ui-sref="login">login</md-button>
+            <md-button ng-show="loggedIn" ui-sref="account">account</md-button>
+            <md-button ng-show="loggedIn" ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
+            <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
+            <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
+            <md-button ui-sref="test">Test</md-button>
+            <md-button ui-sref="test2">Test2</md-button>
+        </md-menu-bar>
+    </div>
+</md-toolbar>
+
+<div layout="row" layout-wrap>
+    <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
+    <!--md-is-locked-open="$mdMedia('gt-sm')">-->
+    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
+                md-swipe-left="toggleSidenav('left')">
+        <md-toolbar>
+
+        </md-toolbar>
+
+        <md-content layout="column">
+            <md-button ui-sref="home">home</md-button>
+            <md-button ng-hide="loggedIn" ui-sref="login">login</md-button>
+            <md-button ng-show="loggedIn" ui-sref="account">account</md-button>
+            <md-button ng-show="loggedIn" ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
+            <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
+            <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
+            <md-button ui-sref="test">Test</md-button>
+            <md-button ui-sref="test2">Test2</md-button>
+        </md-content>
+
+    </md-sidenav>
+
 
 </div>
+
+<section ui-view></section>
+
+
+
+<alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
+    {{broadcast.msg}}
+</alert>
+
+<!--<account-window ng-show="isAccountOpen"></account-window>-->
+<!--<log-in-window ng-show="isLogInOpen"></log-in-window>-->
+<hr>
+
 <footer>
     <h2>
         <a social-twitter class="fa fa-twitter ng-isolate-scope" href=""></a>

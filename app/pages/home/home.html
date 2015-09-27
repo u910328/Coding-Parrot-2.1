@@ -1,4 +1,34 @@
-<h2>Home</h2>
+<div layout-gt-sm="row" layout-sm="column" layout-wrap layout-padding ng-firebase="products">
+    <div flex-md="33" flex-gt-md="25" ng-repeat="(itemId, item) in $value">
+        <md-content class="md-padding" layout-align="center center">
+            <a ui-sref="productDetail({pid: itemId})" style="text-decoration: none;">
+                <md-card>
+                    <md-card-title>
+                       <h3>{{item.itemName}}</h3>
+                    </md-card-title>
+                    <img class="md-card-image" alt="Washed Out" ng-src="{{item.image}}">
+                    <md-card-content layout-align="center center">
+                        <p>{{item.itemName}}</p>
+                        <p style="text-decoration: line-through;">list price: USD {{item.listPrice|currency : '$' : 2}}
+                            </p>
+                        <p>price: USD {{item.price|currency : '$' : 2}}</p>
+                    </md-card-content>
+                </md-card>
+            </a>
+        </md-content>
+    </div>
+</div>
+
+<!--<div flex>-->
+    <!--<md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-gt-md="8" ng-firebase="products">-->
+        <!--<md-grid-tile md-rowspan="3" md-colspan="2" md-colspan-sm="1" ng-repeat="(itemId, item) in $value">-->
+            <!--<md-grid-tile-header>-->
+                <!--<h3>{{item.itemName}}</h3>-->
+            <!--</md-grid-tile-header>-->
+        <!--</md-grid-tile>-->
+    <!--</md-grid-list>-->
+<!--</div>-->
+
 
 <div ng-firebase="products">
     <div ng-repeat="(itemId, item) in $value">

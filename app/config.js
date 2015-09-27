@@ -12,7 +12,7 @@ angular.module('myApp.config', [])
 
 
     // your Firebase data URL goes here, no trailing slash
-    .constant('FBURL', 'https://lauchbox.firebaseio.com')
+    .constant('FBURL', 'https://frecome.firebaseio.com')
     .constant('config', {
         debug: true,
         shipping: 0,
