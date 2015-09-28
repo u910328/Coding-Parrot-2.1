@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule = 'myApp.shoppingCart';
+window.newModule = 'pages.shoppingCart';
 
 (function (angular) {
     "use strict";
@@ -9,9 +9,9 @@ var newModule = 'myApp.shoppingCart';
         ctrlName = 'ShoppingCartCtrl',
         templateUrl = 'pages/shoppingCart/shoppingCart.html';
 
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, function ($q, config, user, $scope, model, $firebase, snippet, $state, ngCart, $firebaseObject) {
+    app.controller(ctrlName, /*@ngInject*/ function ($q, config, user, $scope, model, $firebase, snippet, $state, ngCart, $firebaseObject) {
         $scope.ngCart = ngCart;
         var cart = {products: {}};
 
@@ -281,4 +281,5 @@ var newModule = 'myApp.shoppingCart';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

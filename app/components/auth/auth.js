@@ -1,6 +1,6 @@
-var newModule='firebase.auth';
+window.newModule='firebase.auth';
 
-angular.module(newModule, ['firebase', 'firebase.utils'])
+angular.module(window.newModule, ['firebase', 'firebase.utils'])
     .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', 'snippet', '$firebase', function ($firebaseAuth, fbutil, $q, FBURL, snippet, $firebase) {
 
         var Auth = $firebaseAuth(fbutil.ref());
@@ -131,4 +131,4 @@ angular.module(newModule, ['firebase', 'firebase.utils'])
         return Auth;
     }]);
 
-if(appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);

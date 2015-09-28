@@ -1,6 +1,6 @@
-var newModule='core.init';
+window.newModule='core.init';
 (function (angular){
-    angular.module(newModule, ['firebase', 'myApp.config'])
+    angular.module(window.newModule, ['firebase', 'myApp.config'])
         .factory('init', ['Auth','$q','model',function(Auth, $q, model) {
             //function logInMain(){}
             //function getDbName(){}
@@ -21,19 +21,6 @@ var newModule='core.init';
 
             $rootScope.toggleSidenav = function(menuId) {
                 $mdSidenav(menuId).toggle();
-            };
-
-            //custom code
-            model.calcSubTotal=function(orderId, productsInfo, scope){
-                var subTotal=0;
-                for(var productId in productsInfo){
-                    subTotal+=productsInfo[productId].price*productsInfo[productId].quantity
-                }
-                if(scope) {
-                    scope.subTotal=scope.subTotal||{};
-                    scope.subTotal[orderId]=subTotal;
-                }
-                return subTotal;
             };
 
             //template
@@ -80,4 +67,5 @@ var newModule='core.init';
             });
         });
 })(angular);
-if(appDI) appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

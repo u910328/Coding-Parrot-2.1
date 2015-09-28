@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule='myApp.invoice';
+window.newModule='pages.invoice';
 
 (function (angular) {
     "use strict";
@@ -11,13 +11,13 @@ var newModule='myApp.invoice';
         templateUrl='pages/invoice/invoice.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseObject, model, $firebase, snippet, $location) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseObject, model, customFn, $firebase, snippet, $location) {
 
         $scope.invoice=model.invoice;
-        $scope.subTotal=model.calcSubTotal('', model.invoice.products);
+        $scope.subTotal=customFn.calcSubTotal('', model.invoice.products);
         $scope.date=new Date();
         $scope.OK=function(){
             $location.path('/home')
@@ -40,4 +40,5 @@ var newModule='myApp.invoice';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

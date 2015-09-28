@@ -1,4 +1,4 @@
-var newModule = 'myApp.account';
+window.newModule = 'pages.account';
 
 (function (angular) {
     "use strict";
@@ -14,10 +14,9 @@ var newModule = 'myApp.account';
         },
         directiveName = 'obAccount';
 
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, ['$rootScope', '$scope', 'Auth', 'fbutil', 'user', '$location', '$firebaseObject',
-        function ($rootScope, $scope, Auth, fbutil, user, $location, $firebaseObject) {
+    app.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $location, $firebaseObject) {
             var unbind;
             // create a 3-way binding with the user profile object in Firebase
             var profile = $firebaseObject(fbutil.ref('users', user.uid));
@@ -80,7 +79,7 @@ var newModule = 'myApp.account';
                 $scope.emailmsg = null;
             }
         }
-    ]);
+    );
 
     app.config(['$stateProvider', function ($stateProvider) {
         $stateProvider.state(state, {
@@ -97,7 +96,7 @@ var newModule = 'myApp.account';
                 restrict: 'E',
                 templateUrl: templateUrl,
                 scope: {
-                    initparams: '@'
+                    stateParams: '@'
                 },
                 link: function(scope){
                     linkFn.pagePlusDirective(scope, ctrlName, resolve);
@@ -107,4 +106,5 @@ var newModule = 'myApp.account';
     }
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);
