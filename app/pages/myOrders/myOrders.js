@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule='myApp.myOrders';
+window.newModule='pages.myOrders';
 
 (function (angular) {
     "use strict";
@@ -11,21 +11,10 @@ var newModule='myApp.myOrders';
         templateUrl='pages/myOrders/myOrders.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, ['myApp.security']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function (user, $scope, $firebaseArray, model, $firebase, snippet) {
-
-        //var fbObj=new $firebase.FbObj('users/'+user.uid+'/orderHistory');
-
-        //$scope.loadOrders=function(n){
-        //    var nDaysAgo=(new Date).getTime()-n*24*60*60*1000;
-        //    var ref=fbObj.ref().orderByChild('createdTime').startAt(nDaysAgo);
-        //
-        //    $scope.myOrdersSrc=$firebaseArray(ref);
-        //};
-        //
-        //$scope.loadOrders(65535);
+    app.controller(ctrlName, /*@ngInject*/ function (user, $scope, $firebaseArray, customFn, $firebase, snippet) {
 
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
@@ -37,7 +26,7 @@ var newModule='myApp.myOrders';
 
         $scope.loadOrders(-65535, 65535); //today's order
 
-        var delayedFilter = new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', true, 500);
+        new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', true, 500);
 
         $scope.filterOpt={};
         $scope.refreshFilter = function () {
@@ -50,16 +39,8 @@ var newModule='myApp.myOrders';
             $scope.refreshFilter();
         }, true);
 
-        $scope.orderStatus={};
-        $scope.subTotal={};
 
-        $scope.calcSubTotal=model.calcSubTotal;
-
-
-        $scope.selectOrder=function(orderId, order){
-            $scope.selectedOrder=order;
-            $scope.selectedOrder.orderId=orderId;
-        };
+        $scope.calcSubTotal=customFn.calcSubTotal;
     });
 
 //Step 5: config providers.
@@ -77,4 +58,5 @@ var newModule='myApp.myOrders';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

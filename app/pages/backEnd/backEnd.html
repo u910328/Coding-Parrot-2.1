@@ -41,7 +41,7 @@
     <hr>
     <div ng-repeat="order in allOrders||reverse"
          ng-init="orderStatus[order.$id]=order.orderStatus; calcSubTotal(order.$id, order.products, this)">
-        <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a>
+        <a href>{{order.$id}}</a>
         <a href ng-click="removeOrder(order.$id, order.clientId)">[X]</a><br>
 
         schedule: {{order.schedule| date: 'M/d/yy'}}<br>

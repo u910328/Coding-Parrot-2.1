@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule='myApp.login';
+window.newModule='pages.login';
 
 (function (angular) {
     "use strict";
@@ -12,10 +12,10 @@ var newModule='myApp.login';
         directiveName='obLogin';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
+    var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope', 'Auth', '$state', 'fbutil', 'snippet', '$firebase', function($scope, Auth, $state, fbutil, snippet, $firebase) {
+    app.controller(ctrlName, /*@ngInject*/ function($scope, Auth, $state, fbutil, snippet, $firebase) {
         $scope.email = null;
         $scope.pass = null;
         $scope.confirm = null;
@@ -78,7 +78,7 @@ var newModule='myApp.login';
                 .then(Auth.createAccount, showError)
                 .then(function(){}, showError)
         }
-    }]);
+    });
 
 //Step 5: config providers.
     app.config(['$stateProvider',function($stateProvider){
@@ -104,4 +104,5 @@ var newModule='myApp.login';
         }]);
     }
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

@@ -1,16 +1,23 @@
-var newModule = 'myApp.productDetail';
+window.newModule = 'pages.productDetail';
 (function (angular) {
     "use strict";
 
     var state = 'productDetail',
         url = '/productDetail/:pid',
         ctrlName = 'ProductDetailCtrl',
-        templateUrl = 'pages/productDetail/productDetail.html';
+        templateUrl = 'pages/productDetail/productDetail.html',
+        directiveName = 'productDetail',
+        resolve = {
+            user: ['Auth', function (Auth) {
+                return Auth.$waitForAuth();
+            }]
+        };
 
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, function ($scope, user, $firebaseObject, $firebase, $location, $stateParams) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $rootScope, user, $firebaseObject, $firebase, $location, $stateParams) {
         var productId = $stateParams.pid;
+        $scope.loggedIn=function(){return $rootScope.loggedIn};
         $scope.id = productId;
         $scope.user = user;
         $scope.loaded = function (value) {
@@ -27,13 +34,25 @@ var newModule = 'myApp.productDetail';
             url: url,
             templateUrl: templateUrl,
             controller: ctrlName,
-            resolve: {
-                user: ['Auth', function (Auth) {
-                    return Auth.$waitForAuth();
-                }]
-            }
+            resolve: resolve
         });
     }]);
 
+    if (directiveName) {
+        app.directive(directiveName, ['linkFn', function (linkFn) {
+            return {
+                restrict: 'E',
+                templateUrl: templateUrl,
+                scope: {
+                    stateParams: '='
+                },
+                link: function(scope){
+                    linkFn.pagePlusDirective(scope, ctrlName, resolve);
+                }
+            };
+        }]);
+    }
+
 })(angular);
-appDI.push(newModule);
+
+if (window.appDI) window.appDI.push(window.newModule);

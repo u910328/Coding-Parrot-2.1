@@ -1,7 +1,7 @@
 'use strict';
-var newModule='myApp.filters';
+window.newModule='myApp.filters';
 
-angular.module(newModule,[])
+angular.module(window.newModule,[])
     .filter('reverse', function() {
         return function(items) {
             return items.slice().reverse();
@@ -99,4 +99,4 @@ angular.module(newModule,[])
         };
     }]);
 
-if(appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);

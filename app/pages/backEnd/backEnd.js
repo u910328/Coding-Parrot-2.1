@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule = 'myApp.backEnd';
+window.newModule = 'pages.backEnd';
 
 (function (angular) {
     "use strict";
@@ -11,10 +11,10 @@ var newModule = 'myApp.backEnd';
         templateUrl = 'pages/backEnd/backEnd.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $firebaseArray, $firebaseObject, model, $firebase, snippet) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseArray, $firebaseObject, customFn, $firebase, snippet) {
         //to show orders
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
@@ -43,7 +43,6 @@ var newModule = 'myApp.backEnd';
 
         $scope.statusOptions = ['received', 'preparing', 'ready', 'picked-up'];
         $scope.orderStatus = {};
-        $scope.subTotal = {};
 
         $scope.changeOrderStatus = function (orderId, userId, changedStatus) {
             console.log(orderId, userId, changedStatus);
@@ -64,13 +63,9 @@ var newModule = 'myApp.backEnd';
                 console.log(JSON.stringify(err));
             });
         };
-        $scope.calcSubTotal = model.calcSubTotal;
+        $scope.calcSubTotal = customFn.calcSubTotal;
 
 
-        $scope.selectOrder = function (orderId, order) {
-            $scope.selectedOrder = order;
-            $scope.selectedOrder.orderId = orderId;
-        };
         $scope.removeOrder = function (orderId, userId, reason) {
             var values = [
                 {
@@ -140,4 +135,5 @@ var newModule = 'myApp.backEnd';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

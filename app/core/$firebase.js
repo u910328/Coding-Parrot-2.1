@@ -1,5 +1,6 @@
-var newModule='core.$firebase';
-angular.module(newModule, ['firebase', 'myApp.config'])
+window.newModule='core.$firebase';
+
+angular.module(window.newModule, ['firebase', 'myApp.config'])
     .factory('$firebase', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, snippet) {
         var $firebase = {
             FbObj: FbObj,
@@ -129,7 +130,8 @@ angular.module(newModule, ['firebase', 'myApp.config'])
             fbObj.goOnline();
 
             function RefObj(isSync, eventType) {
-                var that = this, sync;
+                var that = this,
+                    sync;
 
                 function onComplete1(snap, prevChildName, digestCb) {
                     if (config.debug) console.log('load complete', JSON.stringify(snap.val()));
@@ -381,4 +383,4 @@ angular.module(newModule, ['firebase', 'myApp.config'])
         return $firebase
     }]);
 
-if(appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);

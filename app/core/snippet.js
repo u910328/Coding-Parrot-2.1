@@ -1,6 +1,6 @@
-var newModule='core.snippet';
+window.newModule='core.snippet';
 
-angular.module(newModule, ['firebase', 'myApp.config'])
+angular.module(window.newModule, ['firebase', 'myApp.config'])
     .factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
 
         function isArray(someVar){
@@ -471,4 +471,4 @@ angular.module(newModule, ['firebase', 'myApp.config'])
         }
     }]);
 
-if(appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);

@@ -1,8 +1,7 @@
 'use strict';
 
-var newModule = 'myApp.appVersion';
-
-angular.module(newModule,[])
+window.newModule = 'myApp.appVersion';
+angular.module(window.newModule,[])
 
     .directive('appVersion', ['version', function (version) {
         return function (scope, elm) {
@@ -10,4 +9,4 @@ angular.module(newModule,[])
         };
     }]);
 
-if (appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);
