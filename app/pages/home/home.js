@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule='myApp.home';
+window.newModule='pages.home';
 
 (function (angular) {
     "use strict";
@@ -11,10 +11,10 @@ var newModule='myApp.home';
         templateUrl='pages/home/home.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope) {
 
     });
 
@@ -28,4 +28,5 @@ var newModule='myApp.home';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

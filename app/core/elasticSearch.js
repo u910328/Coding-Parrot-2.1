@@ -1,9 +1,9 @@
-var newModule='core.elasticSearch';
+window.newModule='core.elasticSearch';
 
 //credit to katowulf: https://github.com/firebase/flashlight
 
 (function (angular){
-    angular.module(newModule, [])
+    angular.module(window.newModule, [])
         .factory('elasticSearch', ['FBURL','Auth','$q','$rootScope',function(FBURL, Auth, $q, $rootScope) {
             function doSearch(scope, index, type, query) {
                 scope=scope||$rootScope;
@@ -43,4 +43,4 @@ var newModule='core.elasticSearch';
 })(angular);
 
 // display search results
-if(appDI) appDI.push(newModule);
+if(window.appDI) window.appDI.push(window.newModule);

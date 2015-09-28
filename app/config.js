@@ -1,7 +1,8 @@
 'use strict';
+window.newModule = 'myApp.config';
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp.config', [])
+angular.module(window.newModule, [])
 
     // version of this seed app is compatible with angularFire 1.0.0
     // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
@@ -34,8 +35,145 @@ angular.module('myApp.config', [])
 
     }]);
 
+//window.onload = function () {
+//    var script = document.createElement("script");
+//    script.type = "text/javascript";
+//    script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
+//    document.getElementsByTagName("head")[0].appendChild(script);
+//};
+//function DisplayIP(response) {
+//    console.log("Your IP Address is " + response.ip);
+//}
 
-var appDI = [
+window.modulePaths = {
+    //external modules
+    angularPayments: {
+        src: "bower_components/angular-payments/lib/angular-payments.min.js"
+    },
+    uiRouter: {
+        src: "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"
+    },
+    uiValidate: {
+        src: "bower_components/angular-ui-validate/dist/validate.js"
+    },
+    //bundle:{
+    //    src: "dist/app.js"
+    //}
+    //core components
+    appversion: {
+        src: "components/appversion/appversion-directive.js"
+    },
+    auth: {
+        src: "components/auth/auth.js"
+    },
+    firebaseUtils: {
+        src: "components/firebase.utils/firebase.utils.js"
+    },
+    ngcloak: {
+        src: "components/ngcloak/ngcloak-decorator.js"
+    },
+    filters: {
+        src: "components/filters/filters.js"
+    },
+    security: {
+        src: "components/security/security.js"
+    },
+    ngCart: {
+        src: "components/ngcart/ngCart.js"
+    },
+    notify: {
+        src: "components/notify/notify.js",
+        css: "components/notify/notify.css"
+    },
+    ngFirebase: {
+        src: "components/ngFirebase/ngFirebase.js"
+    },
+    uiMask: {
+        src: "components/inputMask/ui-mask.js"
+    },
+    socialLinks: {
+        src: "components/socialLinks/socialLinks.js"
+    },
+    scrollpoint: {
+        src: "components/scrollpoint/scrollpoint.js"
+    },
+    snippet: {
+        src: "core/snippet.js"
+    },
+    model: {
+        src: "core/model.js"
+    },
+    $firebase: {
+        src: "core/$firebase.js"
+    },
+    init: {
+        src: "core/init.js"
+    },
+    linkFn: {
+        src: "core/linkFn.js"
+    },
+    elasticSearch: {
+        src: "core/elasticSearch.js"
+    },
+
+    //custom
+    customService:{
+        src: "custom/customService.js"
+    },
+    //pages
+    login: {
+        src: "pages/login/login.js"
+    },
+    account: {
+        src: "pages/account/account.js"
+    },
+    productDetail: {
+        src: "pages/productDetail/productDetail.js"
+    },
+    home: {
+        src: "pages/home/home.js"
+    },
+    shoppingCart: {
+        src: "pages/shoppingCart/shoppingCart.js"
+    },
+    myOrders: {
+        src: "pages/myOrders/myOrders.js"
+    },
+    backEnd: {
+        src: "pages/backEnd/backEnd.js"
+    },
+    test: {
+        src: "pages/test/test.js"
+    },
+    test2: {
+        src: "pages/test2/test2.js"
+    },
+    invoice: {
+        src: "pages/invoice/invoice.js"
+    },
+    error: {
+        src: "pages/error/error.js"
+    },
+    app: {
+        src: "app.js"
+    }
+};
+
+for (var key in window.modulePaths) {
+    var script = document.createElement("script");
+    script.src = window.modulePaths[key].src;
+    document.getElementsByTagName("body")[0].appendChild(script);
+
+    if (window.modulePaths[key].css) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = window.modulePaths[key].css;
+        document.getElementsByTagName("head")[0].appendChild(link);
+    }
+}
+
+
+window.appDI = [
     'ngMaterial',
     'ngCart',
     'ngFirebase',
@@ -45,13 +183,10 @@ var appDI = [
     'ui.router',
     'angularPayments',
     'socialLinks',
-    'ui.scrollpoint',
-
-    'myApp.config'
-    //'myApp.security'
+    'ui.scrollpoint'
 ];
 
-function randomString(length) {
+window.randomString = function (length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 
     if (!length) {
@@ -63,4 +198,6 @@ function randomString(length) {
         str += chars[Math.floor(Math.random() * chars.length)];
     }
     return str;
-}
+};
+
+if (window.appDI) window.appDI.push(window.newModule);

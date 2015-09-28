@@ -1,4 +1,4 @@
-var newModule='myApp.security';
+window.newModule = 'myApp.security';
 
 (function (angular) {
     "use strict";
@@ -7,7 +7,7 @@ var newModule='myApp.security';
     // to be used by authRequired() in the services below
     var securedStates = [];
 
-    angular.module(newModule, ['ui.router', 'firebase.auth', 'myApp.config'])
+    angular.module(window.newModule, ['ui.router', 'firebase.auth', 'myApp.config'])
 
         .config(['$urlRouterProvider', function ($urlRouterProvider) {
             // routes which are not in our map are redirected to 'home'
@@ -41,7 +41,7 @@ var newModule='myApp.security';
      * for changes in auth status which might require us to navigate away from a path
      * that we can no longer view.
      */
-        .run(['$rootScope', '$location', '$state', 'Auth','loginRedirectState',
+        .run(['$rootScope', '$location', '$state', 'Auth', 'loginRedirectState',
             function ($rootScope, $location, $state, Auth, loginRedirectState) {
                 Auth.$onAuth(checkState);
 
@@ -69,4 +69,4 @@ var newModule='myApp.security';
 
 })(angular);
 
-if(appDI) appDI.push(newModule);
+if (window.appDI) window.appDI.push(window.newModule);

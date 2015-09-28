@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule = 'myApp.test';
+window.newModule = 'pages.test';
 
 (function (angular) {
     "use strict";
@@ -11,10 +11,10 @@ var newModule = 'myApp.test';
         templateUrl = 'pages/test/test.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, ['$scope','$state','$timeout', 'fbutil', '$firebase', 'snippet', 'elasticSearch', function ($scope, $state, $timeout, fbutil, $firebase, authData, snippet, elasticSearch) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $state, $timeout, fbutil, $firebase) {
         $scope.path='products';
         $scope.id='bd_001';
 
@@ -44,7 +44,7 @@ var newModule = 'myApp.test';
                 $scope.result=res
             })
         };
-    }]);
+    });
 
 //Step 5: config providers.
     app.config(function($stateProvider){
@@ -56,4 +56,5 @@ var newModule = 'myApp.test';
         });
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

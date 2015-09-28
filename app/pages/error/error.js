@@ -1,5 +1,5 @@
 //Step 1: name the new module.
-var newModule = 'myApp.error';
+window.newModule = 'pages.error';
 
 (function (angular) {
     "use strict";
@@ -11,10 +11,10 @@ var newModule = 'myApp.error';
         templateUrl = 'pages/error/error.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(newModule, []);
+    var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, function ($scope, $routeParams, model) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $routeParams, model) {
         //create your own controller here
         $scope.error = model.error[$routeParams.errorId];
     });
@@ -34,4 +34,5 @@ var newModule = 'myApp.error';
     }]);
 
 })(angular);
-appDI.push(newModule);
+
+if(window.appDI) window.appDI.push(window.newModule);

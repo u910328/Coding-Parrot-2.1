@@ -3,10 +3,9 @@
     <form>
         listPrice:{{$value.listPrice|currency : '$' : 2}}<br>
         price:{{$value.price|currency : '$' : 2}}<br>
-        you save: {{1-$value.price/$value.listPrice| percentage}}<br>
+        you save: {{1-$value.price/$value.listPrice| percentage:0}}<br>
         options:<select ng-options="option for option in $value.options" ng-model="$value.selectedOption"></select><br>
         description:{{$value.description}}<br>
-        total:{{$value.subTotal}}
     </form>
     <hr>
     <ngcart-addtocart ng-show="loggedIn" id="{{ $value.itemId }}" name="{{ $value.itemName }}" price="{{ $value.price }}" quantity="{{$value.quantity}}" quantity-max="30" data="$value">Add</ngcart-addtocart>

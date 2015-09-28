@@ -1,26 +1,4 @@
 <h2>My orders</h2>
-<!--OrderId: {{selectedOrder.orderId}}<br>
-Item name: {{selectedOrder.itemName}}<br>
-Price: {{selectedOrder.price|currency : '$' : 2}}<br>
-Sub total:{{selectedOrder.price*selectedOrder.quantity|currency : '$' : 2}}<br>
-Created time: {{selectedOrder.createdTime| date: 'fullDate'}}
-Status: {{selectedOrder.orderStatus}}-->
-<!--
-<hr>
-<div ng-repeat="(orderId, order) in myOrders" ng-init="calcSubTotal(orderId, order.products, this)">
-    <a href ng-click="selectOrder(orderId)">{{orderId}}</a><br>
-    Date: {{order.createdTime| date: 'fullDate'}}<br>
-    subtotal:{{subTotal[orderId]}}<br>
-    Status: {{order.orderStatus}}<br>
-
-    <hr>
-</div>
-
-
-<div ng-repeat="(key0, value0) in object">
-
-</div>
--->
 <button ng-click="loadOrders(-0.5,1)">today</button>
 <button ng-click="loadOrders(-0.5,3)">future 3 days</button>
 <button ng-click="loadOrders(7, 65535)">next week</button>
@@ -47,7 +25,7 @@ search:<input ng-model="search" ng-change="refreshFilter()">
 <hr>
 
 <div ng-repeat="order in myOrders" ng-init="calcSubTotal(order.$id, order.products, this)">
-    <a href ng-click="selectOrder(order.$id, order)">{{order.$id}}</a><br>
+    <a href>{{order.$id}}</a><br>
     date: {{order.createdTime| date: 'fullDate'}}<br>
     ------------------------------------------------------
     <div ng-repeat="(productId, productInfo) in order.products">
