@@ -96,7 +96,7 @@ window.newModule = 'pages.account';
                 restrict: 'E',
                 templateUrl: templateUrl,
                 scope: {
-                    stateParams: '@'
+                    stateParams: '='
                 },
                 link: function(scope){
                     linkFn.pagePlusDirective(scope, ctrlName, resolve);
