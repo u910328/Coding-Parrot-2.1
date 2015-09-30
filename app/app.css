@@ -1,5 +1,7 @@
 /* app css stylesheet */
 html, body{
+    overflow-x: hidden;
+    overflow-y: hidden;
     height: 100%;
 }
 

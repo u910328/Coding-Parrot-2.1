@@ -1,45 +1,39 @@
 <div layout-gt-sm="row" layout-sm="column" layout-wrap layout-padding ng-firebase="products">
     <div flex-gt-sm="50" flex-gt-md="33" flex-gt-lg="25" ng-repeat="(itemId, item) in $value">
         <md-content class="md-padding" layout-align="center center">
-            <a ui-sref="productDetail({pid: itemId})" style="text-decoration: none;">
-                <md-card>
-                    <!--<md-card-title>-->
-                       <!--<h3>{{item.itemName}}</h3>-->
-                    <!--</md-card-title>-->
-                    <img class="md-card-image" ng-src="{{item.image}}">
-                    <md-card-content layout-align="center center">
-                        <p>{{item.itemName}} <br>
-                        list price: USD {{item.listPrice|currency : '$' : 2}} <br>
-                        price: USD {{item.price|currency : '$' : 2}}</p>
-                    </md-card-content>
-                    <div class="md-actions" layout="row" layout-align="end center">
-                        <md-button>Action 1</md-button>
-                        <md-button>Action 2</md-button>
-                    </div>
-                </md-card>
-            </a>
+            <md-card>
+               <a href="" ng-click="showDetail($event, itemId)" style="text-decoration: none;">
+                   <img class="md-card-image" ng-src="{{item.image}}">
+                   <md-card-content layout-align="center center">
+                       <p>{{item.itemName}} <br>
+                           list price: USD {{item.listPrice|currency : '$' : 2}} <br>
+                           price: USD {{item.price|currency : '$' : 2}}</p>
+                   </md-card-content>
+
+               </a>
+            </md-card>
         </md-content>
     </div>
 </div>
 
 <!--<div flex>-->
-    <!--<md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-gt-md="8" ng-firebase="products">-->
-        <!--<md-grid-tile md-rowspan="3" md-colspan="2" md-colspan-sm="1" ng-repeat="(itemId, item) in $value">-->
-            <!--<md-grid-tile-header>-->
-                <!--<h3>{{item.itemName}}</h3>-->
-            <!--</md-grid-tile-header>-->
-        <!--</md-grid-tile>-->
-    <!--</md-grid-list>-->
+<!--<md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-gt-md="8" ng-firebase="products">-->
+<!--<md-grid-tile md-rowspan="3" md-colspan="2" md-colspan-sm="1" ng-repeat="(itemId, item) in $value">-->
+<!--<md-grid-tile-header>-->
+<!--<h3>{{item.itemName}}</h3>-->
+<!--</md-grid-tile-header>-->
+<!--</md-grid-tile>-->
+<!--</md-grid-list>-->
 <!--</div>-->
 
 
 <!--<div ng-firebase="products">-->
-    <!--<div ng-repeat="(itemId, item) in $value">-->
-        <!--<a ui-sref="productDetail({pid: itemId})">{{item.itemName}}</a><br>-->
-        <!--list price: USD {{item.listPrice|currency : '$' : 2}}<br>-->
-        <!--price: USD {{item.price|currency : '$' : 2}}<br>-->
-        <!--<img ng-src="{{item.image}}">-->
-        <!--<hr>-->
-    <!--</div>-->
+<!--<div ng-repeat="(itemId, item) in $value">-->
+<!--<a ui-sref="productDetail({pid: itemId})">{{item.itemName}}</a><br>-->
+<!--list price: USD {{item.listPrice|currency : '$' : 2}}<br>-->
+<!--price: USD {{item.price|currency : '$' : 2}}<br>-->
+<!--<img ng-src="{{item.image}}">-->
+<!--<hr>-->
+<!--</div>-->
 <!--</div>-->
 

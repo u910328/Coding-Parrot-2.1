@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet"
-          href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.css">
+          href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -84,10 +84,9 @@
 
 
 </div>
-
-<section ui-view></section>
-
-
+<md-content ui-view>
+    <!--<section ui-view></section>-->
+</md-content>
 
 <alert ng-repeat="(index, broadcast) in broadcasts" type="{{broadcast.type}}" close="closeBroadcast(index)">
     {{broadcast.msg}}
@@ -95,7 +94,7 @@
 
 <!--<account-window ng-show="isAccountOpen"></account-window>-->
 <!--<log-in-window ng-show="isLogInOpen"></log-in-window>-->
-<hr>
+
 
 <!--<footer>-->
     <!--<h2>-->
