@@ -1,3 +1,5 @@
+
+
 //Step 1: name the new module.
 window.newModule='pages.home';
 
@@ -14,8 +16,21 @@ window.newModule='pages.home';
     var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function ($scope) {
-
+    app.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, $mdDialog) {
+        $scope.showDetail= function($event, pid) {
+            var parentEl = angular.element(document.body);
+            $mdDialog.show({
+                parent: parentEl,
+                targetEvent: $event,
+                templateUrl:'pages/productDetail/productDetail.html',
+                locals: {
+                    $stateParams: {pid:pid},
+                    user: $rootScope.user
+                },
+                clickOutsideToClose: true,
+                controller: 'ProductDetailCtrl'
+            });
+        }
     });
 
 //Step 5: config providers.

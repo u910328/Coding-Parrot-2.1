@@ -1,12 +1,17 @@
-<h2>Home</h2>
+<div layout-gt-sm="row" layout-sm="column" layout-wrap layout-padding ng-firebase="products">
+    <div flex-gt-sm="50"  flex-gt-md="33"  ng-repeat="(itemId, item) in $value">
+        <md-content class="md-padding" layout-align="center center">
+            <md-card>
+                <a href="" ng-click="showDetail($event, itemId)" style="text-decoration: none;">
+                    <img class="md-card-image" ng-src="{{item.image}}">
+                    <md-card-content layout-align="center center">
+                        <p>{{item.itemName}} <br>
+                            list price: USD {{item.listPrice|currency : '$' : 2}} <br>
+                            price: USD {{item.price|currency : '$' : 2}}</p>
+                    </md-card-content>
 
-<div ng-firebase="products">
-    <div ng-repeat="(itemId, item) in $value">
-        <a ui-sref="productDetail({pid: itemId})">{{item.itemName}}</a><br>
-        list price: USD {{item.listPrice|currency : '$' : 2}}<br>
-        price: USD {{item.price|currency : '$' : 2}}<br>
-        <img ng-src="{{item.image}}">
-        <hr>
+                </a>
+            </md-card>
+        </md-content>
     </div>
 </div>
-

@@ -15,7 +15,7 @@ window.newModule = 'pages.productDetail';
 
     var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, /*@ngInject*/ function ($scope, $rootScope, user, $firebaseObject, $firebase, $location, $stateParams) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $rootScope, user, $firebaseObject, $firebase, $location, $stateParams, $mdDialog) {
         var productId = $stateParams.pid;
         $scope.loggedIn=function(){return $rootScope.loggedIn};
         $scope.id = productId;
@@ -26,7 +26,12 @@ window.newModule = 'pages.productDetail';
                 itemId: productId
             })
         };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
     });
+
+
 
 //Step 5: config providers.
     app.config(['$stateProvider', function ($stateProvider) {

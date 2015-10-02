@@ -3,96 +3,131 @@
 </div>
 
 <div ng-hide="waiting">
-    <h2>ShoppingCart</h2>
-    <ngcart-cart></ngcart-cart>
-    <hr>
-    <div ng-hide="!ngCart.getTotalItems()">
-        Note:<textarea ng-model="note"></textarea><br>
-        Pick up:
-        <md-datepicker ng-model="dt"
-                       ng-change="changeDt()"
-                       md-min-date="minDate"
-                       md-max-date="maxDate"></md-datepicker>
-        <md-input-container>
-            <label>hour</label>
-            <md-select ng-model="hour" ng-change="changeTime()">
-                <md-option ng-repeat="hr in [10,11,12,13,14,15,16,17,18,19,20]" value="{{hr}}">{{hr}}</md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container>
-            <label>minute</label>
-            <md-select ng-model="minute" ng-change="changeTime()">
-                <md-option ng-repeat="min in [0,15,30,45]" value="{{min}}">{{min}}</md-option>
-            </md-select>
-        </md-input-container>
+    <div layout="column" ng-cloak>
+        <md-content layout-padding>
+            <ngcart-cart></ngcart-cart>
+            <hr>
+            <div ng-hide="!ngCart.getTotalItems()">
+                <md-input-container flex>
+                    <label>Note</label>
+                    <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
+                </md-input-container>
+                Pick up:
+                <!--<time-date-picker></time-date-picker>-->
+                <md-datepicker ng-model="dt"
+                               ng-change="changeDt()"
+                               md-min-date="minDate"
+                               md-max-date="maxDate"></md-datepicker>
+                <md-input-container>
+                    <label>hour</label>
+                    <md-select ng-model="hour" ng-change="changeTime()">
+                        <md-option ng-repeat="hr in [10,11,12,13,14,15,16,17,18,19,20]" value="{{hr}}">{{hr}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>minute</label>
+                    <md-select ng-model="minute" ng-change="changeTime()">
+                        <md-option ng-repeat="min in [0,15,30,45]" value="{{min}}">{{min}}</md-option>
+                    </md-select>
+                </md-input-container>
 
 
-        <br>
+                <br>
 
-        <div>
-            <form name="notiemail" ng-submit="saveEmail()">
-                email: <input class="form-control"
-                              name="email"
-                              type="email"
-                              required ng-model="clientEmail.$value"
-                              ng-change="saveEmail(clientEmail.$value&&!notiemail.email.$error.email)">
+                <div>
+                    <form name="notiemail" ng-submit="saveEmail()">
+                        <md-input-container>
+                            <label>Email</label>
+                            <input required type="email" name="Email" ng-model="project.clientEmail"
+                                   minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/"
+                                   ng-change="saveEmail(clientEmail.$value&&!notiemail.email.$error.email)"/>
+                            <div ng-messages="projectForm.clientEmail.$error" role="alert">
+                                <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                                    Your email must be between 10 and 100 characters long and look like an e-mail address.
+                                </div>
+                            </div>
+                        </md-input-container>
 
-                phone number: <input ng-model="clientPhone" type="text"
-                                     ui-mask="(999) 999-9999"
-                                     ng-change="savePhone()"/>
+                        <md-input-container md-no-float>
+                            <i class="material-icons">phone</i>
+                            <input ng-model="user.phone" type="text" placeholder="Phone Number">
+                        </md-input-container>
+                        <!--<input class="form-control"-->
+                        <!--name="email"-->
+                        <!--type="email"-->
+                        <!--required ng-model="clientEmail.$value"-->
+                        <!--ng-change="saveEmail(clientEmail.$value&&!notiemail.email.$error.email)">-->
 
-                <label>upon pickup
-                    <input type="radio" ng-model="paymentMethod" value="uponPickup">
-                </label>
-                <label>online:
-                    <input type="radio" ng-model="paymentMethod" value="online">
-                </label>
+                        <!--phone number: <input ng-model="clientPhone" type="text"-->
+                        <!--ui-mask="(999) 999-9999"-->
+                        <!--ng-change="savePhone()"/>-->
 
-            </form>
-            <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
-        </div>
+                        <md-radio-group ng-model="paymentMethod">
+                            <md-radio-button  value="uponPickup" class="md-primary">Pickup</md-radio-button>
+                            <md-radio-button  value="online">online:</md-radio-button>
+                        </md-radio-group>
 
-        <hr>
-        <form ng-show="paymentMethod==='online'" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
-            <div ng-show="payOnline"></div>
-            <div class="span3">
-                <label for="">Card number</label>
-                <input type="text" class="input-block-level" ng-model="number" payments-validate="card"
-                       payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
+                        <!--<label>upon pickup-->
+                        <!--<input type="radio" ng-model="paymentMethod" value="uponPickup">-->
+                        <!--</label>-->
+                        <!--<label>online:-->
+                        <!--<input type="radio" ng-model="paymentMethod" value="online">-->
+                        <!--</label>-->
+
+                    </form>
+                    <span ng-show="notiemail.email.$error.email">INVALID_EMAIL</span>
+                </div>
+
+                <hr>
+                <form ng-show="paymentMethod==='online'" stripe-form="stripeCallback" name="myForm" ng-submit="checkOut()">
+                    <div ng-show="payOnline"></div>
+                    <md-input-container flex>
+                        <label for="">Card number</label>
+                        <input ng-model="number" payments-validate="card"
+                               payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="">Expiry</label>
+                        <input ng-model="expiry" payments-validate="expiry"
+                               payments-format="expiry"/>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <label for="">Name</label>
+                        <input required name="clientName" ng-model="project.clientName">
+                        <div ng-messages="projectForm.clientName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <label for="">CVC</label>
+                        <input ng-model="cvc" payments-validate="cvc"
+                               payments-format="cvc" payments-type-model="type"/>
+                    </md-input-container>
+
+
+                    <div class="md-actions" layout="row" layout-wrap>
+                        <md-button class="md-raised" ng-click="checkOut()">Submit</md-button>
+                        <md-button class="md-raised" ng-click="emptyCart()" value="empty cart!">emptyCart</md-button>
+                        <md-button class="md-raised" ui-sref="home">shop more</md-button>
+
+                    </div>
+
+                </form>
+                <form ng-show="paymentMethod==='uponPickup'">
+                    <div class="md-actions" layout="row" layout-wrap>
+                        <md-button class="md-raised" ng-click="checkOut()">Submit</md-button>
+                        <md-button class="md-raised" ng-click="emptyCart()" value="empty cart!">emptyCart</md-button>
+                        <md-button class="md-raised" ui-sref="home">shop more</md-button>
+
+                    </div>
+                </form>
+
+
             </div>
-
-            <div class="span1">
-                <label for="">Expiry</label>
-                <input type="text" class="input-block-level" ng-model="expiry" payments-validate="expiry"
-                       payments-format="expiry"/>
-            </div>
-
-            <div class="span3">
-                <label for="">Name on card </label>
-                <input type="text" class="input-block-level">
-            </div>
-
-            <div class="span1">
-                <label for="">CVC</label>
-                <input type="text" class="input-block-level" ng-model="cvc" payments-validate="cvc"
-                       payments-format="cvc" payments-type-model="type"/>
-            </div>
-
-            <div class="span4">
-                <button type="submit" class="btn btn-primary btn-large">Submit</button>
-                <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
-                <button class="btn btn-primary btn-large" ui-sref="home">shop more</button>
-            </div>
-        </form>
-        <form ng-show="paymentMethod==='uponPickup'" ng-submit="checkOut()">
-            <div class="span4">
-                <button type="submit" class="btn btn-primary btn-large">Submit</button>
-                <input type="button" class="btn btn-warning btn-large" ng-click="emptyCart()" value="empty cart!">
-                <button class="btn btn-primary btn-large" ui-sref="home">shop more</button>
-
-            </div>
-        </form>
+        </md-content>
 
 
+    </div>
 </div>
-
