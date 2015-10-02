@@ -9,13 +9,15 @@ window.newModule='pages.login';
         url='/login',
         ctrlName='LoginCtrl',
         templateUrl='pages/login/login.html',
-        directiveName='obLogin';
+        directiveName='obLogin',
+        resolve={};
 
 //Step 3: write down dependency injection.
     var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function($scope, Auth, $state, fbutil, snippet, $firebase) {
+    app.controller(ctrlName, /*@ngInject*/ function($rootScope, $scope, Auth, $state, fbutil, snippet) {
+        $rootScope.showLogin=false;
         $scope.email = null;
         $scope.pass = null;
         $scope.confirm = null;
@@ -95,7 +97,7 @@ window.newModule='pages.login';
                 restrict: 'E',
                 templateUrl: templateUrl,
                 scope: {
-                    initparams: '@'
+                    stateParams: '@'
                 },
                 link: function(scope){
                     linkFn.pagePlusDirective(scope, ctrlName, resolve);

@@ -38,7 +38,9 @@
             <ul class="menu">
                 <li><a ui-sref="home">home</a></li>
                 <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
+                <li ng-hide="loggedIn"><a href ng-click="showLogin=!showLogin">login2</a></li>
                 <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
+                <li ng-show="loggedIn"><a href ng-click="showAcc=!showAcc">account2</a></li>
                 <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
                 <li ng-show="debug"><a href="#/backEnd">backend</a></li>
                 <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
@@ -50,7 +52,11 @@
             </ul>
         </div>
     </md-toolbar>
-    <section ui-view></section>
+
+    <md-content ng-show="loggedIn&&showAcc"><ob-account state-params="showAcc"></ob-account></md-content>
+    <md-content ng-show="!loggedIn&&showLogin"><ob-login></ob-login></md-content>
+
+    <md-content ui-view></md-content>
 
     <div layout="row" flex>
         <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
