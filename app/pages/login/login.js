@@ -16,7 +16,7 @@ window.newModule='pages.login';
     var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function($rootScope, $scope, Auth, $state, fbutil, snippet) {
+    app.controller(ctrlName, /*@ngInject*/ function($rootScope, $scope, Auth, $state, fbutil, snippet, $mdDialog) {
         $rootScope.showLogin=false;
         $scope.email = null;
         $scope.pass = null;
@@ -37,6 +37,7 @@ window.newModule='pages.login';
                 .then(function(/* user */) {
                     redirectTo('home');
                 }, showError);
+            $mdDialog.cancel();
         };
 
         $scope.createAccount = function() {
@@ -72,6 +73,7 @@ window.newModule='pages.login';
         }
 
         $scope.loginWithProvider=function(provider, opt){
+            $mdDialog.cancel();
             Auth.loginWithProvider(provider, opt)
                 .then(function(user) {
                     redirectTo('home');

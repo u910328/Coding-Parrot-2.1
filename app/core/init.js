@@ -10,7 +10,7 @@ window.newModule='core.init';
 
             return {}
         }])
-        .run(function($rootScope, $http, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart){
+        .run(function($rootScope, $http, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog){
             //get geoip
             $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function(response){
                 console.log(response)
@@ -21,6 +21,34 @@ window.newModule='core.init';
 
             $rootScope.toggleSidenav = function(menuId) {
                 $mdSidenav(menuId).toggle();
+            };
+
+            $rootScope.showAccount= function($event) {
+                var parentEl = angular.element(document.body);
+                $mdDialog.show({
+                    parent: parentEl,
+                    targetEvent: $event,
+                    templateUrl:'pages/account/account.html',
+                    locals: {
+                        user: $rootScope.user
+                    },
+                    clickOutsideToClose: true,
+                    controller: 'AccountCtrl'
+                });
+            };
+
+            $rootScope.showLog= function($event) {
+                var parentEl = angular.element(document.body);
+                $mdDialog.show({
+                    parent: parentEl,
+                    targetEvent: $event,
+                    templateUrl:'pages/login/login.html',
+                    locals: {
+                        user: $rootScope.user
+                    },
+                    clickOutsideToClose: true,
+                    controller: 'LoginCtrl'
+                });
             };
 
             //template

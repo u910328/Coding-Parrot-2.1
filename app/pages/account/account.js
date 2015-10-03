@@ -16,10 +16,10 @@ window.newModule = 'pages.account';
 
     var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject) {
+    app.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject, $mdDialog) {
             var unbind;
             // create a 3-way binding with the user profile object in Firebase
-            $rootScope.showAcc=false;
+            //$rootScope.showAcc=false;
             var profile = $firebaseObject(fbutil.ref('users', user.uid));
             profile.$bindTo($scope, 'profile').then(function (ub) {
                 unbind = ub;
@@ -32,9 +32,10 @@ window.newModule = 'pages.account';
                 }
                 profile.$destroy();
                 Auth.$unauth();
+                $mdDialog.cancel();
                 $state.go('login');
             };
-            $rootScope.logout = $scope.logout;
+            //$rootScope.logout = $scope.logout;
 
             $scope.changePassword = function (pass, confirm, newPass) {
                 resetMessages();
