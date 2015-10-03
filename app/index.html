@@ -66,10 +66,10 @@
 
             <md-content layout="column">
                 <md-button ui-sref="home">home</md-button>
-                <md-button ng-hide="loggedIn" ui-sref="login">login</md-button>
-                <md-button ng-hide="loggedIn" href ng-click="showLogin=!showLogin">login 2</md-button>
-                <md-button ng-show="loggedIn" ui-sref="account">account</md-button>
-                <md-button ng-show="loggedIn" href ng-click="showAcc=!showAcc">account2</md-button>
+                <!--<md-button ng-hide="loggedIn" ui-sref="login">login</md-button>-->
+                <md-button ng-hide="loggedIn" href ng-click="showLog($event)">login</md-button>
+                <!--<md-button ng-show="loggedIn" ui-sref="account">account</md-button>-->
+                <md-button ng-show="loggedIn" href ng-click="showAccount($event)">account</md-button>
                 <md-button ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
                 <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
                 <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
