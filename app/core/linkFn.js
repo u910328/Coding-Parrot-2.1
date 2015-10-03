@@ -1,12 +1,12 @@
 window.newModule='core.linkFn';
 angular.module(window.newModule, ['firebase', 'myApp.config'])
-    .factory('linkFn', ['$controller', '$injector', '$q', 'snippet', function ($controller, $injector, $q, snippet) {
+    .factory('linkFn', ['$controller', '$injector', '$q', 'snippet','Auth', function ($controller, $injector, $q, snippet, Auth) {
         var linkFn={
             pagePlusDirective:pagePlusDirective
         };
 
         function pagePlusDirective(scope, ctrlName, resolveObj) { //TODO:讓不用$scope的controller也能用這個方法
-            scope.$watch('stateParams', function () {
+            function refresh () {
                 var locals = {},
                     condition = 0,
                     resolve=resolveObj||{};
@@ -28,7 +28,10 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
                 var waitUntil = new snippet.WaitUntil(condition, function () {
                     $controller(ctrlName, locals);
                 });
-            })
+            }
+            scope.$watch('stateParams', refresh);
+            Auth.$onAuth(refresh);
+
         }
         return linkFn
     }]);

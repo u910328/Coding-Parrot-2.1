@@ -7,8 +7,7 @@ angular.module('ngFirebase', [])
             transclude: true,
             scope: {
                 ngFirebase: '@',
-                loading: '@',
-                pure:'@'
+                loading: '@'
             },
             link: function (scope, element, attrs, ctrl, transcludeFn) {
                 function init(){
@@ -16,24 +15,27 @@ angular.module('ngFirebase', [])
                     element.append(scope.loading);
                     obj.$loaded(appendTransclude, appendTransclude);
 
+                    var valueAs=attrs.valueAs||'$value',
+                        errorAs=attrs.errorAs||'$error';
+
                     function appendTransclude(dataOrError) {
                         element.empty();
                         transcludeFn(function (clone, trclScope) {
                             element.append(clone);
                             if (dataOrError === obj) {
-                                if(scope.pure){
+                                if(attrs.pure){
                                     var pureValue={};
                                     angular.forEach(dataOrError, function(subValue,key){
                                         pureValue[key]=subValue
                                     });
-                                    trclScope.$value=dataOrError.$value? dataOrError.$value:pureValue;
+                                    trclScope[valueAs]=dataOrError.$value? dataOrError.$value:pureValue;
                                 } else {
-                                    trclScope.$value = dataOrError.$value ? dataOrError.$value : dataOrError;
+                                    trclScope[valueAs] = dataOrError.$value ? dataOrError.$value : dataOrError;
                                 }
                                 trclScope.$firebaseObject = dataOrError;
                                 trclScope.$eval(attrs.loaded);
                             } else {
-                                trclScope.$error = dataOrError;
+                                trclScope[errorAs] = dataOrError;
                                 obj.$destroy();
                             }
                         })
