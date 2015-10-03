@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My App</title>
+    <title>Wedoma1.0</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,24 +32,21 @@
     </md-toolbar>
     <md-toolbar class="md-menu-toolbar" hide-sm>
         <div layout="row">
-            <!--<md-toolbar-filler layout layout-align="center center">-->
-            <!--<i class="material-icons">face</i>-->
-            <!--</md-toolbar-filler>-->
-            <ul class="menu">
-                <li><a ui-sref="home">home</a></li>
-                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-                <li ng-hide="loggedIn"><a href ng-click="showLogin=!showLogin">login2</a></li>
-                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-                <li ng-show="loggedIn"><a href ng-click="showAcc=!showAcc">account2</a></li>
-                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
-
-
-                <li><a ui-sref="test">Test</a></li>
-                <li><a ui-sref="test2">Test2</a></li>
-
-            </ul>
+            <md-toolbar-filler layout layout-align="center center" style="height: 48px;">
+                <i class="material-icons">face</i>
+            </md-toolbar-filler>
+            <md-menu-bar>
+                <md-button ui-sref="home">home</md-button>
+                <md-button ng-hide="loggedIn" ui-sref="login">login</md-button>
+                <md-button ng-hide="loggedIn" href ng-click="showLogin=!showLogin">login 2</md-button>
+                <md-button ng-show="loggedIn" ui-sref="account">account</md-button>
+                <md-button ng-show="loggedIn" href ng-click="showAcc=!showAcc">account2</md-button>
+                <md-button ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
+                <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
+                <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
+                <md-button ui-sref="test">Test</md-button>
+                <md-button ui-sref="test2">Test2</md-button>
+            </md-menu-bar>
         </div>
     </md-toolbar>
 
@@ -58,44 +55,35 @@
 
     <md-content ui-view></md-content>
 
-    <div layout="row" flex>
+    <div layout="row">
         <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
         <!--md-is-locked-open="$mdMedia('gt-sm')">-->
         <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
                     md-swipe-left="toggleSidenav('left')">
-            <ul>
-                <li><a ui-sref="home">home</a></li>
-                <li ng-hide="loggedIn"><a ui-sref="login">login</a></li>
-                <li ng-show="loggedIn"><a ui-sref="account">account</a></li>
-                <li ng-show="loggedIn"><a ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</a></li>
-                <li ng-show="debug"><a href="#/backEnd">backend</a></li>
-                <li ng-show="loggedIn"><a ui-sref="myOrders">myOrders</a></li>
+            <md-toolbar>
 
+            </md-toolbar>
 
-                <li><a ui-sref="test">Test</a></li>
-            </ul>
+            <md-content layout="column">
+                <md-button ui-sref="home">home</md-button>
+                <md-button ng-hide="loggedIn" ui-sref="login">login</md-button>
+                <md-button ng-hide="loggedIn" href ng-click="showLogin=!showLogin">login 2</md-button>
+                <md-button ng-show="loggedIn" ui-sref="account">account</md-button>
+                <md-button ng-show="loggedIn" href ng-click="showAcc=!showAcc">account2</md-button>
+                <md-button ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
+                <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
+                <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
+                <md-button ui-sref="test">Test</md-button>
+                <md-button ui-sref="test2">Test2</md-button>
+            </md-content>
 
         </md-sidenav>
-        <div layout="column" flex id="content">
-            <md-content layout="column" flex class="md-padding">
-            </md-content>
-        </div>
+
+
     </div>
 
 </div>
-<footer>
-    <h2>
-        <a social-twitter class="fa fa-twitter ng-isolate-scope" href=""></a>
-        <a social-facebook class="fa fa-facebook ng-scope" href=""></a>
-        <a social-gplus class="fa fa-google-plus ng-scope" href=""></a>
-        <a social-pinterest class="fa fa-pinterest ng-isolate-scope" media="http://lorempixel.com/100/100/nature/1"
-           href=""></a>
-        <a social-linkedin class="fa fa-linkedin ng-scope" href=""></a>
-        <a social-stumbleupon class="fa fa-stumbleupon ng-scope" href=""></a>
-        <a social-reddit class="fa fa-reddit ng-scope" href=""></a>
-        <a social-vk class="fa fa-vk ng-scope" href=""></a>
-    </h2>
-</footer>
+
 
 
 
