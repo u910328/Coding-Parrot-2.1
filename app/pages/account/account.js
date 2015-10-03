@@ -33,7 +33,7 @@ window.newModule = 'pages.account';
                 profile.$destroy();
                 Auth.$unauth();
                 $mdDialog.cancel();
-                $state.go('login');
+                $state.go('home');
             };
             //$rootScope.logout = $scope.logout;
 
