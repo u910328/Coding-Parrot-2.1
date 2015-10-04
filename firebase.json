@@ -1,6 +1,6 @@
 {
-  "firebase": "lauchbox",
-  "public": "app",
+  "firebase": "frecome",
+  "public": ".",
   "ignore": [
     "firebase.json",
     "**/.*",

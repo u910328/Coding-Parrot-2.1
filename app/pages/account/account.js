@@ -25,6 +25,10 @@ window.newModule = 'pages.account';
                 unbind = ub;
             });
 
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+
             // expose logout function to scope
             $scope.logout = function () {
                 if (unbind) {

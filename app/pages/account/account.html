@@ -1,23 +1,44 @@
 
 <md-dialog>
     <form>
-        <fieldset>
-            <img src="{{profile.profileImageURL}}" height="200" width="200">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <span flex></span>
+                <md-button class="md-icon-button" layout-align="center center"  ng-click="cancel()">
+                    <md-icon class="material-icons" style="height: 24px;">clear</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout-gt-sm="row" layout-sm="column" class="md-padding md-margin">
+            <md-card>
+                <img class="md-card-image" src="{{profile.profileImageURL}}">
+                <md-card-content layout-align="center center">
+                    <md-list>
+                        <md-list-item class="md-3-line">
+                            <div class="md-list-item-text">
+                                <span>Name:</span>
+                                <input type="text" name="name" ng-model="profile.name"/>
+                                <label ng-show="user.provider==='password'">
+                                    <span>Email:</span>
+                                    <br />{{profile.email}}
+                                </label>
+                                <label ng-hide="user.provider==='password'">
+                                    <span>Email:</span>
+                                    <input ng-model="profile.email">
+                                </label>
+                            </div>
+                        </md-list-item>
+                    </md-list>
 
-            <label>
-                <span>Name:</span>
-                <input type="text" name="name" ng-model="profile.name"/>
-            </label>
+                </md-card-content>
+                <div class="md-actions" layout="row">
+                    <md-button class="md-raised" ng-click="logout()">Log Out</md-button>
+                </div>
+            </md-card>
 
-            <label ng-show="user.provider==='password'">
-                <span>Email:</span>
-                <br />{{profile.email}}
-            </label>
-            <label ng-hide="user.provider==='password'">
-                <span>Email:</span>
-                <input ng-model="profile.email">
-            </label>
-        </fieldset>
+
+
+        </md-dialog-content>
     </form>
 
     <!--只有email pass登入的看得到-->
@@ -70,7 +91,7 @@
         </form>
     </div>
 
-    <button ng-click="logout()">Log Out</button>
+
 </md-dialog>
 
 
