@@ -1,6 +1,11 @@
 /* app css stylesheet */
 
-
+.face {
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    width: 48px;
+    margin: 16px;
+}
 
 .menu {
   list-style: none;

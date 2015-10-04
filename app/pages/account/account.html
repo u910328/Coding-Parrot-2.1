@@ -1,44 +1,97 @@
-
-<md-dialog>
+<md-dialog flex="66">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <span flex></span>
-                <md-button class="md-icon-button" layout-align="center center"  ng-click="cancel()">
+                <md-button class="md-icon-button" layout-align="center center" ng-click="cancel()">
                     <md-icon class="material-icons" style="height: 24px;">clear</md-icon>
                 </md-button>
             </div>
         </md-toolbar>
         <md-dialog-content layout-gt-sm="row" layout-sm="column" class="md-padding md-margin">
-            <md-card>
+            <md-card flex-gt-sm="40">
                 <img class="md-card-image" src="{{profile.profileImageURL}}">
+            </md-card>
+            <md-card  flex-gt-sm="55">
                 <md-card-content layout-align="center center">
                     <md-list>
                         <md-list-item class="md-3-line">
                             <div class="md-list-item-text">
-                                <span>Name:</span>
-                                <input type="text" name="name" ng-model="profile.name"/>
-                                <label ng-show="user.provider==='password'">
-                                    <span>Email:</span>
-                                    <br />{{profile.email}}
-                                </label>
-                                <label ng-hide="user.provider==='password'">
-                                    <span>Email:</span>
-                                    <input ng-model="profile.email">
-                                </label>
+                                <md-content>
+                                    <md-input-container flex>
+                                        <label>Name</label>
+                                        <input ng-model="profile.name">
+                                    </md-input-container>
+                                    <md-input-container ng-show="user.provider==='password'">
+                                        <label>{{profile.email}}</label>
+                                        <input ng-model="user.email" type="email" >
+                                    </md-input-container>
+                                    <md-input-container ng-hide="user.provider==='password'">
+                                        <label>Email</label>
+                                        <input ng-model="user.email" type="email">
+                                    </md-input-container>
+                                </md-content>
                             </div>
                         </md-list-item>
                     </md-list>
 
                 </md-card-content>
-                <div class="md-actions" layout="row">
-                    <md-button class="md-raised" ng-click="logout()">Log Out</md-button>
-                </div>
             </md-card>
+            <div ng-show="user.provider==='password'">
+                <form>
+                    <fieldset>
+                        <legend>Change Password</legend>
 
+                        <label>
+                            <span>Old Password:</span>
+                            <input type="password" ng-keypress="clear()" ng-model="oldpass"/>
+                        </label>
 
+                        <label>
+                            <span>New Password:</span>
+                            <input type="password" ng-keypress="clear()" ng-model="newpass"/>
+                        </label>
+
+                        <label>
+                            <span>Confirm New Password:</span>
+                            <input type="password" ng-keypress="clear()" ng-model="confirm"/>
+                        </label>
+
+                        <button ng-click="changePassword(oldpass, newpass, confirm)">change password</button>
+
+                        <p class="error" ng-show="err">{{err}}</p>
+
+                        <p class="good" ng-show="msg">{{msg}}</p>
+                    </fieldset>
+                </form>
+
+                <form>
+                    <fieldset>
+                        <legend>Change Email</legend>
+
+                        <label>
+                            <span>New Email:</span>
+                            <input type="text" ng-keypress="clear()" ng-model="newEmail"/>
+                        </label>
+
+                        <label>
+                            <span>Password:</span>
+                            <input type="password" ng-keypress="clear()" ng-model="pass"/>
+                        </label>
+
+                        <button ng-click="changeEmail(pass, newEmail)">update email</button>
+
+                        <p class="error" ng-show="emailerr">{{emailerr}}</p>
+
+                        <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
+                    </fieldset>
+                </form>
+            </div>
 
         </md-dialog-content>
+        <div class="md-actions" layout="row">
+            <md-button ng-click="logout()">Log Out</md-button>
+        </div>
     </form>
 
     <!--只有email pass登入的看得到-->
@@ -65,6 +118,7 @@
                 <button ng-click="changePassword(oldpass, newpass, confirm)">change password</button>
 
                 <p class="error" ng-show="err">{{err}}</p>
+
                 <p class="good" ng-show="msg">{{msg}}</p>
             </fieldset>
         </form>
@@ -86,6 +140,7 @@
                 <button ng-click="changeEmail(pass, newEmail)">update email</button>
 
                 <p class="error" ng-show="emailerr">{{emailerr}}</p>
+
                 <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
             </fieldset>
         </form>
