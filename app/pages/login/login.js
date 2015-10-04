@@ -17,6 +17,10 @@ window.newModule='pages.login';
 
 //Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function($rootScope, $scope, Auth, $state, fbutil, snippet, $mdDialog) {
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
         $rootScope.showLogin=false;
         $scope.email = null;
         $scope.pass = null;
