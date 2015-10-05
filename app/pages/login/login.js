@@ -36,6 +36,7 @@ window.newModule='pages.login';
         }
 
         $scope.login = function(email, pass) {
+            console.log(email,pass);
             $scope.err = null;
             Auth.$authWithPassword({ email: email, password: pass }, {rememberMe: true})
                 .then(function(/* user */) {

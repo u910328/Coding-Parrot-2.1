@@ -1,7 +1,7 @@
-window.newModule='core.init';
-(function (angular){
+window.newModule = 'core.init';
+(function (angular) {
     angular.module(window.newModule, ['firebase', 'myApp.config'])
-        .factory('init', ['Auth','$q','model',function(Auth, $q, model) {
+        .factory('init', ['Auth', '$q', 'model', function (Auth, $q, model) {
             //function logInMain(){}
             //function getDbName(){}
             //function getIdentity(){}
@@ -10,25 +10,31 @@ window.newModule='core.init';
 
             return {}
         }])
-        .run(function($rootScope, $http, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog){
+        .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog) {
             //get geoip
-            $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function(response){
+            $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function (response) {
                 console.log(response)
             });
 
-            $rootScope.debug=config.debug;
-            if(config.debug) console.log('debug mode');
+            $rootScope.debug = config.debug;
+            if (config.debug) console.log('debug mode');
 
-            $rootScope.toggleSidenav = function(menuId) {
+            $rootScope.toggleSidenav = function (menuId) {
                 $mdSidenav(menuId).toggle();
             };
 
-            $rootScope.showAccount= function($event) {
+            $rootScope.sideNavLogout = function (menuId) {
+                Auth.$unauth();
+                $mdSidenav(menuId).toggle();
+                $state.go('home');
+            };
+
+            $rootScope.showAccount = function ($event) {
                 var parentEl = angular.element(document.body);
                 $mdDialog.show({
                     parent: parentEl,
                     targetEvent: $event,
-                    templateUrl:'pages/account/account.html',
+                    templateUrl: 'pages/account/account.html',
                     locals: {
                         user: $rootScope.user
                     },
@@ -37,12 +43,12 @@ window.newModule='core.init';
                 });
             };
 
-            $rootScope.showLog= function($event) {
+            $rootScope.showLog = function ($event) {
                 var parentEl = angular.element(document.body);
                 $mdDialog.show({
                     parent: parentEl,
                     targetEvent: $event,
-                    templateUrl:'pages/login/login.html',
+                    templateUrl: 'pages/login/login.html',
                     locals: {
                         user: $rootScope.user
                     },
@@ -58,24 +64,27 @@ window.newModule='core.init';
             ngCart.setTaxRate(config.taxRate);
 
 
-            function refreshTotalItems(){
-                $rootScope.cartTotalItems=ngCart.getTotalItems()
+            function refreshTotalItems() {
+                $rootScope.cartTotalItems = ngCart.getTotalItems()
             }
 
             $rootScope.$on('ngCart:change', refreshTotalItems);
             refreshTotalItems();
 
             var _ref;
-            Auth.$onAuth(function(user) { //app.js也有同樣的用法
-                if(user) {
+            Auth.$onAuth(function (user) { //app.js也有同樣的用法
+                if (user) {
                     console.log('user', user);
-                    $firebase.params={
-                        '$uid':user.uid
+                    $firebase.params = {
+                        '$uid': user.uid
                     };
 
-                    $rootScope.user=user;
-                    _ref=$firebase.ref('config');
-                    _ref.child('payment/stripe/publishable_key').once('value',function(snap){
+                    $rootScope.user = user;
+                    _ref = $firebase.ref();
+                    _ref.child('users/' + user.uid + '/profileImageURL').once('value', function (snap) {
+                        user.profileImageURL = snap.val();
+                    });
+                    _ref.child('config/payment/stripe/publishable_key').once('value', function (snap) {
                         Stripe.setPublishableKey(snap.val());
                     });
                     //Notification
@@ -88,12 +97,12 @@ window.newModule='core.init';
                     //    ngNotify(orderStatus);
                     //});
                 } else {
-                    if(_ref ) _ref.off();
+                    if (_ref) _ref.off();
                     console.log('no user', user);
-                    $firebase.params={};
+                    $firebase.params = {};
                 }
             });
         });
 })(angular);
 
-if(window.appDI) window.appDI.push(window.newModule);
+if (window.appDI) window.appDI.push(window.newModule);

@@ -34,7 +34,6 @@
         <div layout="row">
             <md-toolbar-filler layout layout-align="center center" style="height: 100px;">
                 <i class="material-icons">face</i>
-                <img ng-show="loggedIn" src="{{profile.profileImageURL}}">
             </md-toolbar-filler>
             <md-menu-bar>
                 <md-button ui-sref="home">home</md-button>
@@ -51,9 +50,6 @@
         </div>
     </md-toolbar>
 
-    <md-content ng-show="loggedIn&&showAcc"><ob-account state-params="showAcc"></ob-account></md-content>
-    <md-content ng-show="!loggedIn&&showLogin"><ob-login></ob-login></md-content>
-
     <md-content ui-view></md-content>
 
     <div layout="row">
@@ -64,9 +60,10 @@
             <md-toolbar>
                 <md-toolbar-filler layout layout-align="center center" style="height: 108px;">
                     <i class="material-icons">face</i>
+                    <img ng-show="loggedIn" ng-src="{{user.profileImageURL}}">
                     <!--<img class="face" ng-show="loggedIn" src="{{profile.profileImageURL}}">-->
                 </md-toolbar-filler>
-                <md-button ng-click="logout()">Log out</md-button>
+                <md-button ng-click="sideNavLogout('left')">Log out</md-button>
             </md-toolbar>
 
             <md-content layout="column">
