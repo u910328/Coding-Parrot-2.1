@@ -43,7 +43,7 @@ angular.module('ngFirebase', [])
                 }
 
                 scope.$watch('ngFirebase', function(){
-                    init();
+                    if($firebase.isRefUrlValid(scope.ngFirebase)) init();
                 });
             }
 

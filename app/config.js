@@ -115,6 +115,9 @@ window.modulePaths = {
     elasticSearch: {
         src: "core/elasticSearch.js"
     },
+    $errorHandler:{
+        src: "core/$errorHandler.js"
+    },
 
     //custom
     customService:{
@@ -159,17 +162,21 @@ window.modulePaths = {
     }
 };
 
-for (var key in window.modulePaths) {
+function addResource(resource){
     var script = document.createElement("script");
-    script.src = window.modulePaths[key].src;
+    script.src = resource.src;
     document.getElementsByTagName("body")[0].appendChild(script);
 
-    if (window.modulePaths[key].css) {
+    if (resource.css) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
-        link.href = window.modulePaths[key].css;
+        link.href = resource.css;
         document.getElementsByTagName("head")[0].appendChild(link);
     }
+}
+
+for (var key in window.modulePaths) {
+    if(window.modulePaths.hasOwnProperty(key)) addResource(window.modulePaths[key]);
 }
 
 

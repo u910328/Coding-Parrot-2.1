@@ -14,7 +14,7 @@ window.newModule = 'pages.backEnd';
     var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseArray, $firebaseObject, customFn, $firebase, snippet) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseArray, $firebaseObject, customFn, $firebase, snippet, $errorHandler) {
         //to show orders
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
@@ -58,10 +58,7 @@ window.newModule = 'pages.backEnd';
                     set: true
                 }
             ];
-            $firebase.batchUpdate(values, true).then(function () {
-            }, function (err) {
-                console.log(JSON.stringify(err));
-            });
+            $firebase.batchUpdate(values, true).then(angular.noop, $errorHandler({}));
         };
         $scope.calcSubTotal = customFn.calcSubTotal;
 

@@ -1,20 +1,21 @@
-window.newModule='core.$firebase';
+window.newModule = 'core.$firebase';
 
 angular.module(window.newModule, ['firebase', 'myApp.config'])
     .factory('$firebase', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, snippet) {
         var $firebase = {
             FbObj: FbObj,
-            load: load,
+            //load: load,
             update: update,
             set: set,
             batchUpdate: batchUpdate,
             params: {},
             databases: {},
             ref: ref,
-            $communicate:$communicate,
+            $communicate: $communicate,
             $object: $object,
-            getMultipleRefVal:getMultipleRefVal,
-            move:move
+            getMultipleRefVal: getMultipleRefVal,
+            isRefUrlValid:isRefUrlValid,
+            move: move
         };
 
         var activeRefUrl = {};
@@ -90,17 +91,22 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             return fbObj.ref()
         }
 
-        var objectRepo={};
-        function $object(refUrl){
-            if(objectRepo[refUrl]){
+        var objectRepo = {};
+
+        function $object(refUrl) {
+            if (objectRepo[refUrl]) {
                 return objectRepo[refUrl]
             } else {
-                objectRepo[refUrl]=$firebaseObject(ref(refUrl));
+                objectRepo[refUrl] = $firebaseObject(ref(refUrl));
                 return objectRepo[refUrl]
             }
         }
 
-        //TODO:用snippet.DelayExec改寫
+        function isRefUrlValid(refUrl){
+            return (typeof refUrl==='string')&&(refUrl.split('/').indexOf('')===-1)
+        }
+
+        //TODO:用$q改寫
         function Digest(scope, fbObj, isSync, delay) {
             var timeout;
             this.reset = function (callback, customDelay) {
@@ -114,66 +120,66 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
         }
 
 
-        function load(refUrl, rule, extraOnComplete, finalOnComplete) {
-            var fbObj = new FbObj(refUrl),
-                query = rule && rule["query"] ? "." + rule["query"] : "",
-                isSync = rule && rule["isSync"] || true,
-                eventType = rule && rule["eventType"] || 'value',
-                scope = rule && rule["scope"],
-                delay = rule && rule["delay"] || 300;
-
-            var ref = fbObj.ref(),
-                queryRef = eval("ref" + query);
-
-            var digest = new Digest(scope, fbObj, isSync, delay);
-
-            fbObj.goOnline();
-
-            function RefObj(isSync, eventType) {
-                var that = this,
-                    sync;
-
-                function onComplete1(snap, prevChildName, digestCb) {
-                    if (config.debug) console.log('load complete', JSON.stringify(snap.val()));
-
-                    digest.reset(function () {
-                        if (typeof digestCb === 'function') digestCb.apply(null);
-                        if (typeof finalOnComplete === 'function') finalOnComplete.apply(null, [snap, prevChildName])
-                    });
-                    if (extraOnComplete) return extraOnComplete(snap, prevChildName);
-                }
-
-                if (isSync) {
-                    sync = 'on';
-                    that.onComplete = onComplete1;
-                } else {
-                    sync = 'once';
-                    if (eventType === 'child_added') {
-                        sync = 'on';
-                        that.onComplete = function (snap, prevChildName) {
-                            onComplete1(snap, prevChildName, function () {
-                                queryRef.off('child_added', that.onComplete)
-                            })
-                        }
-                    } else {
-                        that.onComplete = onComplete1
-                    }
-                }
-                that.evalString = "queryRef." + sync + "('" + eventType + "', onComplete, errorCallback)"
-            }
-
-            var refObj = new RefObj(isSync, eventType);
-            var onComplete = refObj.onComplete;
-
-            function errorCallback(err) {
-                console.log("Fail to load " + refUrl + ": " + err.code);
-                //TODO: 加入ERROR到MODEL
-                fbObj.goOffline();
-            }
-
-            digest.reset(null, 5000);
-            eval(refObj.evalString);
-        }
+        //function load(refUrl, rule, extraOnComplete, finalOnComplete) {
+        //    var fbObj = new FbObj(refUrl),
+        //        query = rule && rule["query"] ? "." + rule["query"] : "",
+        //        isSync = rule && rule["isSync"] || true,
+        //        eventType = rule && rule["eventType"] || 'value',
+        //        scope = rule && rule["scope"],
+        //        delay = rule && rule["delay"] || 300;
+        //
+        //    var ref = fbObj.ref(),
+        //        queryRef = eval("ref" + query);
+        //
+        //    var digest = new Digest(scope, fbObj, isSync, delay);
+        //
+        //    fbObj.goOnline();
+        //
+        //    function RefObj(isSync, eventType) {
+        //        var that = this,
+        //            sync;
+        //
+        //        function onComplete1(snap, prevChildName, digestCb) {
+        //            if (config.debug) console.log('load complete', JSON.stringify(snap.val()));
+        //
+        //            digest.reset(function () {
+        //                if (typeof digestCb === 'function') digestCb.apply(null);
+        //                if (typeof finalOnComplete === 'function') finalOnComplete.apply(null, [snap, prevChildName])
+        //            });
+        //            if (extraOnComplete) return extraOnComplete(snap, prevChildName);
+        //        }
+        //
+        //        if (isSync) {
+        //            sync = 'on';
+        //            that.onComplete = onComplete1;
+        //        } else {
+        //            sync = 'once';
+        //            if (eventType === 'child_added') {
+        //                sync = 'on';
+        //                that.onComplete = function (snap, prevChildName) {
+        //                    onComplete1(snap, prevChildName, function () {
+        //                        queryRef.off('child_added', that.onComplete)
+        //                    })
+        //                }
+        //            } else {
+        //                that.onComplete = onComplete1
+        //            }
+        //        }
+        //        that.evalString = "queryRef." + sync + "('" + eventType + "', onComplete, errorCallback)"
+        //    }
+        //
+        //    var refObj = new RefObj(isSync, eventType);
+        //    var onComplete = refObj.onComplete;
+        //
+        //    function errorCallback(err) {
+        //        console.log("Fail to load " + refUrl + ": " + err.code);
+        //        //TODO: 加入ERROR到MODEL
+        //        fbObj.goOffline();
+        //    }
+        //
+        //    digest.reset(null, 5000);
+        //    eval(refObj.evalString);
+        //}
 
         function update(refUrl, value, onComplete, removePrev, refUrlParams) {
             var def = $q.defer();
@@ -223,60 +229,79 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
 //TODO: Transaction
 
         function batchUpdate(values, isConsecutive) {
-            var def = $q.defer();
-            var onCompletes = [], refUrlParams = snippet.cloneObject($firebase.params);
+            var def = $q.defer(),
+                refUrlParams = angular.extend({}, $firebase.params),
+                _isConsecutive=(isConsecutive || isConsecutive === undefined);
 
             function update(i) {
-                var ithOnComplete = (isConsecutive) ? onCompletes[i] : values[i].onComplete;
-                var params = $firebase.update(values[i].refUrl, values[i].value, ithOnComplete, values[i].set, refUrlParams).params;
+                var params = $firebase.update(values[i].refUrl, values[i].value, onComplete(i), values[i].set, refUrlParams).params;
                 refUrlParams = angular.extend(refUrlParams, params);
             }
 
-            function OnComplete(j, isLast) {
-                return function (error) {
-                    if (values[j] && values[j].onComplete) values[j].onComplete.apply(null, [error]);
+            function onComplete(i) {
+
+                function consective(error) {  //防止最後實際執行onComplete時使用的是跑完loop後的j的值
+                    var isLast = i === (values.length - 1);
+
+                    if (values[i] && values[i].onComplete) values[i].onComplete.apply(null, [error]);
                     if (error) {
                         def.reject(error);
-                        return
-                    }
-
-                    if (isLast) {
-                        def.resolve({params: refUrlParams});
                     } else {
-                        update(j + 1);
+                        if (isLast) {
+                            def.resolve({params: refUrlParams});
+                        } else {
+                            update(i + 1);
+                        }
                     }
                 }
+
+                function nonConsective(error) {
+                    if (values[i] && values[i].onComplete) values[i].onComplete.apply(null, [error]);
+                    if (error) {
+                        defers[i].reject(error)
+                    } else {
+                        defers[i].resolve();
+                    }
+                }
+
+                return _isConsecutive ? consective : nonConsective
             }
 
-            if (isConsecutive || isConsecutive === undefined) {
-                for (var j = 0; j < values.length; j++) {
-                    onCompletes[j] = new OnComplete(j, j === (values.length - 1));  //防止最後實際執行onComplete時使用的是跑完loop後的j的值
-                }
+            if (_isConsecutive) {
                 update(0);
             } else {
+                var defers = [],
+                    promises = [];
                 for (var i = 0; i < values.length; i++) {
+                    defers[i] = $q.defer(); promises[i] = defers[i].promise;
                     update(i);
                 }
+                $q.all(promises).then(function(){
+                    def.resolve({params: refUrlParams})
+                }, function(error){
+                    def.reject(error);
+                });
             }
+
             return def.promise
         }
 
-        function move(from, to){
-            var sourceRef=new Firebase(from),
-                targetRef=new Firebase(to);
-            sourceRef.once('value', function(snap){
+        function move(from, to) {
+            var sourceRef = new Firebase(from),
+                targetRef = new Firebase(to);
+            sourceRef.once('value', function (snap) {
                 targetRef.update(snap.val());
             })
         }
 
-        function $transfer(from, to){
-            var sourceRef=new Firebase(from.refUrl),
-                targetRef=new Firebase(to.refUrl),
-                def=$q.defer();
-            sourceRef.once('value', function(snap){
-                var value=from.modifier&&(typeof modifier==='function')? from.modifier(snap.val()):snap.val();
-                targetRef.update(value, function(error){
-                    if(error){
+        function $transfer(from, to) {
+            var sourceRef = new Firebase(from.refUrl),
+                targetRef = new Firebase(to.refUrl),
+                def = $q.defer();
+            sourceRef.once('value', function (snap) {
+                var value = from.modifier && (typeof modifier === 'function') ? from.modifier(snap.val()) : snap.val();
+                targetRef.update(value, function (error) {
+                    if (error) {
                         def.reject(error);
                     } else {
                         def.resolve();
@@ -290,12 +315,12 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             if (typeof opt !== 'object') return;
 
             batchUpdate(opt.request, true).then(function (resolveVal) {
-                if(!opt.response) {
+                if (!opt.response) {
                     def.resolve(resolveVal);
                     return
                 }
                 angular.extend(res, resolveVal);
-                var resUrlArr= snippet.replaceParamsInObj(opt.response, resolveVal.params);
+                var resUrlArr = snippet.replaceParamsInObj(opt.response, resolveVal.params);
 
                 getResponse(resUrlArr).then(function (response) {
                     angular.extend(res, response);
@@ -310,72 +335,76 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
         }
 
         function getResponse(refs) {
-            var refNum= Object.keys(refs).length, res = {};
+            var isRenew = {}, promises = {};
 
-            var def = $q.defer(),
+            function onComplete(key, refUrl) {
+                var def = $q.derfer();
+                promises[key] = def.promise;
+
+                var onSuccess = function (snap) {
+                    if (isRenew[key] === true) {
+                        def.resolve(snap.val());
+                        ref(refUrl).off();
+                    } else {
+                        isRenew[key] = true; //server hasn't change the data.
+                    }
+                };
+                var onError = function (err) {
+                    def.reject(err)
+                };
+
+                return [onSuccess, onError]
+            }
+
+            for (var key in refs) {
+                if (refs.hasOwnProperty(key)) ref(refs[key]).on('value', onComplete(key, refs[key])[0], onComplete(key, refs[key])[1]);
+            }
+            return $q.all(promises);
+        }
+
+        function getMultipleRefVal(refs, opt) {
+            var _opt = opt ? opt : {};
+
+            var res = {},
+                params = {},
+                onComplete = {},
+                onGoingRef = {},
+                def = $q.defer(),
+                refNum = Object.keys(refs).length,
+                indicator = _opt.indicator || '&',
+                currentRefs = angular.extend({}, refs),
                 waitUntil = new snippet.WaitUntil(refNum, function () {
                     def.resolve(res)
                 });
 
             for (var key in refs) {
-                ref(refs[key]).on('value', function (snap) {
-                    if(res[key]!==undefined){
-                        res[key]=snap.val();
-                        waitUntil.resolve();
-                        ref(refs[key]).off();
-                    } else {
-                        res[key] = snap.val(); //server hasn't change the data.
-                    }
-                    //setTimeout(function(){waitUntil.resolve()},0);
-                }, function (err) {
-                    def.reject(err);
-                });
-            }
-            return def.promise
-        }
-
-        function getMultipleRefVal(refs, opt){
-            var _opt=opt? opt:{};
-
-            var res={},
-                params={},
-                onComplete={},
-                onGoingRef={},
-                def = $q.defer(),
-                refNum= Object.keys(refs).length,
-                indicator=_opt.indicator||'&',
-                currentRefs=angular.extend({},refs),
-                waitUntil = new snippet.WaitUntil(refNum, function () {
-                    def.resolve(res)
-                });
-
-            for(var key in refs){
-                onGoingRef[key]=false;
+                onGoingRef[key] = false;
             }
 
-            function iterate(){
-                currentRefs=snippet.replaceParamsInObj(currentRefs, params);
-                for(var key in onGoingRef){
-                    if(onGoingRef.hasOwnProperty(key)&&currentRefs[key].indexOf(indicator)===-1&&!onGoingRef[key]){
+            function iterate() {
+                currentRefs = snippet.replaceParamsInObj(currentRefs, params);
+                for (var key in onGoingRef) {
+                    if (onGoingRef.hasOwnProperty(key) && currentRefs[key].indexOf(indicator) === -1 && !onGoingRef[key]) {
 
-                        onComplete[key]=new (function(key){
-                            return function (snap){
-                                if(typeof snap.val()==='string') {
-                                    params[indicator+key]=snap.val();
+                        onComplete[key] = new (function (key) {
+                            return function (snap) {
+                                if (typeof snap.val() === 'string') {
+                                    params[indicator + key] = snap.val();
 
                                 }
-                                res[key]=snap.val();
+                                res[key] = snap.val();
                                 delete onGoingRef[key];
                                 waitUntil.resolve();
                                 iterate();
                             }
                         })(key);
 
-                        onGoingRef[key]=true;
+                        onGoingRef[key] = true;
                         ref(currentRefs[key]).once('value', onComplete[key])
                     }
                 }
             }
+
             iterate();
             return def.promise
         }
@@ -383,4 +412,4 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
         return $firebase
     }]);
 
-if(window.appDI) window.appDI.push(window.newModule);
+if (window.appDI) window.appDI.push(window.newModule);
