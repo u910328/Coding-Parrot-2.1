@@ -62,8 +62,8 @@
             <md-toolbar>
                 <md-toolbar-filler layout layout-align="center center" style="height: 108px;">
                     <i class="material-icons">face</i>
-                    <img ng-if="loggedIn" ng-src="{{user.profileImageURL}}">
-                    <md-button ng-if="loggedIn" ng-click="sideNavLogout('left')">Log out</md-button>
+                    <img ng-show="loggedIn" ng-src="{{user.profileImageURL}}">
+                    <md-button ng-show="loggedIn" ng-click="sideNavLogout('left')">Log out</md-button>
 
                     <!--<img class="face" ng-show="loggedIn" src="{{profile.profileImageURL}}">-->
                 </md-toolbar-filler>
@@ -75,11 +75,11 @@
 
                 <md-button ui-sref="productList" ng-click="toggleSidenav('left')">product list</md-button>
                 <!--<md-button ng-hide="loggedIn" ui-sref="login">login</md-button>-->
-                <md-button ng-if="!loggedIn" href
-                           ng-click="showLogin($event);toggleSidenav('left')">
+                <md-button ng-hide="loggedIn" ui-sref="login"
+                           ng-click="toggleSidenav('left')">
                     login
                 </md-button>
-                <md-button ng-if="loggedIn" ui-sref="account"
+                <md-button ng-show="loggedIn" ui-sref="account"
                            ng-click="toggleSidenav('left')">
                     Account
                 </md-button>

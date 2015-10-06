@@ -104,7 +104,7 @@ window.newModule='pages.login';
             $mdDialog.show({
                 parent: parentEl,
                 targetEvent: $event,
-                templateUrl: 'pages/login/login.html',
+                templateUrl: 'pages/login/loginDialog.html',
                 clickOutsideToClose: true,
                 controller: 'LoginCtrl'
             });
