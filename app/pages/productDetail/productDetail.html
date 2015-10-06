@@ -1,8 +1,7 @@
-<md-dialog ng-firebase="products/{{id}}" loaded="loaded($value)" pure="true" flex="100">
-    <form>
+<md-dialog ng-firebase="products/{{id}}" loaded="loaded($value)" pure="true">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>{{$value.itemName}}</h2>
+                <h4>{{$value.itemName}}</h4>
                 <span flex></span>
                 <md-button class="md-icon-button" layout-align="center center"  ng-click="cancel()">
                     <md-icon class="material-icons" style="height: 24px;">clear</md-icon>
@@ -26,11 +25,6 @@
                 </md-card-content>
             </md-card>
         </md-dialog-content>
-        <div class="md-actions" layout="row">
-            <md-button  ng-click="cancel()" style="background-color: lightcoral">keep shopping</md-button>
-        </div>
-    </form>
-    </md-dialog-content>
 
 </md-dialog>
 

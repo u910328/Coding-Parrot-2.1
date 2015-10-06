@@ -270,6 +270,18 @@ window.newModule = 'pages.shoppingCart';
         });
     }]);
 
+    app.run(function ($rootScope, ngCart, config) {
+        ngCart.setShipping(config.shipping);
+        ngCart.setTaxRate(config.taxRate);
+
+        function refreshTotalItems() {
+            $rootScope.cartTotalItems = ngCart.getTotalItems()
+        }
+
+        $rootScope.$on('ngCart:change', refreshTotalItems);
+        refreshTotalItems();
+    });
+
 })(angular);
 
 if(window.appDI) window.appDI.push(window.newModule);

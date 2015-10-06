@@ -186,6 +186,7 @@ for (var key in window.modulePaths) {
 
 window.appDI = [
     'ngMaterial',
+    'ngMessages',
     'ngCart',
     'ngFirebase',
     'ngAnimate',

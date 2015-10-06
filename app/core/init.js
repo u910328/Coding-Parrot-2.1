@@ -30,7 +30,7 @@ window.newModule = 'core.init';
 
             return def.promise
         })
-        .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog) {
+        .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config) {
 
 
             $rootScope.debug = config.debug;
@@ -49,16 +49,10 @@ window.newModule = 'core.init';
             //template
 
 
-            ngCart.setShipping(config.shipping);
-            ngCart.setTaxRate(config.taxRate);
 
 
-            function refreshTotalItems() {
-                $rootScope.cartTotalItems = ngCart.getTotalItems()
-            }
 
-            $rootScope.$on('ngCart:change', refreshTotalItems);
-            refreshTotalItems();
+
 
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
                 if (user) {

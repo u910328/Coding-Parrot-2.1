@@ -1,5 +1,7 @@
 //  $.../app/ browserify --entry browserifyEntry.js --outfile dist/app.js
 'use strict';
+require("./bower_components/angular-payments/lib/angular-payments.min.js");
+require("./bower_components/angular-ui-validate/dist/validate.js");
 require("./components/appversion/appversion-directive.js");
 require("./components/auth/auth.js");
 require("./components/firebase.utils/firebase.utils.js");
