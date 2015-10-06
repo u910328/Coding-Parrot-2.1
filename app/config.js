@@ -106,9 +106,6 @@ window.modulePaths = {
     $firebase: {
         src: "core/$firebase.js"
     },
-    init: {
-        src: "core/init.js"
-    },
     linkFn: {
         src: "core/linkFn.js"
     },
@@ -117,6 +114,9 @@ window.modulePaths = {
     },
     $errorHandler:{
         src: "core/$errorHandler.js"
+    },
+    init: {
+        src: "core/init.js"
     },
 
     //custom
@@ -129,6 +129,9 @@ window.modulePaths = {
     },
     account: {
         src: "pages/account/account.js"
+    },
+    productList: {
+        src: "pages/productList/productList.js"
     },
     productDetail: {
         src: "pages/productDetail/productDetail.js"
@@ -160,6 +163,7 @@ window.modulePaths = {
     app: {
         src: "app.js"
     }
+
 };
 
 function addResource(resource){

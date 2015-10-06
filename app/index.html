@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Wedoma1.0</title>
+    <title>Obsidian 0.8</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,7 +27,7 @@
                 <md-icon aria-label="Menu"
                          md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
             </md-button>
-            <h1>Wedoma v1.0.1</h1>
+            <h1>Obsidian 0.8</h1>
         </div>
     </md-toolbar>
     <md-toolbar class="md-menu-toolbar" hide-sm>
@@ -37,6 +37,8 @@
             </md-toolbar-filler>
             <md-menu-bar>
                 <md-button ui-sref="home">home</md-button>
+                <md-button ui-sref="productList">product list</md-button>
+
                 <!--<md-button ng-hide="loggedIn" ui-sref="login">login</md-button>-->
                 <md-button ng-hide="loggedIn" href ng-click="showLogin($event)">login</md-button>
                 <!--<md-button ng-show="loggedIn" ui-sref="account">account</md-button>-->
@@ -61,22 +63,34 @@
                 <md-toolbar-filler layout layout-align="center center" style="height: 108px;">
                     <i class="material-icons">face</i>
                     <img ng-if="loggedIn" ng-src="{{user.profileImageURL}}">
+                    <md-button ng-if="loggedIn" ng-click="sideNavLogout('left')">Log out</md-button>
+
                     <!--<img class="face" ng-show="loggedIn" src="{{profile.profileImageURL}}">-->
                 </md-toolbar-filler>
-                <md-button ng-click="sideNavLogout('left')">Log out</md-button>
+
             </md-toolbar>
 
             <md-content layout="column">
-                <md-button ui-sref="home">home</md-button>
+                <md-button ui-sref="home" ng-click="toggleSidenav('left')">home</md-button>
+
+                <md-button ui-sref="productList" ng-click="toggleSidenav('left')">product list</md-button>
                 <!--<md-button ng-hide="loggedIn" ui-sref="login">login</md-button>-->
-                <md-button ng-if="!loggedIn" href ng-click="showLogin($event)">login</md-button>
+                <md-button ng-if="!loggedIn" href
+                           ng-click="showLogin($event);toggleSidenav('left')">
+                    login
+                </md-button>
+                <md-button ng-if="loggedIn" ui-sref="account"
+                           ng-click="toggleSidenav('left')">
+                    Account
+                </md-button>
+
                 <!--<md-button ng-show="loggedIn" ui-sref="account">account</md-button>-->
                 <!--<md-button ng-show="loggedIn" href ng-click="showAccount($event)">account</md-button>-->
-                <md-button ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
-                <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
-                <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
-                <md-button ui-sref="test">Test</md-button>
-                <md-button ui-sref="test2">Test2</md-button>
+                <md-button ui-sref="shoppingCart" ng-click="toggleSidenav('left')">shopping cart [{{cartTotalItems}}]</md-button>
+                <md-button ng-show="debug" ui-sref="backEnd" ng-click="toggleSidenav('left')">backEnd</md-button>
+                <md-button ng-show="loggedIn" ui-sref="myOrders" ng-click="toggleSidenav('left')">myOrders</md-button>
+                <md-button ui-sref="test" ng-click="toggleSidenav('left')">Test</md-button>
+                <md-button ui-sref="test2" ng-click="toggleSidenav('left')">Test2</md-button>
             </md-content>
 
         </md-sidenav>

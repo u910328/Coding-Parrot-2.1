@@ -1,20 +1,37 @@
 window.newModule = 'core.init';
 (function (angular) {
     angular.module(window.newModule, ['firebase', 'myApp.config'])
-        .factory('init', ['Auth', '$q', 'model', function (Auth, $q, model) {
+        .factory('init', /*@ngInject*/ function (Auth, $q, $http, $firebase, $rootScope) {
+            var def = $q.defer();
             //function logInMain(){}
             //function getDbName(){}
             //function getIdentity(){}
             //function logInOthersAnonymously(){}
             ////compile viewLogic
-
-            return {}
-        }])
-        .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog) {
             //get geoip
             $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function (response) {
                 console.log(response)
             });
+
+            var preLoadList = {
+                stripeKey: {
+                    refUrl: 'config/payment/stripe/publishable_key'
+                }
+            };
+
+            $firebase.load(preLoadList)
+                .then(function (res) {
+                    if (res.stripeKey && Stripe) Stripe.setPublishableKey(res.stripeKey);
+                    return res
+                })
+                .then(function(res){
+                    def.resolve(res);
+                });
+
+            return def.promise
+        })
+        .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config, ngCart, $mdDialog) {
+
 
             $rootScope.debug = config.debug;
             if (config.debug) console.log('debug mode');
@@ -51,19 +68,15 @@ window.newModule = 'core.init';
                     };
                     $rootScope.user = user;
 
-                    var preLoadList={
-                        profileImageURL:{
-                            refUrl:'users/' + user.uid+'/profileImageURL'
-                        },
-                        stripeKey:{
-                            refUrl:'config/payment/stripe/publishable_key'
+                    var loadList = {
+                        profileImageURL: {
+                            refUrl: 'users/' + user.uid + '/profileImageURL'
                         }
                     };
 
-                    $firebase.load(preLoadList).then(function(res){
+                    $firebase.load(loadList).then(function (res) {
                         user.profileImageURL = res.profileImageURL;
                         $rootScope.user = user;
-                        if(res.stripeKey&&Stripe) Stripe.setPublishableKey(res.stripeKey);
                     });
                     //Notification
                     //_ref=$firebase.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
@@ -76,7 +89,7 @@ window.newModule = 'core.init';
                     //});
                 } else {
                     console.log('no user', user);
-                    $rootScope.user={};
+                    $rootScope.user = {};
                     $firebase.params = {};
                 }
             });

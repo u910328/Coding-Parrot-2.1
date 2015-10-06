@@ -102,7 +102,7 @@ window.newModule = 'pages.account';
             $mdDialog.show({
                 parent: parentEl,
                 targetEvent: $event,
-                templateUrl: 'pages/account/account.html',
+                templateUrl: 'pages/account/accountDialog.html',
                 locals: {
                     user: $rootScope.user
                 },
