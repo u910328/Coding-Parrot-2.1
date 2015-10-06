@@ -21,7 +21,6 @@ window.newModule='pages.login';
             $mdDialog.cancel();
         };
 
-        $rootScope.showLogin=false;
         $scope.email = null;
         $scope.pass = null;
         $scope.confirm = null;
@@ -98,6 +97,19 @@ window.newModule='pages.login';
             controller: ctrlName
         });
     }]);
+
+    app.run(function ($rootScope, $mdDialog) {
+        $rootScope.showLogin = function ($event) {
+            var parentEl = angular.element(document.body);
+            $mdDialog.show({
+                parent: parentEl,
+                targetEvent: $event,
+                templateUrl: 'pages/login/login.html',
+                clickOutsideToClose: true,
+                controller: 'LoginCtrl'
+            });
+        };
+    });
 
     if (directiveName) {
         app.directive(directiveName, ['linkFn', function (linkFn) {

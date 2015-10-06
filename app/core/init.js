@@ -29,34 +29,6 @@ window.newModule = 'core.init';
                 $state.go('home');
             };
 
-            $rootScope.showAccount = function ($event) {
-                var parentEl = angular.element(document.body);
-                $mdDialog.show({
-                    parent: parentEl,
-                    targetEvent: $event,
-                    templateUrl: 'pages/account/account.html',
-                    locals: {
-                        user: $rootScope.user
-                    },
-                    clickOutsideToClose: true,
-                    controller: 'AccountCtrl'
-                });
-            };
-
-            $rootScope.showLog = function ($event) {
-                var parentEl = angular.element(document.body);
-                $mdDialog.show({
-                    parent: parentEl,
-                    targetEvent: $event,
-                    templateUrl: 'pages/login/login.html',
-                    locals: {
-                        user: $rootScope.user
-                    },
-                    clickOutsideToClose: true,
-                    controller: 'LoginCtrl'
-                });
-            };
-
             //template
 
 
@@ -71,21 +43,27 @@ window.newModule = 'core.init';
             $rootScope.$on('ngCart:change', refreshTotalItems);
             refreshTotalItems();
 
-            var _ref;
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
                 if (user) {
                     console.log('user', user);
                     $firebase.params = {
                         '$uid': user.uid
                     };
-
                     $rootScope.user = user;
-                    _ref = $firebase.ref();
-                    _ref.child('users/' + user.uid + '/profileImageURL').once('value', function (snap) {
-                        user.profileImageURL = snap.val();
-                    });
-                    _ref.child('config/payment/stripe/publishable_key').once('value', function (snap) {
-                        Stripe.setPublishableKey(snap.val());
+
+                    var preLoadList={
+                        profileImageURL:{
+                            refUrl:'users/' + user.uid+'/profileImageURL'
+                        },
+                        stripeKey:{
+                            refUrl:'config/payment/stripe/publishable_key'
+                        }
+                    };
+
+                    $firebase.load(preLoadList).then(function(res){
+                        user.profileImageURL = res.profileImageURL;
+                        $rootScope.user = user;
+                        if(res.stripeKey&&Stripe) Stripe.setPublishableKey(res.stripeKey);
                     });
                     //Notification
                     //_ref=$firebase.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
@@ -97,8 +75,8 @@ window.newModule = 'core.init';
                     //    ngNotify(orderStatus);
                     //});
                 } else {
-                    if (_ref) _ref.off();
                     console.log('no user', user);
+                    $rootScope.user={};
                     $firebase.params = {};
                 }
             });

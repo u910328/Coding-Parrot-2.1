@@ -28,21 +28,11 @@ window.newModule = 'pages.shoppingCart';
             $scope.clientPhone = snap.val();
         });
 
-        var delayExe = new snippet.DelayExec(1000);
-        $scope.saveEmail = function (isValid) {
-            function onComplete() {
-                if (isValid) $scope.clientEmail.$save();
-                console.log($scope.clientEmail.$value)
-            }
+        $scope.saveEmail = function (newEmail, isValid) {
 
-            delayExe.reset(onComplete)
         };
-        $scope.savePhone = function () {
-            function onComplete() {
-                if ($scope.clientPhone) $firebase.update('users/' + user.uid, {phone: $scope.clientPhone || null});
-            }
-
-            delayExe.reset(onComplete)
+        $scope.savePhone = function (newPhone, isValid) {
+            if (isValid) $firebase.update('users/' + user.uid, {phone: $scope.clientPhone || null});
         };
 
         if (config.debug) {

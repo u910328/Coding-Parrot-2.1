@@ -96,6 +96,22 @@ window.newModule = 'pages.account';
         });
     }]);
 
+    app.run(function ($rootScope, $mdDialog) {
+        $rootScope.showAccount = function ($event) {
+            var parentEl = angular.element(document.body);
+            $mdDialog.show({
+                parent: parentEl,
+                targetEvent: $event,
+                templateUrl: 'pages/account/account.html',
+                locals: {
+                    user: $rootScope.user
+                },
+                clickOutsideToClose: true,
+                controller: 'AccountCtrl'
+            });
+        };
+    });
+
     if (directiveName) {
         app.directive(directiveName, ['linkFn', function (linkFn) {
             return {

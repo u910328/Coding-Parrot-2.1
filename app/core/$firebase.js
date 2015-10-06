@@ -15,32 +15,36 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             $object: $object,
             getMultipleRefVal: getMultipleRefVal,
             isRefUrlValid:isRefUrlValid,
-            move: move
+            move: move,
+            load:load
         };
 
         var activeRefUrl = {};
 
         function FbObj(refUrl, opt) {
-            var dbOpt = opt || {}, db = $firebase.databases[refUrl.split("@")[1]] || {};
+            var _opt = opt || {},
+                _refUrl = refUrl||'',
+                db = $firebase.databases[_refUrl.split("@")[1]] || {};
 
             function isDbOnline() {
-                if (dbOpt.keepOnline !== undefined) return !!dbOpt.keepOnline;
+                if (_opt.keepOnline !== undefined) return !!_opt.keepOnline;
                 if (db.keepOnline !== undefined) return !!db.keepOnline;
                 return true
             }
 
             this.dbName = db.Name || FBURL.split("//")[1].split(".fi")[0];
             this.dbUrl = "https://" + this.dbName + ".firebaseio.com";
-            this.path = refUrl.split("@")[0];
+            this.path = _refUrl.split("@")[0];
             this.url = this.dbUrl + "/" + this.path;
             this.t = (new Date).getTime().toString();
-            this.params = dbOpt.params || {};
+            this.params = _opt.params || {};
             this.keepOnline = isDbOnline();
         }
 
         FbObj.prototype = {
             ref: function () {
                 var ref = new Firebase(this.dbUrl);
+                if(this.path==='') return ref;
                 var pathArr = this.path.split("/");
                 for (var i = 0; i < pathArr.length; i++) {
                     if (pathArr[i].charAt(0) === "$") {
@@ -91,6 +95,38 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             return fbObj.ref()
         }
 
+        function queryRef(refUrl, options) {
+            var opt = options || {},
+                ref = $firebase.ref(refUrl);
+            if (opt.orderBy) {
+                var orderBy='orderBy' + opt.orderBy.split(':')[0];
+                if(orderBy==='orderByChild') {
+                    ref = ref[orderBy](opt.orderBy.split(':')[1]); //ex {orderBy:'Child:name'}
+                } else {
+                    ref = ref[orderBy]();
+                }
+
+            } else {
+                return ref
+            }
+            if (opt.startAt) {
+                ref = ref['startAt'](opt.startAt);
+            }
+            if (opt.endAt) {
+                ref = ref['endAt'](opt.endAt);
+            }
+            if (opt.equalTo) {
+                ref = ref['equalTo'](opt.equalTo);
+            }
+            if (opt.limitToFirst) {
+                ref = ref['limitToFirst'](opt.limitToFirst);
+            }
+            if (opt.limitToLast) {
+                ref = ref['limitToLast'](opt.limitToLast);
+            }
+            return ref;
+        }
+
         var objectRepo = {};
 
         function $object(refUrl) {
@@ -117,6 +153,30 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
                     if (scope) scope.$digest();
                 }, customDelay || delay);
             }
+        }
+
+        function load(loadList, defaultOpt){
+            var _defaultOpt=(typeof defaultOpt === 'object')? defaultOpt:{},
+                defers={},
+                promises={};
+
+            function onComplete(key){
+                return function(snap){
+                    defers[key].resolve(snap.val())
+                }
+            }
+
+            for(var key in loadList){
+                if(loadList.hasOwnProperty(key)){
+                    defers[key]=$q.defer();
+                    promises[key]=defers[key].promise;
+                    var loadObj = loadList[key],
+                        ref = queryRef(loadObj.refUrl, loadObj.opt||_defaultOpt);
+
+                    ref.once('value', onComplete(key))
+                }
+            }
+            return $q.all(promises)
         }
 
 
