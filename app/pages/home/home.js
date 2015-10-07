@@ -16,8 +16,13 @@ window.newModule='pages.home';
     var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function ($scope) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $state) {
         //
+        console.log($state.data);
+
+        $scope.test= function () {
+            $state.goWithData('test2',{},{a:'a',b:'b'})
+        }
     });
 
 //Step 5: config providers.

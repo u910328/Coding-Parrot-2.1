@@ -34,6 +34,6 @@ require("./pages/backEnd/backEnd.js");
 require("./pages/test/test.js");
 require("./pages/test2/test2.js");
 require("./pages/invoice/invoice.js");
-require("./pages/error/error.js");
+require("./components/errorHandler/error.js");
 
 require("./app.js");

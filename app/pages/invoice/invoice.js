@@ -6,7 +6,7 @@ window.newModule='pages.invoice';
 
 //Step 2: set route, ctrlName and templateUrl.
     var state='invoice',
-        url='/invoice',
+        url='/invoice/:orderId',
         ctrlName='InvoiceCtrl',
         templateUrl='pages/invoice/invoice.html';
 
@@ -14,13 +14,13 @@ window.newModule='pages.invoice';
     var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseObject, model, customFn, $firebase, snippet, $location) {
-
-        $scope.invoice=model.invoice;
-        $scope.subTotal=customFn.calcSubTotal('', model.invoice.products);
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebaseObject, $state, customFn) {
+        console.log($state.data);
+        $scope.invoice=$state.data;
+        //$scope.subTotal=customFn.calcSubTotal('', $stateParams.products);
         $scope.date=new Date();
         $scope.OK=function(){
-            $location.path('/home')
+            $state.go('home')
         }
 
     });

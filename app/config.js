@@ -63,6 +63,9 @@ window.modulePaths = {
     appversion: {
         src: "components/appversion/appversion-directive.js"
     },
+    errorHandler:{
+        src: "components/errorHandler/error.js"
+    },
     auth: {
         src: "components/auth/auth.js"
     },
@@ -97,12 +100,13 @@ window.modulePaths = {
     scrollpoint: {
         src: "components/scrollpoint/scrollpoint.js"
     },
-    snippet: {
-        src: "core/snippet.js"
-    },
     model: {
         src: "core/model.js"
     },
+    snippet: {
+        src: "core/snippet.js"
+    },
+
     $firebase: {
         src: "core/$firebase.js"
     },
@@ -111,9 +115,6 @@ window.modulePaths = {
     },
     elasticSearch: {
         src: "core/elasticSearch.js"
-    },
-    $errorHandler:{
-        src: "core/$errorHandler.js"
     },
     init: {
         src: "core/init.js"
@@ -156,9 +157,6 @@ window.modulePaths = {
     },
     invoice: {
         src: "pages/invoice/invoice.js"
-    },
-    error: {
-        src: "pages/error/error.js"
     },
     app: {
         src: "app.js"

@@ -7,7 +7,7 @@
     <ngcart-cart></ngcart-cart>
     <hr>
     <div ng-hide="!ngCart.getTotalItems()">
-        <form name="checkOut" stripe-form="stripeCallback" ng-submit="checkOut()">
+        <form name="checkOut" stripe-form="stripeCallback" ng-submit="submitOrder()">
             <md-input-container>
                 <label>Note</label>
                 <textarea name="note" ng-model="note" md-maxlength="10"></textarea>

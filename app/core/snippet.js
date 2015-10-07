@@ -7,6 +7,20 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             return Object.prototype.toString.call( someVar ) === '[object Array]'
         }
 
+        function randomString(length) {
+            var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+
+            if (!length) {
+                length = Math.floor(Math.random() * chars.length);
+            }
+
+            var str = '';
+            for (var i = 0; i < length; i++) {
+                str += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return str;
+        };
+
         function ReplaceableObj(){
             var that=this;
             this.replace=function(objName,params){
@@ -467,7 +481,8 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             filterRawData:filterRawData,
             firstPartOfEmail:firstPartOfEmail,
             errMessage:errMessage,
-            ucfirst:ucfirst
+            ucfirst:ucfirst,
+            randomString:randomString
         }
     }]);
 

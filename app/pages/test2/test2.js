@@ -15,7 +15,10 @@ window.newModule = window.randomString(8);
     var app = angular.module(window.newModule, []);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebase) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $state, $firebase, $rootScope) {
+
+        console.log($state.data);
+
         var loadList = [
             {
                 refUrl: 'products/bd_001'
@@ -33,7 +36,12 @@ window.newModule = window.randomString(8);
         ];
         $firebase.load(loadList).then(function(res){
             console.log(res);
-        })
+        });
+
+
+        $scope.test=function(){
+            $state.go('home', {test:'test'})
+        }
     });
 
 //Step 5: config providers.
