@@ -27,11 +27,11 @@ window.newModule='pages.login';
         $scope.createMode = false;
 
         function redirectTo(state){
-            $state.transitionTo(state);
+            $state.go(state);
         }
 
         function showError(err) {
-            $scope.err = snippet.errMessage(err);
+            $scope.err = angular.isObject(err) && err.code? err.code : err + '';
         }
 
         $scope.login = function(email, pass) {
@@ -39,7 +39,7 @@ window.newModule='pages.login';
             $scope.err = null;
             Auth.$authWithPassword({ email: email, password: pass }, {rememberMe: true})
                 .then(function(/* user */) {
-                    $mdDialog.cancel();
+                    $mdDialog.hide();
                     redirectTo('home');
                 }, showError);
         };
@@ -58,7 +58,7 @@ window.newModule='pages.login';
                     .then(Auth.createAccount)
                     .then(function(/* user */) {
                         // redirect to home
-                        $mdDialog.cancel();
+                        $mdDialog.hide();
                         redirectTo('home');
                     }, showError);
             }
@@ -80,7 +80,7 @@ window.newModule='pages.login';
         $scope.loginWithProvider=function(provider, opt){
             Auth.loginWithProvider(provider, opt)
                 .then(function(user) {
-                    $mdDialog.cancel();
+                    $mdDialog.hide();
                     redirectTo('home');
                     return Auth.checkIfAccountExistOnFb(user)
                 }, showError)

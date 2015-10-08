@@ -14,7 +14,7 @@
     <br>
     status: received<br>
     pick-up time:{{invoice.schedule| date: 'short'}}<br>
-    subtotal:{{subTotal}}<br>
+    subtotal:{{invoice|orderSubTotal}}<br>
     payment: {{invoice.payment.token? 'credit card': 'payment upon pickup'}}<br>
     note:{{invoice.note}}
 

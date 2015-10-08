@@ -7,31 +7,31 @@ angular.module(window.newModule,[])
             return items.slice().reverse();
         };
     })
-    .filter('consecutive', ['$filter', function ($filter) {
+    .filter('consecutive', function ($filter, snippet) {
         return function (items, input, isReverse) {
-            var result=angular.copy(items);
+            var _items=items||[];
+            var result=angular.copy(_items);
+
             if(typeof input==='object'){
                 angular.forEach(input, function(value, key){
-                    if(!value) return;
+                    if(!value&&value!=='') return;
                     if(value===true) {
                         result=$filter('filter')(result, key);
                     } else {
                         result=$filter('filter')(result, value);
                     }
                 });
-
             } else if(typeof input==='string'){
                 input=input.trim();
                 var keyArray = input.split(' ');
                 for (var i = 0; i < keyArray.length; i++) {
                     result = $filter('filter')(result, keyArray[i]);
                 }
-                result=input === '' ? items : result
+                result=input === '' ? _items : result
             }
-            if(result===undefined) result=[];
             return isReverse? result.slice().reverse():result
         }
-    }])
+    })
     ////see http://jsfiddle.net/nirmalkumar_86/9F89Q/5/
     .filter('filterMultiple', ['$filter', function ($filter) {
         return function (items, keyObj) {

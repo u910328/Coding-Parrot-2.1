@@ -122,7 +122,13 @@ window.modulePaths = {
 
     //custom
     customService:{
-        src: "custom/customService.js"
+        src: "custom/service.js"
+    },
+    customFilter:{
+        src: "custom/filter.js"
+    },
+    customDirective:{
+        src: "custom/filter.js"
     },
     //pages
     login: {
@@ -148,6 +154,12 @@ window.modulePaths = {
     },
     backEnd: {
         src: "pages/backEnd/backEnd.js"
+    },
+    backEndOrders: {
+        src: "pages/backEnd/orders/orders.js"
+    },
+    backEndProductManager: {
+        src: "pages/backEnd/productManager/productManager.js"
     },
     test: {
         src: "pages/test/test.js"

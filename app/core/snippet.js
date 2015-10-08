@@ -19,21 +19,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
                 str += chars[Math.floor(Math.random() * chars.length)];
             }
             return str;
-        };
-
-        function ReplaceableObj(){
-            var that=this;
-            this.replace=function(objName,params){
-                if(that[objName]===undefined) that[objName]={};
-                var resString=JSON.stringify(that[objName]);
-                for(var key in params){
-                    resString=resString.replace(eval("/\\"+key+"/g"), params[key]);
-                }
-                that[objName]=JSON.parse(resString);
-            };
-            this.showObj=function(objName){
-                console.log(JSON.stringify(that[objName]))
-            }
         }
 
         function replaceParamsInString(string, params){
@@ -58,17 +43,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
 
             return replacedObj
         }
-
-        //function getUnionOfObj(objArr){
-        //    var result=objArr[0];
-        //    if(objArr.length===1) return result;
-        //    for(var i=1;i<objArr.length;i++){
-        //        for(var key in objArr[i]){
-        //            result[key]=objArr[i][key];
-        //        }
-        //    }
-        //    return result
-        //}
 
         function evalAssignment(lhsArr, rhsArr){
 
@@ -341,60 +315,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             return isExist
         }
 
-        function getRouteKey(locationPath, routeParam){
-            var path=locationPath;
-            for(var key in routeParam){
-                if(key==='key') continue;
-                var replacement=routeParam[key].split('/')[1]? ':'+key+'*':':'+key;
-                path=path.replace(routeParam[key], replacement);
-            }
-            return path
-        }
-
-
-        function getRule(structure, pathArr){
-            var omniKey={},
-                currentStructure=structure,
-                checkStructure=true;
-
-            //collect the real value for keys like $uid, $pjId.
-            function findOmniKey(i){
-                if(currentStructure[pathArr[i]]){
-                    currentStructure=currentStructure[pathArr[i]]
-                } else {
-                    var keyExist=false;
-                    for(var key in currentStructure){
-                        if(key.charAt(0)=="$"){
-                            omniKey[key]=pathArr[i];
-                            currentStructure=currentStructure[key];
-                            keyExist=true;
-                            break;
-                        }
-                    }
-                    if(!keyExist){
-                        checkStructure=false;
-                        console.log("no rules for ["+pathArr.toString()+"]");
-                    }
-                }
-            }
-
-            for(var i=0; i<pathArr.length; i++){
-                findOmniKey(i);
-                if(!checkStructure) break
-            }
-
-            if(!checkStructure) return undefined;
-
-            var contentString=JSON.stringify(currentStructure);
-            for(var key in omniKey){
-                contentString=contentString.replace(eval("/\\"+key+"/g"), omniKey[key])
-            }
-
-            console.log(JSON.stringify(omniKey));
-
-            return JSON.parse(contentString);
-        }
-
         function WaitUntil(conditionNum, onComplete, context){
             var that=this;
             this.satisfiedCondition=0;
@@ -407,10 +327,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             if(conditionNum===0){
                 onComplete.apply(context||null)
             }
-        }
-
-        function errMessage(err) {
-            return angular.isObject(err) && err.code? err.code : err + '';
         }
 
         function firstPartOfEmail(email) {
@@ -460,6 +376,10 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             });
         }
 
+        function isObjEmpty(obj){
+            return !Object.getOwnPropertyNames(obj).length > 0
+        }
+
 
         return {
             DelayExec:DelayExec,
@@ -468,21 +388,17 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             unflatten:unflatten,
             isArray:isArray,
             cloneObject:cloneObject,
-            getRule:getRule,
-            getRouteKey:getRouteKey,
             evalAssignment:evalAssignment,
             checkIfPropertyExist:checkIfPropertyExist,
             WaitUntil:WaitUntil,
-            //getUnionOfObj:getUnionOfObj,
-            ReplaceableObj:ReplaceableObj,
             replaceParamsInObj:replaceParamsInObj,
             replaceParamsInString:replaceParamsInString,
             createBatchUpdateValues:createBatchUpdateValues,
             filterRawData:filterRawData,
             firstPartOfEmail:firstPartOfEmail,
-            errMessage:errMessage,
             ucfirst:ucfirst,
-            randomString:randomString
+            randomString:randomString,
+            isObjEmpty:isObjEmpty
         }
     }]);
 

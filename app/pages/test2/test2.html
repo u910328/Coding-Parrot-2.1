@@ -12,7 +12,7 @@
 <div class="box" id="box1">box1</div>
 <div class="box" id="box2">box1</div>
 
-
+<input ng-model="inputDelayTest" ng-model-options="{updateOn: 'default blur', debounce: { 'default': 5000, 'blur': 0 }}" ng-change="changed()">
 <button ng-click="test()">test</button>
 <div class="placeholder"></div>
 

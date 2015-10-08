@@ -24,7 +24,7 @@
 search:<input ng-model="search" ng-change="refreshFilter()">
 <hr>
 
-<div ng-repeat="order in myOrders" ng-init="calcSubTotal(order.$id, order.products, this)">
+<div ng-repeat="order in myOrders">
     <a href>{{order.$id}}</a><br>
     date: {{order.createdTime| date: 'fullDate'}}<br>
     ------------------------------------------------------
@@ -36,6 +36,6 @@ search:<input ng-model="search" ng-change="refreshFilter()">
     ------------------------------------------------------
     <br>
     status:{{order.orderStatus}}<br>
-    subtotal:{{subTotal[order.$id]|currency : '$' : 2}}
+    subtotal:{{order|orderSubTotal|currency : '$' : 2}}
     <hr>
 </div>

@@ -14,7 +14,7 @@ window.newModule='pages.myOrders';
     var app = angular.module(window.newModule, ['myApp.security']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function (user, $scope, $firebaseArray, customFn, $firebase, snippet) {
+    app.controller(ctrlName, /*@ngInject*/ function (user, $scope, $firebaseArray, $firebase, snippet) {
 
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
@@ -40,7 +40,6 @@ window.newModule='pages.myOrders';
         }, true);
 
 
-        $scope.calcSubTotal=customFn.calcSubTotal;
     });
 
 //Step 5: config providers.

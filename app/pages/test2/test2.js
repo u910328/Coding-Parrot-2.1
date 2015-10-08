@@ -18,7 +18,9 @@ window.newModule = window.randomString(8);
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $state, $firebase, $rootScope) {
 
         console.log($state.data);
-
+        $scope.changed=function(){
+            console.log('data changed to '+$scope.inputDelayTest)
+        };
         var loadList = [
             {
                 refUrl: 'products/bd_001'

@@ -39,6 +39,7 @@ window.newModule='pages.invoice';
         });
     }]);
 
+
 })(angular);
 
 if(window.appDI) window.appDI.push(window.newModule);

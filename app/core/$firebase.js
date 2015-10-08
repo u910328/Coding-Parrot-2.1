@@ -4,7 +4,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
     .factory('$firebase', ['FBURL', 'config', 'fbutil', '$firebaseObject', '$q', 'snippet', function (FBURL, config, fbutil, $firebaseObject, $q, snippet) {
         var $firebase = {
             FbObj: FbObj,
-            //load: load,
             update: update,
             set: set,
             batchUpdate: batchUpdate,
