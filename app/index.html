@@ -21,7 +21,7 @@
 <body ng-cloak>
 <div layout="column">
 
-    <md-toolbar layout="row">
+    <md-toolbar layout="row" style="position: fixed;">
         <div class="md-toolbar-tools">
             <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
                 <md-icon aria-label="Menu"
@@ -30,8 +30,8 @@
             <h1>Obsidian 0.8</h1>
         </div>
     </md-toolbar>
-    <md-toolbar class="md-menu-toolbar" hide-sm>
-        <div layout="row">
+    <md-toolbar class="md-menu-toolbar"  hide-sm>
+        <div layout="row"  style="position: fixed;">
             <!--<md-toolbar-filler layout layout-align="center center" style="height: 100px;">-->
                 <!--<i class="material-icons">face</i>-->
             <!--</md-toolbar-filler>-->
@@ -43,17 +43,27 @@
                 <md-button ng-hide="loggedIn" href ng-click="showLogin($event)">login</md-button>
                 <!--<md-button ng-show="loggedIn" ui-sref="account">account</md-button>-->
                 <md-button ng-show="loggedIn" href ng-click="showAccount($event)">account</md-button>
+
+                <!--<md-button ng-show="loggedIn" ui-sref="account">account</md-button>-->
                 <md-button ui-sref="shoppingCart">shopping cart [{{cartTotalItems}}]</md-button>
                 <md-button ng-show="debug" ui-sref="backEnd">backEnd</md-button>
                 <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
                 <md-button ui-sref="test">Test</md-button>
                 <md-button ui-sref="test2">Test2</md-button>
             </md-menu-bar>
+            <md-menu md-position-mode="target-right target" >
+                <md-button ng-show="loggedIn" ng-click="$mdOpenMenu()"> account window</md-button>
+                <md-menu-content width="4" >
+
+                    <acc-window></acc-window>
+                </md-menu-content>
+            </md-menu>
         </div>
     </md-toolbar>
-
+    <!--<md-content ng-show="showAccountWindow"><acc-window></acc-window></md-content>-->
     <md-content ui-view></md-content>
     <md-content ui-view="main"></md-content>
+
 
     <div layout="row">
         <!--<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"-->
@@ -61,14 +71,11 @@
         <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
                     md-swipe-left="toggleSidenav('left')">
             <md-toolbar>
-                <md-toolbar-filler layout layout-align="center center" style="height: 108px;">
-                    <i class="material-icons">face</i>
-                    <img ng-show="loggedIn" ng-src="{{user.profileImageURL}}">
-                    <md-button ng-show="loggedIn" ng-click="sideNavLogout('left')">Log out</md-button>
-
-                    <!--<img class="face" ng-show="loggedIn" src="{{profile.profileImageURL}}">-->
+                <md-toolbar-filler layout layout-align="center center">
+                    <i ng-hide="loggedIn" class="material-icons">face</i>
+                    <img ng-show="loggedIn" class="face" ng-src="{{user.profileImageURL}}">
                 </md-toolbar-filler>
-
+                <md-button ng-show="loggedIn" ng-click="sideNavLogout('left')">Log out</md-button>
             </md-toolbar>
 
             <md-content layout="column">

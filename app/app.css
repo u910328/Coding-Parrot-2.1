@@ -7,6 +7,13 @@
     margin: 16px;
 }
 
+.md-face {
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    width: 48px;
+    margin: 16px;
+}
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;

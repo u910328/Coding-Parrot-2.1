@@ -26,6 +26,10 @@ window.newModule='pages.login';
         $scope.confirm = null;
         $scope.createMode = false;
 
+        $scope.submit = function() {
+
+        };
+
         function redirectTo(state){
             $state.go(state);
         }

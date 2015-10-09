@@ -1,6 +1,6 @@
 {
   "firebase": "frecome",
-  "public": ".",
+  "public": "app",
   "ignore": [
     "firebase.json",
     "**/.*",

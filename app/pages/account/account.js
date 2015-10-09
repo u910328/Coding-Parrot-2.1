@@ -25,6 +25,8 @@ window.newModule = 'pages.account';
                 unbind = ub;
             });
 
+            $scope.user = user
+
             $scope.closeDialog = function() {
                 $mdDialog.hide();
             };
@@ -111,6 +113,21 @@ window.newModule = 'pages.account';
             });
         };
     });
+
+    app.directive('accWindow', function (){
+         return {
+             restrict: 'E',
+             templateUrl: 'pages/account/accountWindow.html',
+             controller: function($rootScope, $scope){
+                 $scope.logout = function(){
+                     Auth.$unauth();
+                     $state.go('home');
+                 };
+                 $scope.user = $rootScope.user
+             }
+         };
+        }
+    );
 
     if (directiveName) {
         app.directive(directiveName, ['linkFn', function (linkFn) {
