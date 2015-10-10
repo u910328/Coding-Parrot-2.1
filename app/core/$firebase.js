@@ -178,68 +178,6 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             return $q.all(promises)
         }
 
-
-        //function load(refUrl, rule, extraOnComplete, finalOnComplete) {
-        //    var fbObj = new FbObj(refUrl),
-        //        query = rule && rule["query"] ? "." + rule["query"] : "",
-        //        isSync = rule && rule["isSync"] || true,
-        //        eventType = rule && rule["eventType"] || 'value',
-        //        scope = rule && rule["scope"],
-        //        delay = rule && rule["delay"] || 300;
-        //
-        //    var ref = fbObj.ref(),
-        //        queryRef = eval("ref" + query);
-        //
-        //    var digest = new Digest(scope, fbObj, isSync, delay);
-        //
-        //    fbObj.goOnline();
-        //
-        //    function RefObj(isSync, eventType) {
-        //        var that = this,
-        //            sync;
-        //
-        //        function onComplete1(snap, prevChildName, digestCb) {
-        //            if (config.debug) console.log('load complete', JSON.stringify(snap.val()));
-        //
-        //            digest.reset(function () {
-        //                if (typeof digestCb === 'function') digestCb.apply(null);
-        //                if (typeof finalOnComplete === 'function') finalOnComplete.apply(null, [snap, prevChildName])
-        //            });
-        //            if (extraOnComplete) return extraOnComplete(snap, prevChildName);
-        //        }
-        //
-        //        if (isSync) {
-        //            sync = 'on';
-        //            that.onComplete = onComplete1;
-        //        } else {
-        //            sync = 'once';
-        //            if (eventType === 'child_added') {
-        //                sync = 'on';
-        //                that.onComplete = function (snap, prevChildName) {
-        //                    onComplete1(snap, prevChildName, function () {
-        //                        queryRef.off('child_added', that.onComplete)
-        //                    })
-        //                }
-        //            } else {
-        //                that.onComplete = onComplete1
-        //            }
-        //        }
-        //        that.evalString = "queryRef." + sync + "('" + eventType + "', onComplete, errorCallback)"
-        //    }
-        //
-        //    var refObj = new RefObj(isSync, eventType);
-        //    var onComplete = refObj.onComplete;
-        //
-        //    function errorCallback(err) {
-        //        console.log("Fail to load " + refUrl + ": " + err.code);
-        //        //TODO: 加入ERROR到MODEL
-        //        fbObj.goOffline();
-        //    }
-        //
-        //    digest.reset(null, 5000);
-        //    eval(refObj.evalString);
-        //}
-
         function update(refUrl, value, onComplete, removePrev, refUrlParams) {
             var def = $q.defer();
             var replacedRefUrl = snippet.replaceParamsInString(refUrl, refUrlParams);

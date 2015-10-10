@@ -56,7 +56,6 @@ window.newModule = 'core.init';
 
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
                 if (user) {
-                    console.log('user', user);
                     $firebase.params = {
                         '$uid': user.uid
                     };
@@ -65,12 +64,21 @@ window.newModule = 'core.init';
                     var loadList = {
                         profileImageURL: {
                             refUrl: 'users/' + user.uid + '/profileImageURL'
+                        },
+                        email: {
+                            refUrl: 'users/' + user.uid + '/email'
+                        },
+                        phone: {
+                            refUrl: 'users/' + user.uid + '/phone'
                         }
                     };
 
                     $firebase.load(loadList).then(function (res) {
                         user.profileImageURL = res.profileImageURL;
+                        user.email=res.email;
+                        user.phone=res.phone;
                         $rootScope.user = user;
+                        console.log($rootScope.user);
                     });
                     //Notification
                     //_ref=$firebase.ref('users/'+user.uid+'/notification').orderByChild('unread').equalTo(true).limitToLast(10);
