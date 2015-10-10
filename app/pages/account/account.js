@@ -118,7 +118,7 @@ window.newModule = 'pages.account';
          return {
              restrict: 'E',
              templateUrl: 'pages/account/accountWindow.html',
-             controller: function($rootScope, $scope){
+             controller: function($rootScope, $scope, Auth, $state){
                  $scope.logout = function(){
                      Auth.$unauth();
                      $state.go('home');
