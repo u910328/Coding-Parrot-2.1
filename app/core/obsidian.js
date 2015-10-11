@@ -1,13 +1,13 @@
-
-angular.module('obsidian', ['firebase','ui.router'])
+angular.module('obsidian', ['firebase', 'ui.router'])
     .factory('obsidian', /*@ngInject*/ function (/*injections*/) {
         //start here
     });
 
+var obsidian = new (function () {
+    console.log('obsidian');
+    var appDependencies = [];
 
-(function(){
-    var obsidian={};
-    obsidian.addResource=function(resource){
+    this.addResource = function (resource) {
         var script = document.createElement("script");
         script.src = resource.src;
         document.getElementsByTagName("body")[0].appendChild(script);
@@ -20,40 +20,23 @@ angular.module('obsidian', ['firebase','ui.router'])
         }
     };
 
-    obsidian.init=function(){
-        for (var key in obsidian.sourcePaths) {
-            if(obsidian.sourcePaths.hasOwnProperty(key)) obsidian.addResource(obsidian.sourcePaths[key]);
-        }
+    this.module = function (name, dependencies, addToAppDependencies) {
+        var _dep = dependencies || [];
+        if(addToAppDependencies||addToAppDependencies===undefined) appDependencies.push(name);
+        return angular.module(name, _dep)
+    };
+
+    this.setAppDependencies = function (dependencies) {
+        appDependencies=JSON.parse(JSON.stringify(dependencies));
+    };
+
+    this.getAppDependencies= function () {
+        return appDependencies;
     };
 
 
-
-
-    obsidian.appDI = [
-        'ngMaterial',
-        'ngCart',
-        'ngFirebase',
-        'ngAnimate',
-        'ngNotify',
-        'ui.mask',
-        'ui.router',
-        'angularPayments',
-        'socialLinks',
-        'ui.scrollpoint'
-    ];
-
-    obsidian.randomString = function (length) {
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
-
-        if (!length) {
-            length = Math.floor(Math.random() * chars.length);
-        }
-
-        var str = '';
-        for (var i = 0; i < length; i++) {
-            str += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return str;
-    };
-    return obsidian
+    //for (var key in sourceMap) {
+    //    if (sourceMap.hasOwnProperty(key)) addResource(sourceMap[key]);
+    //}
 })();
+

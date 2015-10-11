@@ -48,7 +48,7 @@ window.newModule = 'myApp.security';
                 function checkState(user) {
                     if (!user && authStateRequired($state.current.name)) {
                         console.log('check failed', user, $location.path()); //debug
-                        $state.transitionTo(loginRedirectState);
+                        $state.go(loginRedirectState);
                     }
                 }
 

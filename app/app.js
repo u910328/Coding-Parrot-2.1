@@ -8,10 +8,10 @@ angular.module('myApp', window.appDI)
         // track status of authentication
         init.then(function(res){
         });
-        Auth.$onAuth(function (user) {
-            $rootScope.user=user;
-            $rootScope.loggedIn = !!user;
-        });
+        //Auth.$onAuth(function (user) {
+        //    $rootScope.user=user;
+        //    $rootScope.loggedIn = !!user;
+        //});
     });
 
 angular.bootstrap(document, ['myApp']);

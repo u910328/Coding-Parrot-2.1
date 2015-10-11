@@ -208,6 +208,10 @@ window.appDI = [
     'ui.scrollpoint'
 ];
 
+obsidian.setAppDependencies(window.appDI);
+obsidian.addResource({src: "pages/account/accountTest.js"});
+
+
 window.randomString = function (length) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 
