@@ -1,21 +1,14 @@
-
-
-//Step 1: name the new module.
-window.newModule='pages.home';
-
 (function (angular) {
     "use strict";
 
-//Step 2: set route, ctrlName and templateUrl.
     var state='home',
         url='/home',
         ctrlName='HomeCtrl',
         templateUrl='pages/home/home.html';
 
-//Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, []);
 
-//Step 4: construct a controller.
+    var app = obsidian.module('pages.home', []);
+
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $state) {
         //
         console.log($state.data);
@@ -25,7 +18,6 @@ window.newModule='pages.home';
         }
     });
 
-//Step 5: config providers.
     app.config(['$stateProvider',function($stateProvider){
         $stateProvider.state(state, {
             url: url,
@@ -35,5 +27,3 @@ window.newModule='pages.home';
     }]);
 
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

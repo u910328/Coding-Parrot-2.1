@@ -1,25 +1,18 @@
-//Step 1: name the new module.
-window.newModule = 'pages.backEnd';
-
 (function (angular) {
     "use strict";
 
-//Step 2: set route, ctrlName and templateUrl.
     var state = 'backEnd',
         url = '/backEnd',
         ctrlName = 'BackEndCtrl',
         templateUrl = 'pages/backEnd/backEnd.html';
 
-//Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, ['pages.backEnd.productManager', 'pages.backEnd.orders']);
+    var app = obsidian.module('pages.backEnd', ['pages.backEnd.productManager', 'pages.backEnd.orders']);
 
-//Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebase, snippet, $errorHandler) {
         this.test='1234'
     });
 
 
-//Step 5: config providers.
     app.config(function ($stateProvider) {
         $stateProvider
             .state(state, {
@@ -54,5 +47,3 @@ window.newModule = 'pages.backEnd';
 
 
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);

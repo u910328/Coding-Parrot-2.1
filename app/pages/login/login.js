@@ -1,10 +1,6 @@
-//Step 1: name the new module.
-window.newModule='pages.login';
-
 (function (angular) {
     "use strict";
 
-//Step 2: set route, ctrlName and templateUrl.
     var state='login',
         url='/login',
         ctrlName='LoginCtrl',
@@ -12,10 +8,8 @@ window.newModule='pages.login';
         directiveName='obLogin',
         resolve={};
 
-//Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
+    var app = obsidian.module('pages.login', ['firebase.auth', 'firebase', 'firebase.utils', 'ui.router', 'core.model']);
 
-//Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function($rootScope, $scope, Auth, $state, fbutil, snippet, $mdDialog) {
         $scope.closeDialog = function() {
             $mdDialog.hide();
@@ -93,7 +87,6 @@ window.newModule='pages.login';
         }
     });
 
-//Step 5: config providers.
     app.config(['$stateProvider',function($stateProvider){
         $stateProvider.state(state, {
             url: url,
@@ -130,5 +123,3 @@ window.newModule='pages.login';
         }]);
     }
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

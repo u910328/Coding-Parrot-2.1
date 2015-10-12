@@ -1,9 +1,7 @@
-//Step 1: name the new module or use a random id.
-window.newModule = 'pages.backEnd.orders';
 
 (function (angular) {
 
-    var app = angular.module(window.newModule, []);
+    var app = angular.module('pages.backEnd.orders', []);
 
 //Step 4: construct a controller. Notice that $scope is required, don't delete it.
     app.controller('Orders', /*@ngInject*/ function ($scope, filterUtil, customFn, $firebaseArray, $firebase, snippet, $errorHandler) {
@@ -85,4 +83,3 @@ window.newModule = 'pages.backEnd.orders';
 
 })(angular);
 
-if (window.appDI) window.appDI.push(window.newModule);

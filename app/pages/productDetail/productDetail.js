@@ -1,4 +1,3 @@
-window.newModule = 'pages.productDetail';
 (function (angular) {
     "use strict";
 
@@ -13,7 +12,7 @@ window.newModule = 'pages.productDetail';
             }]
         };
 
-    var app = angular.module(window.newModule, []);
+    var app = obsidian.module('pages.productDetail', []);
 
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $rootScope, user, $firebaseObject, $firebase, $location, $stateParams, $mdDialog) {
         var productId = $stateParams.pid;
@@ -59,5 +58,3 @@ window.newModule = 'pages.productDetail';
     }
 
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);

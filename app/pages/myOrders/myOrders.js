@@ -11,7 +11,7 @@ window.newModule='pages.myOrders';
         templateUrl='pages/myOrders/myOrders.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, ['myApp.security']);
+    var app = obsidian.module('pages.myOrders', ['myApp.security']);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function (user, $scope, $firebaseArray, $firebase, snippet) {
@@ -57,5 +57,3 @@ window.newModule='pages.myOrders';
     }]);
 
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

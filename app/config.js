@@ -45,7 +45,7 @@ angular.module(window.newModule, [])
 //    console.log("Your IP Address is " + response.ip);
 //}
 
-window.modulePaths = {
+var modulePaths = {
     //external modules
     angularPayments: {
         src: "bower_components/angular-payments/lib/angular-payments.min.js"
@@ -176,30 +176,13 @@ window.modulePaths = {
 
 };
 
-function addResource(resource){
-    var script = document.createElement("script");
-    script.src = resource.src;
-    document.getElementsByTagName("body")[0].appendChild(script);
 
-    if (resource.css) {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = resource.css;
-        document.getElementsByTagName("head")[0].appendChild(link);
-    }
-}
-
-for (var key in window.modulePaths) {
-    if(window.modulePaths.hasOwnProperty(key)) addResource(window.modulePaths[key]);
-}
-
-
-window.appDI = [
+var appDI = [
     'ngMaterial',
     'ngMessages',
+    'ngAnimate',
     'ngCart',
     'ngFirebase',
-    'ngAnimate',
     'ngNotify',
     'ui.mask',
     'ui.router',
@@ -208,18 +191,26 @@ window.appDI = [
     'ui.scrollpoint'
 ];
 
-window.randomString = function (length) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 
-    if (!length) {
-        length = Math.floor(Math.random() * chars.length);
-    }
+obsidian.setAppDependencies(appDI);
 
-    var str = '';
-    for (var i = 0; i < length; i++) {
-        str += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return str;
-};
+for (var key in modulePaths) {
+    if(modulePaths.hasOwnProperty(key)) obsidian.addResource(modulePaths[key]);
+}
 
-if (window.appDI) window.appDI.push(window.newModule);
+
+//
+//
+//window.randomString = function (length) {
+//    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+//
+//    if (!length) {
+//        length = Math.floor(Math.random() * chars.length);
+//    }
+//
+//    var str = '';
+//    for (var i = 0; i < length; i++) {
+//        str += chars[Math.floor(Math.random() * chars.length)];
+//    }
+//    return str;
+//};

@@ -1,6 +1,3 @@
-//Step 1: name the new module.
-window.newModule = 'pages.test';
-
 (function (angular) {
     "use strict";
 
@@ -11,7 +8,7 @@ window.newModule = 'pages.test';
         templateUrl = 'pages/test/test.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, []);
+    var app = obsidian.module('pages.test', []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $state, $timeout, fbutil, $firebase) {
@@ -56,5 +53,3 @@ window.newModule = 'pages.test';
         });
 
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

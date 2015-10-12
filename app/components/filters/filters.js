@@ -1,35 +1,31 @@
 'use strict';
-window.newModule='myApp.filters';
-
-angular.module(window.newModule,[])
-    .filter('reverse', function() {
-        return function(items) {
-            return items.slice().reverse();
-        };
-    })
+obsidian.module('myApp.filters', []).filter('reverse', function () {
+    return function (items) {
+        return items.slice().reverse();
+    }})
     .filter('consecutive', function ($filter, snippet) {
         return function (items, input, isReverse) {
-            var _items=items||[];
-            var result=angular.copy(_items);
+            var _items = items || [];
+            var result = angular.copy(_items);
 
-            if(typeof input==='object'){
-                angular.forEach(input, function(value, key){
-                    if(!value&&value!=='') return;
-                    if(value===true) {
-                        result=$filter('filter')(result, key);
+            if (typeof input === 'object') {
+                angular.forEach(input, function (value, key) {
+                    if (!value && value !== '') return;
+                    if (value === true) {
+                        result = $filter('filter')(result, key);
                     } else {
-                        result=$filter('filter')(result, value);
+                        result = $filter('filter')(result, value);
                     }
                 });
-            } else if(typeof input==='string'){
-                input=input.trim();
+            } else if (typeof input === 'string') {
+                input = input.trim();
                 var keyArray = input.split(' ');
                 for (var i = 0; i < keyArray.length; i++) {
                     result = $filter('filter')(result, keyArray[i]);
                 }
-                result=input === '' ? _items : result
+                result = input === '' ? _items : result
             }
-            return isReverse? result.slice().reverse():result
+            return isReverse ? result.slice().reverse() : result
         }
     })
     ////see http://jsfiddle.net/nirmalkumar_86/9F89Q/5/
@@ -90,13 +86,12 @@ angular.module(window.newModule,[])
     //see https://github.com/vpegado/angular-percentage-filter
     .filter('percentage', ['$window', function ($window) {
         return function (input, decimals, suffix) {
-            decimals = angular.isNumber(decimals)? decimals :  3;
+            decimals = angular.isNumber(decimals) ? decimals : 3;
             suffix = suffix || '%';
             if ($window.isNaN(input)) {
                 return '';
             }
-            return Math.round(input * Math.pow(10, decimals + 2))/Math.pow(10, decimals) + suffix
+            return Math.round(input * Math.pow(10, decimals + 2)) / Math.pow(10, decimals) + suffix
         };
     }]);
 
-if(window.appDI) window.appDI.push(window.newModule);

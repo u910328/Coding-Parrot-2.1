@@ -1,6 +1,3 @@
-//Step 1: name the new module or use a random id.
-window.newModule = window.randomString(8);
-
 (function (angular) {
     "use strict";
 
@@ -12,7 +9,7 @@ window.newModule = window.randomString(8);
         directiveName = '';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, []);
+    var app = obsidian.module('pages.test2', []);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $state, $firebase, $rootScope) {
@@ -74,5 +71,3 @@ window.newModule = window.randomString(8);
 
 
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);
