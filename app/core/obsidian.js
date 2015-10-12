@@ -1,10 +1,4 @@
-angular.module('obsidian', ['firebase', 'ui.router'])
-    .factory('obsidian', /*@ngInject*/ function (/*injections*/) {
-        //start here
-    });
-
 var obsidian = new (function () {
-    console.log('obsidian');
     var appDependencies = [];
 
     this.addResource = function (resource) {
@@ -20,18 +14,36 @@ var obsidian = new (function () {
         }
     };
 
-    this.module = function (name, dependencies, addToAppDependencies) {
-        var _dep = dependencies || [];
-        if(addToAppDependencies||addToAppDependencies===undefined) appDependencies.push(name);
-        return angular.module(name, _dep)
+    this.module = function (name, dependencies) {
+        if (appDependencies.indexOf(name) === -1) {
+            appDependencies.push(name);
+        }
+        return dependencies? angular.module(name, dependencies): angular.module(name)
     };
 
     this.setAppDependencies = function (dependencies) {
-        appDependencies=JSON.parse(JSON.stringify(dependencies));
+        appDependencies = JSON.parse(JSON.stringify(dependencies));
     };
 
-    this.getAppDependencies= function () {
+    this.getAppDependencies = function () {
         return appDependencies;
+    };
+
+    this.bootstrap = function (name) {
+        var _name=name||'myApp';
+        angular.module(_name, appDependencies)
+
+            .run(function ($rootScope, Auth, init) {
+                // track status of authentication
+                init.then(function(res){
+                });
+                //Auth.$onAuth(function (user) {
+                //    $rootScope.user=user;
+                //    $rootScope.loggedIn = !!user;
+                //});
+            });
+
+        angular.bootstrap(document, [_name]);
     };
 
 

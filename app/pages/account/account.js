@@ -1,9 +1,8 @@
-window.newModule = 'pages.account';
-
 (function (angular) {
     "use strict";
 
-    var state = 'account',
+    var mod = obsidian.module('pages.account', []),
+        state = 'account',
         url = '/account',
         ctrlName = 'AccountCtrl',
         templateUrl = 'pages/account/account.html',
@@ -14,9 +13,8 @@ window.newModule = 'pages.account';
         },
         directiveName = 'obAccount';
 
-    var app = angular.module(window.newModule, []);
 
-    app.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject, $mdDialog) {
+    mod.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject, $mdDialog) {
             var unbind;
             // create a 3-way binding with the user profile object in Firebase
             //$rootScope.showAcc=false;
@@ -87,7 +85,7 @@ window.newModule = 'pages.account';
         }
     );
 
-    app.config(['$stateProvider', function ($stateProvider) {
+    mod.config(['$stateProvider', function ($stateProvider) {
         $stateProvider.state(state, {
             url: url,
             templateUrl: templateUrl,
@@ -96,7 +94,7 @@ window.newModule = 'pages.account';
         });
     }]);
 
-    app.run(function ($rootScope, $mdDialog) {
+    mod.run(function ($rootScope, $mdDialog) {
         $rootScope.showAccount = function ($event) {
             var parentEl = angular.element(document.body);
             $mdDialog.show({
@@ -113,7 +111,7 @@ window.newModule = 'pages.account';
     });
 
     if (directiveName) {
-        app.directive(directiveName, ['linkFn', function (linkFn) {
+        mod.directive(directiveName, ['linkFn', function (linkFn) {
             return {
                 restrict: 'E',
                 templateUrl: templateUrl,
@@ -128,5 +126,3 @@ window.newModule = 'pages.account';
     }
 
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

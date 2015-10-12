@@ -1,6 +1,3 @@
-//Step 1: name the new module.
-window.newModule = 'pages.shoppingCart';
-
 (function (angular) {
     "use strict";
 
@@ -9,7 +6,7 @@ window.newModule = 'pages.shoppingCart';
         ctrlName = 'ShoppingCartCtrl',
         templateUrl = 'pages/shoppingCart/shoppingCart.html';
 
-    var app = angular.module(window.newModule, []);
+    var app = obsidian.module('pages.shoppingCart', []);
 
     app.controller(ctrlName, /*@ngInject*/ function ($q, config, user, $scope, $rootScope, $firebase, snippet, $state, ngCart) {
         $scope.ngCart = ngCart;
@@ -23,7 +20,7 @@ window.newModule = 'pages.shoppingCart';
         $scope.paymentMethod = 'uponPickup';
         $scope.clientEmail=$rootScope.user? $rootScope.user.email:null;
         $scope.clientPhone=$rootScope.user? $rootScope.user.phone:null;
-        $scope.clientName=$rootScope.user? user[user.provider].displayName || user[user.provider].email:null;
+        $scope.clientName=$rootScope.user? (user[user.provider].displayName || user[user.provider].email):null;
         $scope.uid=$rootScope.user? $rootScope.user.uid:null;
 
 
@@ -270,5 +267,3 @@ window.newModule = 'pages.shoppingCart';
     });
 
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);

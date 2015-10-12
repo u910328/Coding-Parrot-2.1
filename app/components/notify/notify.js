@@ -1,6 +1,8 @@
 // see https://github.com/cgross/angular-notify/blob/master/dist/angular-notify.js
-angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile','$templateCache','$rootScope',
-    function($timeout,$http,$compile,$templateCache,$rootScope){
+var mod = obsidian.module('ngNotify', []);
+
+mod.factory('ngNotify', ['$timeout', '$http', '$compile', '$templateCache', '$rootScope',
+    function ($timeout, $http, $compile, $templateCache, $rootScope) {
 
         var startTop = 10;
         var verticalSpacing = 15;
@@ -13,10 +15,10 @@ angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile'
         var messageElements = [];
         var openNotificationsScope = [];
 
-        var notify = function(args){
+        var notify = function (args) {
 
-            if (typeof args !== 'object'){
-                args = {message:args};
+            if (typeof args !== 'object') {
+                args = {message: args};
             }
 
             args.duration = args.duration ? args.duration : defaultDuration;
@@ -37,94 +39,94 @@ angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile'
                 }
             }
 
-            $http.get(args.templateUrl,{cache: $templateCache}).success(function(template){
+            $http.get(args.templateUrl, {cache: $templateCache}).success(function (template) {
 
                 var templateElement = $compile(template)(scope);
-                templateElement.bind('webkitTransitionEnd oTransitionEnd otransitionend transitionend msTransitionEnd', function(e){
+                templateElement.bind('webkitTransitionEnd oTransitionEnd otransitionend transitionend msTransitionEnd', function (e) {
                     if (e.propertyName === 'opacity' || e.currentTarget.style.opacity === 0 ||
-                        (e.originalEvent && e.originalEvent.propertyName === 'opacity')){
+                        (e.originalEvent && e.originalEvent.propertyName === 'opacity')) {
 
                         templateElement.remove();
-                        messageElements.splice(messageElements.indexOf(templateElement),1);
-                        openNotificationsScope.splice(openNotificationsScope.indexOf(scope),1);
+                        messageElements.splice(messageElements.indexOf(templateElement), 1);
+                        openNotificationsScope.splice(openNotificationsScope.indexOf(scope), 1);
                         layoutMessages();
                     }
                 });
 
-                if (args.messageTemplate){
+                if (args.messageTemplate) {
                     var messageTemplateElement;
-                    for (var i = 0; i < templateElement.children().length; i ++){
-                        if (angular.element(templateElement.children()[i]).hasClass('cg-notify-message-template')){
+                    for (var i = 0; i < templateElement.children().length; i++) {
+                        if (angular.element(templateElement.children()[i]).hasClass('cg-notify-message-template')) {
                             messageTemplateElement = angular.element(templateElement.children()[i]);
                             break;
                         }
                     }
-                    if (messageTemplateElement){
+                    if (messageTemplateElement) {
                         messageTemplateElement.append($compile(args.messageTemplate)(scope));
                     } else {
-                        throw new Error('ngNotify could not find the .ng-notify-message-template element in '+args.templateUrl+'.');
+                        throw new Error('ngNotify could not find the .ng-notify-message-template element in ' + args.templateUrl + '.');
                     }
                 }
 
                 angular.element(args.container).append(templateElement);
                 messageElements.push(templateElement);
 
-                if (scope.$position === 'center'){
-                    $timeout(function(){
-                        scope.$centerMargin = '-' + (templateElement[0].offsetWidth /2) + 'px';
+                if (scope.$position === 'center') {
+                    $timeout(function () {
+                        scope.$centerMargin = '-' + (templateElement[0].offsetWidth / 2) + 'px';
                     });
                 }
 
-                scope.$close = function(){
-                    templateElement.css('opacity',0).attr('data-closing','true');
+                scope.$close = function () {
+                    templateElement.css('opacity', 0).attr('data-closing', 'true');
                     layoutMessages();
                 };
 
-                var layoutMessages = function(){
+                var layoutMessages = function () {
                     var j = 0;
                     var currentY = startTop;
-                    for(var i = messageElements.length - 1; i >= 0; i --){
+                    for (var i = messageElements.length - 1; i >= 0; i--) {
                         var shadowHeight = 10;
                         var element = messageElements[i];
                         var height = element[0].offsetHeight;
                         var top = currentY + height + shadowHeight;
-                        if (element.attr('data-closing')){
+                        if (element.attr('data-closing')) {
                             top += 20;
                         } else {
                             currentY += height + verticalSpacing;
                         }
-                        element.css('top',top + 'px').css('margin-top','-' + (height+shadowHeight) + 'px').css('visibility','visible');
-                        j ++;
+                        element.css('top', top + 'px').css('margin-top', '-' + (height + shadowHeight) + 'px').css('visibility', 'visible');
+                        j++;
                     }
                 };
 
-                $timeout(function(){
+                $timeout(function () {
                     layoutMessages();
                 });
 
-                if (args.duration > 0){
-                    $timeout(function(){
+                if (args.duration > 0) {
+                    $timeout(function () {
                         scope.$close();
-                    },args.duration);
+                    }, args.duration);
                 }
 
-            }).error(function(data){
-                throw new Error('Template specified for ngNotify ('+args.templateUrl+') could not be loaded. ' + data);
+            }).error(function (data) {
+                throw new Error('Template specified for ngNotify (' + args.templateUrl + ') could not be loaded. ' + data);
             });
 
             var retVal = {};
 
-            retVal.close = function(){
-                if (scope.$close){
+            retVal.close = function () {
+                if (scope.$close) {
                     scope.$close();
                 }
             };
 
-            Object.defineProperty(retVal,'message',{
-                get: function(){
+            Object.defineProperty(retVal, 'message', {
+                get: function () {
                     return scope.$message;
                 },
-                set: function(val){
+                set: function (val) {
                     scope.$message = val;
                 }
             });
@@ -135,7 +137,7 @@ angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile'
 
         };
 
-        notify.config = function(args){
+        notify.config = function (args) {
             startTop = !angular.isUndefined(args.startTop) ? args.startTop : startTop;
             verticalSpacing = !angular.isUndefined(args.verticalSpacing) ? args.verticalSpacing : verticalSpacing;
             defaultDuration = !angular.isUndefined(args.duration) ? args.duration : defaultDuration;
@@ -145,10 +147,10 @@ angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile'
             maximumOpen = args.maximumOpen ? args.maximumOpen : maximumOpen;
         };
 
-        notify.closeAll = function(){
-            for(var i = messageElements.length - 1; i >= 0; i --){
+        notify.closeAll = function () {
+            for (var i = messageElements.length - 1; i >= 0; i--) {
                 var element = messageElements[i];
-                element.css('opacity',0);
+                element.css('opacity', 0);
             }
         };
 
@@ -156,7 +158,7 @@ angular.module('ngNotify', []).factory('ngNotify',['$timeout','$http','$compile'
     }
 ]);
 
-angular.module('ngNotify').run(['$templateCache', function($templateCache) {
+mod.run(['$templateCache', function ($templateCache) {
     'use strict';
 
     $templateCache.put('angular-notify.html',

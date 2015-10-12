@@ -1,11 +1,7 @@
-//Step 1: name the new module or use a random id.
-window.newModule = 'pages.backEnd.productManager';
-
 (function (angular) {
 
-    var app = angular.module(window.newModule, []);
+    var app = angular.module('pages.backEnd.productManager', []);
 
-//Step 4: construct a controller. Notice that $scope is required, don't delete it.
     app.controller('ProductManager', /*@ngInject*/ function ($scope, $firebaseArray, $firebaseObject, customFn, $firebase, snippet, $errorHandler) {
 
         //to add/remove new products
@@ -54,4 +50,3 @@ window.newModule = 'pages.backEnd.productManager';
 
 })(angular);
 
-if (window.appDI) window.appDI.push(window.newModule);

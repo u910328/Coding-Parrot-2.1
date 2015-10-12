@@ -1,6 +1,3 @@
-//Step 1: name the new module.
-window.newModule = 'pages.test';
-
 (function (angular) {
     "use strict";
 
@@ -10,7 +7,7 @@ window.newModule = 'pages.test';
         templateUrl = 'pages/test/test.html';
 
 //Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
+    var app = obsidian.module('pages.queryTest', ['firebase.auth', 'firebase', 'firebase.utils', 'ngRoute', 'core.model']);
 
 //Step 4: construct a controller.
     app.controller(ctrlName, /*@ngInject*/ function ($scope, fbutil, $firebase, user, snippet, elasticSearch) {
@@ -58,4 +55,3 @@ window.newModule = 'pages.test';
 
 })(angular);
 
-if(window.appDI) window.appDI.push(window.newModule);

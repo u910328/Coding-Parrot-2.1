@@ -1,35 +1,36 @@
 window.newModule = 'core.init';
 (function (angular) {
-    angular.module(window.newModule, ['firebase', 'myApp.config'])
-        .factory('init', /*@ngInject*/ function (Auth, $q, $http, $firebase, $rootScope) {
-            var def = $q.defer();
-            //function logInMain(){}
-            //function getDbName(){}
-            //function getIdentity(){}
-            //function logInOthersAnonymously(){}
-            ////compile viewLogic
-            //get geoip
-            $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function (response) {
-                console.log(response)
+    var mod = obsidian.module('core.init', ['firebase', 'myApp.config']);
+
+    mod.factory('init', /*@ngInject*/ function (Auth, $q, $http, $firebase, $rootScope) {
+        var def = $q.defer();
+        //function logInMain(){}
+        //function getDbName(){}
+        //function getIdentity(){}
+        //function logInOthersAnonymously(){}
+        ////compile viewLogic
+        //get geoip
+        $http.jsonp('http://www.telize.com/geoip?callback=JSON_CALLBACK').then(function (response) {
+            console.log(response)
+        });
+
+        var preLoadList = {
+            stripeKey: {
+                refUrl: 'config/payment/stripe/publishable_key'
+            }
+        };
+
+        $firebase.load(preLoadList)
+            .then(function (res) {
+                if (res.stripeKey && Stripe) Stripe.setPublishableKey(res.stripeKey);
+                return res
+            })
+            .then(function (res) {
+                def.resolve(res);
             });
 
-            var preLoadList = {
-                stripeKey: {
-                    refUrl: 'config/payment/stripe/publishable_key'
-                }
-            };
-
-            $firebase.load(preLoadList)
-                .then(function (res) {
-                    if (res.stripeKey && Stripe) Stripe.setPublishableKey(res.stripeKey);
-                    return res
-                })
-                .then(function(res){
-                    def.resolve(res);
-                });
-
-            return def.promise
-        })
+        return def.promise
+    })
         .run(function ($rootScope, $http, $state, $mdSidenav, $q, Auth, $firebase, model, init, snippet, config) {
 
 
@@ -49,17 +50,14 @@ window.newModule = 'core.init';
             //template
 
 
-
-
-
-
-
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
+                $rootScope.user = user;
+
                 if (user) {
                     $firebase.params = {
                         '$uid': user.uid
                     };
-                    $rootScope.user = user;
+                    $rootScope.loggedIn = !!user;
 
                     var loadList = {
                         profileImageURL: {
@@ -75,8 +73,8 @@ window.newModule = 'core.init';
 
                     $firebase.load(loadList).then(function (res) {
                         user.profileImageURL = res.profileImageURL;
-                        user.email=res.email;
-                        user.phone=res.phone;
+                        user.email = res.email;
+                        user.phone = res.phone;
                         $rootScope.user = user;
                         console.log($rootScope.user);
                     });
@@ -91,11 +89,8 @@ window.newModule = 'core.init';
                     //});
                 } else {
                     console.log('no user', user);
-                    $rootScope.user = {};
                     $firebase.params = {};
                 }
             });
         });
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);
