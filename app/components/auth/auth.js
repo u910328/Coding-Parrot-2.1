@@ -1,6 +1,5 @@
-window.newModule='firebase.auth';
-
-angular.module(window.newModule, ['firebase', 'firebase.utils'])
+'use strict';
+obsidian.module('firebase.auth', ['firebase', 'firebase.utils'])
     .factory('Auth', ['$firebaseAuth', 'fbutil', '$q', 'FBURL', 'snippet', '$firebase', function ($firebaseAuth, fbutil, $q, FBURL, snippet, $firebase) {
 
         var Auth = $firebaseAuth(fbutil.ref());
@@ -93,7 +92,8 @@ angular.module(window.newModule, ['firebase', 'firebase.utils'])
         };
 
 
-        Auth.loginWithProvider = function (provider, opt) {
+        Auth.loginWithProvider = function (provider, options) {
+            var opt = typeof options === 'object' ? options : {};
             switch (provider) {
                 case 'password':
                     return Auth.$authWithPassword({email: opt.email, password: opt.password}, opt);
@@ -102,11 +102,11 @@ angular.module(window.newModule, ['firebase', 'firebase.utils'])
                     return Auth.$authWithCustomToken(opt.customToken, opt);
                     break;
                 case 'anonymous':
-                    opt.rememberMe = 'none';
+                    opt.rememberMe = opt.rememberMe || 'none';
                     return Auth.$authAnonymously(opt);
                     break;
                 default:
-                    if (opt && opt.popup === false) {
+                    if (opt.popup === false) {
                         return Auth.$authWithOAuthRedirect(provider, opt);
                     } else {
                         return Auth.$authWithOAuthPopup(provider, opt);
@@ -130,5 +130,3 @@ angular.module(window.newModule, ['firebase', 'firebase.utils'])
 
         return Auth;
     }]);
-
-if(window.appDI) window.appDI.push(window.newModule);

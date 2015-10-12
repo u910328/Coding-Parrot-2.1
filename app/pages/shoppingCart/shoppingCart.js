@@ -1,6 +1,3 @@
-//Step 1: name the new module.
-window.newModule = 'pages.shoppingCart';
-
 (function (angular) {
     "use strict";
 
@@ -9,9 +6,9 @@ window.newModule = 'pages.shoppingCart';
         ctrlName = 'ShoppingCartCtrl',
         templateUrl = 'pages/shoppingCart/shoppingCart.html';
 
-    var app = angular.module(window.newModule, []);
+    var app = obsidian.module('pages.shoppingCart', []);
 
-    app.controller(ctrlName, /*@ngInject*/ function ($q, config, user, $scope, $firebase, snippet, $state, ngCart, $firebaseObject) {
+    app.controller(ctrlName, /*@ngInject*/ function ($q, config, user, $scope, $rootScope, $firebase, snippet, $state, ngCart) {
         $scope.ngCart = ngCart;
         var cart = {products: {}};
 
@@ -21,19 +18,27 @@ window.newModule = 'pages.shoppingCart';
         };
 
         $scope.paymentMethod = 'uponPickup';
+        $scope.clientEmail=$rootScope.user? $rootScope.user.email:null;
+        $scope.clientPhone=$rootScope.user? $rootScope.user.phone:null;
+        $scope.clientName=$rootScope.user? (user[user.provider].displayName || user[user.provider].email):null;
+        $scope.uid=$rootScope.user? $rootScope.user.uid:null;
 
 
-        $scope.clientEmail = $firebaseObject($firebase.ref('users/' + user.uid + '/email'));
-        $firebase.ref('users/' + user.uid + '/phone').on('value', function (snap) {
-            $scope.clientPhone = snap.val();
-        });
 
-        $scope.saveEmail = function (newEmail, isValid) {
 
-        };
-        $scope.savePhone = function (newPhone, isValid) {
-            if (isValid) $firebase.update('users/' + user.uid, {phone: $scope.clientPhone || null});
-        };
+        function updateContactInfo(){
+            if(!$rootScope.user) return;
+            var isEmailChanged=($scope.clientEmail===$rootScope.user.email),
+                isPhoneChanged=($scope.clientPhone===$rootScope.user.phone),
+                uploadList=[];
+            if(isEmailChanged) uploadList.push({
+                refUrl:'users/' + user.uid + '/email', value: $scope.clientEmail
+            });
+            if(isPhoneChanged) uploadList.push({
+                refUrl:'users/' + user.uid + '/phone', value: $scope.clientPhone
+            });
+            if(uploadList.length>0) $firebase.batchUpdate(uploadList);
+        }
 
         if (config.debug) {
             $scope.number = '4242424242424242';
@@ -42,7 +47,7 @@ window.newModule = 'pages.shoppingCart';
         }
 
         function isTimeValid() {
-            if(( $scope.dt.getDay() === 0 || $scope.dt.getDay() === 6 )){
+            if (( $scope.dt.getDay() === 0 || $scope.dt.getDay() === 6 )) {
                 alert('Please pick a weekday.');
                 return false
             }
@@ -60,9 +65,9 @@ window.newModule = 'pages.shoppingCart';
 
             $scope.waiting = true; //進入waiting畫面,得到token後stripeCallback會執行
             if ($scope.paymentMethod === 'uponPickup') uploadOrder('uponPickup').then(function (res) {
-                var orderId=res.params['$orderId'];
-                $scope.invoice.orderId=orderId;
-                $state.goWithData('invoice', {orderId:orderId}, $scope.invoice); //成功後轉換至invoice頁面
+                var orderId = res.params['$orderId'];
+                $scope.invoice.orderId = orderId;
+                $state.goWithData('invoice', {orderId: orderId}, $scope.invoice); //成功後轉換至invoice頁面
                 $scope.emptyCart();
                 if (!$scope.$$phase) $scope.$apply(); //確保成功轉換頁面
             });
@@ -82,7 +87,7 @@ window.newModule = 'pages.shoppingCart';
         }
 
         $scope.stripeCallback = function (code, result) {
-            if ($scope.paymentMethod === 'uponPickup'||!isTimeValid()) return;
+            if ($scope.paymentMethod === 'uponPickup' || !isTimeValid()) return;
             getPaymentData(code, result);
 
             //將payment provider取得的token加入其他資料一起上傳
@@ -90,7 +95,6 @@ window.newModule = 'pages.shoppingCart';
                 .then(function (res) {
                     var orderId = res.params['$orderId'];
                     console.log('orderId is ' + orderId);
-
 
 
                     clearTimeout(timeout);
@@ -123,10 +127,10 @@ window.newModule = 'pages.shoppingCart';
 
             angular.extend(cart,
                 {
-                    clientName: user[user.provider].displayName || user[user.provider].email,
-                    clientId: user.uid,
-                    clientEmail: $scope.clientEmail.$value || null,
-                    clientPhone: $scope.clientPhone || null,
+                    clientName: $scope.clientName,
+                    clientId: $scope.uid,
+                    clientEmail: $scope.clientEmail,
+                    clientPhone: $scope.clientPhone,
                     createdTime: Firebase.ServerValue.TIMESTAMP,
                     note: $scope.note || null,
                     schedule: $scope.dt.getTime(),
@@ -140,6 +144,7 @@ window.newModule = 'pages.shoppingCart';
 
         function uploadOrder(type) {
 
+            updateContactInfo();
             //整理order 資料
             prepareOrderData();
 
@@ -214,8 +219,8 @@ window.newModule = 'pages.shoppingCart';
         //date picker
 
         $scope.dt = new Date();
-        $scope.hour=12;
-        $scope.minute=0;
+        $scope.hour = 12;
+        $scope.minute = 0;
         $scope.minDate = $scope.dt;
         $scope.maxDate = new Date(
             $scope.dt.getFullYear(),
@@ -223,14 +228,14 @@ window.newModule = 'pages.shoppingCart';
             $scope.dt.getDate());
 
         $scope.changeDt = function () {
-            $scope.hour=12;
+            $scope.hour = 12;
             $scope.dt.setHours(12);
-            $scope.minute=0;
+            $scope.minute = 0;
             $scope.dt.setMinutes(0);
         };
         $scope.changeDt();
 
-        $scope.changeTime= function(){
+        $scope.changeTime = function () {
             $scope.dt.setHours($scope.hour);
             $scope.dt.setMinutes($scope.minute);
         };
@@ -262,5 +267,3 @@ window.newModule = 'pages.shoppingCart';
     });
 
 })(angular);
-
-if(window.appDI) window.appDI.push(window.newModule);

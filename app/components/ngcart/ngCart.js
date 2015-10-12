@@ -1,9 +1,8 @@
 'use strict';
 
+var mod = obsidian.module('ngCart', ['ngCart.directives']);
 
-angular.module('ngCart', ['ngCart.directives'])
-
-    .config([function () {
+mod.config([function () {
 
     }])
 
@@ -332,7 +331,7 @@ angular.module('ngCart', ['ngCart.directives'])
     }])
 
     .value('version', '1.0.0');
-;'use strict';
+'use strict';
 
 
 angular.module('ngCart.directives', ['ngCart.fulfilment'])
@@ -452,7 +451,7 @@ angular.module('ngCart.directives', ['ngCart.fulfilment'])
             }
         };
     }]);
-;
+
 angular.module('ngCart.fulfilment', [])
     .service('fulfilmentProvider', ['$injector', function($injector){
 

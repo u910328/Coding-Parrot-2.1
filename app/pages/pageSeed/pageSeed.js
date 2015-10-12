@@ -1,8 +1,8 @@
-//Step 1: name the new module or use a random id.
-window.newModule = window.randomString(8);
-
 (function (angular) {
     "use strict";
+//Step 1: name the new module or use a random id.
+
+    var app = obsidian.module('pageSeed', ['firebase.auth', 'firebase', 'firebase.utils', 'core.model']);
 
 //Step 2: set state, url, ctrlName and templateUrl.
     var state = 'pageSeed',
@@ -21,7 +21,6 @@ window.newModule = window.randomString(8);
         };
 
 //Step 3: write down dependency injection.
-    var app = angular.module(window.newModule, ['firebase.auth', 'firebase', 'firebase.utils', 'core.model']);
 
 //Step 4: construct a controller. Notice that $scope is required, don't delete it.
     app.controller(ctrlName, /*@ngInject*/ function ($scope) {
@@ -54,5 +53,3 @@ window.newModule = window.randomString(8);
     }
 
 })(angular);
-
-if (window.appDI) window.appDI.push(window.newModule);

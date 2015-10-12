@@ -1,79 +1,79 @@
-window.newModule = 'core.model';
-angular.module(window.newModule, ['firebase', 'myApp.config'])
-    .factory('model', /*@ngInject*/ function (config, fbutil, $q, snippet) {
-        var model = {
-            update: update,
-            ModelObj: ModelObj,
-            init: init,
-            action: {},
-            view: {}
-        };
+var mod = obsidian.module('core.model', ['firebase', 'myApp.config']);
 
-        function ModelObj(modelPath) {
-            this.modelPathArr = modelPath.split("|");
-            this.pathArr = this.modelPathArr[0].split(".");
-            /*this.val=function(){
-             var value={},
-             modelPath="";
+mod.factory('model', /*@ngInject*/ function (config, fbutil, $q, snippet) {
+    var model = {
+        update: update,
+        ModelObj: ModelObj,
+        init: init,
+        action: {},
+        view: {}
+    };
 
-             for(var j=0; j<that.pathArr.length; j++){
-             modelPath=modelPath+"['"+that.pathArr[j]+"']"
-             }
-             for(var i=1; i<that.modelPathArr.length; i++){
-             value[that.modelPathArr[i]]=eval("model"+modelPath)[that.modelPathArr[i]];
-             }
+    function ModelObj(modelPath) {
+        this.modelPathArr = modelPath.split("|");
+        this.pathArr = this.modelPathArr[0].split(".");
+        /*this.val=function(){
+         var value={},
+         modelPath="";
 
-             if(JSON.stringify(value)==="{}"){
-             eval("value=model"+modelPath)
-             }
+         for(var j=0; j<that.pathArr.length; j++){
+         modelPath=modelPath+"['"+that.pathArr[j]+"']"
+         }
+         for(var i=1; i<that.modelPathArr.length; i++){
+         value[that.modelPathArr[i]]=eval("model"+modelPath)[that.modelPathArr[i]];
+         }
 
-             return value
-             }*/
+         if(JSON.stringify(value)==="{}"){
+         eval("value=model"+modelPath)
+         }
+
+         return value
+         }*/
+    }
+
+    ModelObj.prototype = {
+        val: function () {
+            var value = {},
+                modelPath = "";
+
+            for (var j = 0; j < this.pathArr.length; j++) {
+                modelPath = modelPath + "['" + this.pathArr[j] + "']"
+            }
+            for (var i = 1; i < this.modelPathArr.length; i++) {
+                value[this.modelPathArr[i]] = eval("model" + modelPath)[this.modelPathArr[i]];
+            }
+
+            if (JSON.stringify(value) === "{}") {
+                eval("value=model" + modelPath)
+            }
+            return value
         }
+    };
 
-        ModelObj.prototype = {
-            val: function () {
-                var value = {},
-                    modelPath = "";
-
-                for (var j = 0; j < this.pathArr.length; j++) {
-                    modelPath = modelPath + "['" + this.pathArr[j] + "']"
-                }
-                for (var i = 1; i < this.modelPathArr.length; i++) {
-                    value[this.modelPathArr[i]] = eval("model" + modelPath)[this.modelPathArr[i]];
-                }
-
-                if (JSON.stringify(value) === "{}") {
-                    eval("value=model" + modelPath)
-                }
-                return value
-            }
-        };
-
-        function init(scope, keyArrOrStr, refresh) {
-            if (typeof keyArrOrStr === 'string') {
-                model[keyArrOrStr] = refresh ? {} : model[keyArrOrStr] || {};
-                scope[keyArrOrStr] = model[keyArrOrStr];
-                return
-            }
-            for (var i = 0; i < keyArrOrStr.length; i++) {
-                model[keyArrOrStr[i]] = refresh ? {} : model[keyArrOrStr[i]] || {};
-                scope[keyArrOrStr[i]] = model[keyArrOrStr[i]]
-            }
+    function init(scope, keyArrOrStr, refresh) {
+        if (typeof keyArrOrStr === 'string') {
+            model[keyArrOrStr] = refresh ? {} : model[keyArrOrStr] || {};
+            scope[keyArrOrStr] = model[keyArrOrStr];
+            return
         }
-
-        function update(path, value, valuePathArr) {
-            var pathArr = path.split(".");
-            if (valuePathArr != undefined) {
-                snippet.evalAssignment([model, pathArr], valuePathArr);
-            } else {
-                snippet.evalAssignment([model, pathArr], [value]);
-            }
-            //updateView(path)
+        for (var i = 0; i < keyArrOrStr.length; i++) {
+            model[keyArrOrStr[i]] = refresh ? {} : model[keyArrOrStr[i]] || {};
+            scope[keyArrOrStr[i]] = model[keyArrOrStr[i]]
         }
+    }
 
-        return model
-    })
+    function update(path, value, valuePathArr) {
+        var pathArr = path.split(".");
+        if (valuePathArr != undefined) {
+            snippet.evalAssignment([model, pathArr], valuePathArr);
+        } else {
+            snippet.evalAssignment([model, pathArr], [value]);
+        }
+        //updateView(path)
+    }
+
+    return model
+})
     .factory('$stateData', /*@ngInject*/ function (model) {
         var o = {
             get data() {
@@ -87,10 +87,10 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
     .run(function ($state, model, $rootScope) {
         var activeStates = {};
         $state.goWithData = function (to, params, data, options) {
-            var clear=$rootScope.$on('$stateChangeStart', function(){
+            var clear = $rootScope.$on('$stateChangeStart', function () {
                 clear();
                 activeStates[$state.href(to, params)] = {data: data};
-                var clearAgain=$rootScope.$on('$stateChangeStart', function () {
+                var clearAgain = $rootScope.$on('$stateChangeStart', function () {
                     clearAgain();
                     delete activeStates[$state.href(to, params)]
                 })
@@ -101,12 +101,10 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
         //define a getter so that user can retrieve data by using $state.data
         Object.defineProperty($state, "data", {
             get: function () {
-                var state=activeStates[$state.href($state.current.name, $state.params)]||{};
+                var state = activeStates[$state.href($state.current.name, $state.params)] || {};
                 return state.data
             }
         });
 
 
     });
-
-if (window.appDI) window.appDI.push(window.newModule);

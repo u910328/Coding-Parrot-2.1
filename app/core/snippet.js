@@ -1,7 +1,6 @@
-window.newModule='core.snippet';
+var mod = obsidian.module('core.snippet', ['firebase', 'myApp.config']);
 
-angular.module(window.newModule, ['firebase', 'myApp.config'])
-    .factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
+mod.factory('snippet', ['config','$q', '$filter',function (config, $q, $filter) {
 
         function isArray(someVar){
             return Object.prototype.toString.call( someVar ) === '[object Array]'
@@ -401,5 +400,3 @@ angular.module(window.newModule, ['firebase', 'myApp.config'])
             isObjEmpty:isObjEmpty
         }
     }]);
-
-if(window.appDI) window.appDI.push(window.newModule);
