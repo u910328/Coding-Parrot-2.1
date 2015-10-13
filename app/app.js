@@ -15,4 +15,18 @@ console.log(obsidian.getAppDependencies());
 //    });
 //
 //angular.bootstrap(document, ['myApp']);
-obsidian.bootstrap();
+//obsidian.bootstrap();
+
+//angular.bootstrap(document, ['myApp']);
+angular.module('myApp', obsidian.getAppDependencies())
+    .run(function ($rootScope, Auth, init) {
+        // track status of authentication
+        console.log('myApp');
+        init.then(function(res){
+        });
+        //Auth.$onAuth(function (user) {
+        //    $rootScope.user=user;
+        //    $rootScope.loggedIn = !!user;
+        //});
+    });
+angular.bootstrap(document, ['myApp']);

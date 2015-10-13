@@ -22,33 +22,21 @@ var obsidian = new (function () {
     };
 
     this.setAppDependencies = function (dependencies) {
-        appDependencies = JSON.parse(JSON.stringify(dependencies));
+        for(var key in appDependencies){
+            dependencies.push(appDependencies[key])
+        }
+        appDependencies=dependencies;
     };
 
     this.getAppDependencies = function () {
         return appDependencies;
     };
 
-    this.bootstrap = function (name) {
-        var _name=name||'myApp';
-        angular.module(_name, appDependencies)
 
-            .run(function ($rootScope, Auth, init) {
-                // track status of authentication
-                init.then(function(res){
-                });
-                //Auth.$onAuth(function (user) {
-                //    $rootScope.user=user;
-                //    $rootScope.loggedIn = !!user;
-                //});
-            });
-
-        angular.bootstrap(document, [_name]);
+    this.init = function (appDI, modulePaths) {
+        obsidian.setAppDependencies(appDI);
+        for (var key in modulePaths) {
+            if(modulePaths.hasOwnProperty(key)) obsidian.addResource(modulePaths[key]);
+        }
     };
-
-
-    //for (var key in sourceMap) {
-    //    if (sourceMap.hasOwnProperty(key)) addResource(sourceMap[key]);
-    //}
 })();
-
