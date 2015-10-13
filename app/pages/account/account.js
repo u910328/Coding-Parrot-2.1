@@ -13,6 +13,8 @@
         },
         directiveName = 'obAccount';
 
+    console.log(state);
+
 
     mod.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject, $mdDialog) {
             var unbind;

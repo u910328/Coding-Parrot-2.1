@@ -1,9 +1,7 @@
 //credit to katowulf: https://github.com/firebase/flashlight
 
-(function (angular) {
-    var mod = obsidian.module('core.elasticSearch', []);
-
-    mod.factory('elasticSearch', ['FBURL', 'Auth', '$q', '$rootScope', function (FBURL, Auth, $q, $rootScope) {
+obsidian.module('core.elasticSearch', [])
+    .factory('elasticSearch', /*@ngInject*/ function (FBURL, Auth, $q, $rootScope) {
         function doSearch(scope, index, type, query) {
             scope = scope || $rootScope;
             var ref = new Firebase(FBURL + '/search');
@@ -45,7 +43,5 @@
         }
 
         return doSearch
-    }])
-})(angular);
-
+    });
 // display search results

@@ -6,6 +6,9 @@
         ctrlName = 'BackEndCtrl',
         templateUrl = 'pages/backEnd/backEnd.html';
 
+    console.log(state);
+
+
     var app = obsidian.module('pages.backEnd', ['pages.backEnd.productManager', 'pages.backEnd.orders']);
 
     app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebase, snippet, $errorHandler) {

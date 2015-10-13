@@ -1,6 +1,5 @@
-var mod = obsidian.module('core.linkFn', ['firebase', 'myApp.config']);
-
-mod.factory('linkFn', ['$controller', '$injector', '$q', 'snippet', 'Auth', function ($controller, $injector, $q, snippet, Auth) {
+obsidian.module('core.linkFn', ['firebase'])
+    .factory('linkFn', /*@ngInject*/ function ($controller, $injector, $q, snippet, Auth) {
     var linkFn = {
         pagePlusDirective: pagePlusDirective
     };
@@ -36,4 +35,4 @@ mod.factory('linkFn', ['$controller', '$injector', '$q', 'snippet', 'Auth', func
     }
 
     return linkFn
-}]);
+});

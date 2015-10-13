@@ -5,10 +5,10 @@
 var securedStates = [];
 var mod = obsidian.module('myApp.security', ['ui.router', 'firebase.auth', 'myApp.config']);
 
-mod.config(['$urlRouterProvider', function ($urlRouterProvider) {
-    // routes which are not in our map are redirected to 'home'
-    $urlRouterProvider.otherwise('/index');
-}])
+//mod.config(function ($urlRouterProvider, config) {
+//    // routes which are not in our map are redirected to 'home'
+//    $urlRouterProvider.otherwise(config.redirectUrl);
+//})
 
 /**
  * Adds a special `whenAuthenticated` method onto $routeProvider. This special method,
@@ -19,7 +19,7 @@ mod.config(['$urlRouterProvider', function ($urlRouterProvider) {
  * dependency injection (see AuthCtrl), or rejects the promise if user is not logged in,
  * forcing a redirect to the /login page
  */
-    .config(['$stateProvider', function ($stateProvider) {
+mod.config(['$stateProvider', function ($stateProvider) {
         $stateProvider.stateAuthenticated = function (name, stateObject) {
             securedStates.push(name);
             stateObject.resolve = stateObject.resolve || {};

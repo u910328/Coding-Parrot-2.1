@@ -1,12 +1,24 @@
 'use strict';
-window.newModule = 'myApp.config';
 
 // Declare app level module which depends on filters, and services
-angular.module(window.newModule, [])
+obsidian.module('myApp.config',
+    [
+        'firebase',
+        'ngMaterial',
+        'ui.router',
+        'ngMessages',
+        'ngAnimate',
+        'ngCart',
+        'ngNotify',
+        'ui.mask',
+        'angularPayments',
+        'socialLinks',
+        'ui.scrollpoint'
+    ])
 
     // version of this seed app is compatible with angularFire 1.0.0
     // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
-    .constant('version', '2.3.0')
+    .constant('version', '0.8.5')
 
     // where to redirect users if they need to authenticate (see security.js)
     .constant('loginRedirectState', 'login')
@@ -19,13 +31,13 @@ angular.module(window.newModule, [])
         shipping: 0,
         taxRate: 0
     })
-    .config(function ($mdIconProvider) {
-        $mdIconProvider
-            .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+    .config(function ($mdIconProvider, $urlRouterProvider) {
+        $mdIconProvider.defaultIconSet('img/icons/sets/core-icons.svg', 24);
+        $urlRouterProvider.otherwise('/home');
     })
 
     // double check that the app has been configured before running it and blowing up space and time
-    .run(['FBURL', '$timeout', '$http', function (FBURL, $timeout, $http) {
+    .run(function (FBURL, $timeout) {
         if (FBURL.match('//INSTANCE.firebaseio.com')) {
             angular.element(document.body).html('<h1>Please configure app/config.js before running!</h1>');
             $timeout(function () {
@@ -33,29 +45,16 @@ angular.module(window.newModule, [])
             }, 250);
         }
 
-    }]);
-
-//window.onload = function () {
-//    var script = document.createElement("script");
-//    script.type = "text/javascript";
-//    script.src = "http://www.telize.com/jsonip?callback=DisplayIP";
-//    document.getElementsByTagName("head")[0].appendChild(script);
-//};
-//function DisplayIP(response) {
-//    console.log("Your IP Address is " + response.ip);
-//}
+    });
 
 var modulePaths = {
     //external modules
-    angularPayments: {
-        src: "bower_components/angular-payments/lib/angular-payments.min.js"
-    },
-    uiRouter: {
-        src: "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"
-    },
-    uiValidate: {
-        src: "bower_components/angular-ui-validate/dist/validate.js"
-    },
+    //angularPayments: {
+    //    src: "bower_components/angular-payments/lib/angular-payments.min.js"
+    //},
+    //uiValidate: {
+    //    src: "bower_components/angular-ui-validate/dist/validate.js"
+    //},
     //bundle:{
     //    src: "dist/app.js"
     //}
@@ -63,7 +62,7 @@ var modulePaths = {
     appversion: {
         src: "components/appversion/appversion-directive.js"
     },
-    errorHandler:{
+    errorHandler: {
         src: "components/errorHandler/error.js"
     },
     auth: {
@@ -121,13 +120,13 @@ var modulePaths = {
     },
 
     //custom
-    customService:{
+    customService: {
         src: "custom/service.js"
     },
-    customFilter:{
+    customFilter: {
         src: "custom/filter.js"
     },
-    customDirective:{
+    customDirective: {
         src: "custom/filter.js"
     },
     //pages
@@ -148,6 +147,9 @@ var modulePaths = {
     },
     shoppingCart: {
         src: "pages/shoppingCart/shoppingCart.js"
+    },
+    pageSeed: {
+        src: "pages/pageSeed/pageSeed.js"
     },
     myOrders: {
         src: "pages/myOrders/myOrders.js"
@@ -173,30 +175,24 @@ var modulePaths = {
     app: {
         src: "app.js"
     }
-
 };
 
 
 var appDI = [
-    'ngMaterial',
-    'ngMessages',
-    'ngAnimate',
-    'ngCart',
-    'ngFirebase',
-    'ngNotify',
-    'ui.mask',
-    'ui.router',
-    'angularPayments',
-    'socialLinks',
-    'ui.scrollpoint'
+    //'ngMaterial',
+    //'ngMessages',
+    //'ngAnimate',
+    //'ngCart',
+    //'ngNotify',
+    //'ui.mask',
+    //'ui.router',
+    //'angularPayments',
+    //'socialLinks',
+    //'ui.scrollpoint'
 ];
 
 
-obsidian.setAppDependencies(appDI);
-
-for (var key in modulePaths) {
-    if(modulePaths.hasOwnProperty(key)) obsidian.addResource(modulePaths[key]);
-}
+obsidian.init(appDI, modulePaths);
 
 
 //

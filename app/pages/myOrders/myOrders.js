@@ -1,5 +1,4 @@
 //Step 1: name the new module.
-window.newModule='pages.myOrders';
 
 (function (angular) {
     "use strict";
@@ -10,23 +9,30 @@ window.newModule='pages.myOrders';
         ctrlName='MyOrdersCtrl',
         templateUrl='pages/myOrders/myOrders.html';
 
+    console.log(state);
+
 //Step 3: write down dependency injection.
-    var app = obsidian.module('pages.myOrders', ['myApp.security']);
+    var app = obsidian.module('pages.myOrders', ['ui.router']);
 
 //Step 4: construct a controller.
-    app.controller(ctrlName, /*@ngInject*/ function (user, $scope, $firebaseArray, $firebase, snippet) {
+    app.controller(ctrlName, /*@ngInject*/ function (user, $scope, filterUtil, $firebaseArray, $firebase) {
 
         $scope.loadOrders = function (startDay, endDay) {
             var now = (new Date).getTime(),
                 day = 24 * 60 * 60 * 1000;
             var ref = $firebase.ref('users/'+user.uid+'/orderHistory').orderByChild('createdTime').startAt(now + startDay * day).endAt(now + endDay * day);
 
+            //to prevent memory leak
+            if($scope.myOrdersSrc) $scope.myOrdersSrc.$destroy();
+            if($scope.unwatchFilter) $scope.unwatchFilter();
+
             $scope.myOrdersSrc = $firebaseArray(ref);
+            $scope.myOrdersSrc.$loaded().then(function(){
+                $scope.unwatchFilter=filterUtil.watchFilterOpts($scope, 'myOrdersSrc', 'myOrders', 'filters');
+            })
         };
 
         $scope.loadOrders(-65535, 65535); //today's order
-
-        new snippet.DelayedFilter($scope, 'myOrdersSrc', 'myOrders', 'filters', true, 500);
 
         $scope.filterOpt={};
         $scope.refreshFilter = function () {
