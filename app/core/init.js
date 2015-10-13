@@ -52,6 +52,7 @@ window.newModule = 'core.init';
 
             Auth.$onAuth(function (user) { //app.js也有同樣的用法
                 $rootScope.user = user;
+                $rootScope.loggedIn = !!user;
 
                 if (user) {
                     $firebase.params = {

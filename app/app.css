@@ -1,5 +1,9 @@
 /* app css stylesheet */
 
+.md-toolbar-tools.ui-scrollpoint {
+    background-color: blue;
+}
+
 .face {
     border-radius: 30px;
     border: 1px solid #ddd;
