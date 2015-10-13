@@ -21,8 +21,8 @@
 <body ng-cloak>
 <div layout="column">
 
-    <md-toolbar layout="row" style="position: fixed;" id="navtoolbar1">
-        <div class="md-toolbar-tools" style="background-color: green;" id="navtoolbar2">
+    <md-toolbar layout="row" style="position: fixed;">
+        <div class="md-toolbar-tools" id="navtoolbar">
             <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
                 <md-icon aria-label="Menu"
                          md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
@@ -43,9 +43,8 @@
                 <md-button ng-show="loggedIn" ui-sref="myOrders">myOrders</md-button>
                 <md-button ui-sref="test">Test</md-button>
                 <md-button ui-sref="test2">Test2</md-button>
-                <acc-window></acc-window>
-                <!--<md-button ng-show="loggedIn" ng-click="showAccountWindow=!showAccountWindow">account window</md-button>-->
             </md-menu-bar>
+            <acc-window></acc-window>
         </div>
     </md-toolbar>
     <!--<md-toolbar class="md-menu-toolbar"  hide-sm>-->
