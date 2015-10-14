@@ -1,8 +1,8 @@
 
-<md-menu md-position-mode="target-right target" md-offset="0 80">
-    <md-button ng-show="loggedIn" ng-click="$mdOpenMenu()">
-        <i class="material-icons">face</i>
-    </md-button>
+<md-menu hide-sm md-position-mode="target-right target" md-offset="0 80">
+    <a href="" style="text-decoration: none;">
+        <img ng-show="loggedIn" class="face" ng-src="{{user.profileImageURL}}" ng-click="$mdOpenMenu()">
+    </a>
     <md-menu-content width="6">
         <md-content>
             <h3>{{user[user.provider].displayName}}</h3>

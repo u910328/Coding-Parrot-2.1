@@ -11,7 +11,7 @@
 
     var app = obsidian.module('pages.backEnd', ['pages.backEnd.productManager', 'pages.backEnd.orders']);
 
-    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebase, snippet, $errorHandler) {
+    app.controller(ctrlName, /*@ngInject*/ function ($scope, $firebase, snippet, $errorHandler, $mdSidenav) {
         this.test='1234'
     });
 
