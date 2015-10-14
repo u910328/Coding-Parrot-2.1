@@ -9,7 +9,6 @@
         ctrlName='MyOrdersCtrl',
         templateUrl='pages/myOrders/myOrders.html';
 
-    console.log(state);
 
 //Step 3: write down dependency injection.
     var app = obsidian.module('pages.myOrders', ['ui.router']);

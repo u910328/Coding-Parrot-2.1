@@ -1,3 +1,4 @@
-/**
- * Created by 博彥 on 2015/10/7.
- */
+(function () {
+    var mod = obsidian.module('custom.directives', []);
+})();
+

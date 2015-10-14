@@ -91,7 +91,7 @@
         });
     }]);
 
-    app.run(function ($rootScope, $mdDialog) {
+    app.run(/*@ngInject*/ function ($rootScope, $mdDialog) {
         $rootScope.showLogin = function ($event) {
             var parentEl = angular.element(document.body);
             $mdDialog.show({

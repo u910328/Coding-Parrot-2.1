@@ -6,7 +6,6 @@
         ctrlName='HomeCtrl',
         templateUrl='pages/home/home.html';
 
-    console.log(state);
 
     var app = obsidian.module('pages.home', []);
 

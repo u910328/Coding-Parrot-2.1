@@ -254,7 +254,7 @@
         });
     }]);
 
-    app.run(function ($rootScope, ngCart, config) {
+    app.run(/*@ngInject*/ function ($rootScope, ngCart, config) {
         ngCart.setShipping(config.shipping);
         ngCart.setTaxRate(config.taxRate);
 

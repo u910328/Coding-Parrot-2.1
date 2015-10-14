@@ -1,52 +1,10 @@
 'use strict';
 
+var ENV = {
+    DEV_MODE: false,
+    BUNDLE: 'dist/bundle.js'
+};
 // Declare app level module which depends on filters, and services
-obsidian.module('myApp.config',
-    [
-        'firebase',
-        'ngMaterial',
-        'ui.router',
-        'ngMessages',
-        'ngAnimate',
-        'ngCart',
-        'ngNotify',
-        'ui.mask',
-        'angularPayments',
-        'socialLinks',
-        'ui.scrollpoint'
-    ])
-
-    // version of this seed app is compatible with angularFire 1.0.0
-    // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
-    .constant('version', '0.8.5')
-
-    // where to redirect users if they need to authenticate (see security.js)
-    .constant('loginRedirectState', 'login')
-
-
-    // your Firebase data URL goes here, no trailing slash
-    .constant('FBURL', 'https://lauchbox.firebaseio.com')
-    .constant('config', {
-        debug: true,
-        shipping: 0,
-        taxRate: 0
-    })
-    .config(function ($mdIconProvider, $urlRouterProvider) {
-        $mdIconProvider.defaultIconSet('img/icons/sets/core-icons.svg', 24);
-        $urlRouterProvider.otherwise('/home');
-    })
-
-    // double check that the app has been configured before running it and blowing up space and time
-    .run(function (FBURL, $timeout) {
-        if (FBURL.match('//INSTANCE.firebaseio.com')) {
-            angular.element(document.body).html('<h1>Please configure app/config.js before running!</h1>');
-            $timeout(function () {
-                angular.element(document.body).removeClass('hide');
-            }, 250);
-        }
-
-    });
-
 var modulePaths = {
     //external modules
     //angularPayments: {
@@ -58,6 +16,7 @@ var modulePaths = {
     //bundle:{
     //    src: "dist/app.js"
     //}
+
     //core components
     appversion: {
         src: "components/appversion/appversion-directive.js"
@@ -127,7 +86,7 @@ var modulePaths = {
         src: "custom/filter.js"
     },
     customDirective: {
-        src: "custom/filter.js"
+        src: "custom/directive.js"
     },
     //pages
     login: {
@@ -177,22 +136,58 @@ var modulePaths = {
     }
 };
 
+if (typeof module !== 'undefined' && module.exports) {module.exports = {modulePaths: modulePaths,env:ENV}} else {
 
-var appDI = [
-    //'ngMaterial',
-    //'ngMessages',
-    //'ngAnimate',
-    //'ngCart',
-    //'ngNotify',
-    //'ui.mask',
-    //'ui.router',
-    //'angularPayments',
-    //'socialLinks',
-    //'ui.scrollpoint'
-];
+    obsidian.module('myApp.config',
+        [
+            'firebase',
+            'ngMaterial',
+            'ui.router',
+            'ngMessages',
+            'ngAnimate',
+            'ngCart',
+            'ngNotify',
+            'ui.mask',
+            'angularPayments',
+            'socialLinks',
+            'ui.scrollpoint'
+        ])
+
+        // version of this seed app is compatible with angularFire 1.0.0
+        // see tags for other versions: https://github.com/firebase/angularFire-seed/tags
+        .constant('version', '0.8.5')
+
+        // where to redirect users if they need to authenticate (see security.js)
+        .constant('loginRedirectState', 'login')
 
 
-obsidian.init(appDI, modulePaths);
+        // your Firebase data URL goes here, no trailing slash
+        .constant('FBURL', 'https://lauchbox.firebaseio.com')
+        .constant('config', {
+            debug: true,
+            shipping: 0,
+            taxRate: 0
+        })
+        .config(/*@ngInject*/ function ($mdIconProvider, $urlRouterProvider) {
+            $mdIconProvider.defaultIconSet('img/icons/sets/core-icons.svg', 24);
+            $urlRouterProvider.otherwise('/home');
+        })
+
+        // double check that the app has been configured before running it and blowing up space and time
+        .run(/*@ngInject*/ function (FBURL, $timeout) {
+            if (FBURL.match('//INSTANCE.firebaseio.com')) {
+                angular.element(document.body).html('<h1>Please configure app/config.js before running!</h1>');
+                $timeout(function () {
+                    angular.element(document.body).removeClass('hide');
+                }, 250);
+            }
+        });
+
+    obsidian.init(modulePaths, ENV);
+
+
+
+}
 
 
 //
@@ -210,3 +205,11 @@ obsidian.init(appDI, modulePaths);
 //    }
 //    return str;
 //};
+
+
+//window.module=undefined;
+//if(module){
+//    module.exports={
+//        modulePaths:modulePaths
+//    }
+//}

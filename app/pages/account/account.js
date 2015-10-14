@@ -13,9 +13,6 @@
         },
         directiveName = 'obAccount';
 
-    console.log(state);
-
-
     mod.controller(ctrlName, /*@ngInject*/ function ($rootScope, $scope, Auth, fbutil, user, $state, $firebaseObject, $mdDialog) {
             var unbind;
             // create a 3-way binding with the user profile object in Firebase
@@ -96,7 +93,7 @@
         });
     }]);
 
-    mod.run(function ($rootScope, $mdDialog) {
+    mod.run(/*@ngInject*/ function ($rootScope, $mdDialog) {
         $rootScope.showAccount = function ($event) {
             var parentEl = angular.element(document.body);
             $mdDialog.show({

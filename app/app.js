@@ -19,7 +19,7 @@ console.log(obsidian.getAppDependencies());
 
 //angular.bootstrap(document, ['myApp']);
 angular.module('myApp', obsidian.getAppDependencies())
-    .run(function ($rootScope, Auth, init) {
+    .run(/*@ngInject*/ function ($rootScope, Auth, init) {
         // track status of authentication
         console.log('myApp');
         init.then(function(res){
