@@ -1,17 +1,17 @@
 
-<md-menu hide-sm md-position-mode="target-right target" md-offset="0 80">
+<md-menu hide-sm md-position-mode="target-right target" md-offset="0 90">
     <a href="" style="text-decoration: none;">
         <img ng-show="loggedIn" class="face" ng-src="{{user.profileImageURL}}" ng-click="$mdOpenMenu()">
     </a>
-    <md-menu-content width="6">
-        <md-content>
-            <h3>{{user[user.provider].displayName}}</h3>
+    <md-menu-content width="4">
+        <md-content class="md-margin">
             <img class="face" ng-src="{{user.profileImageURL}}">
-            <md-button class="md-raised" ng-show="loggedIn" ui-sref="account">
-                Edit Account
-            </md-button>
-            <md-button class="md-raised md-warn" ng-click="logout()">logout</md-button>
+            <span flex >{{user[user.provider].displayName}}</span>
         </md-content>
+        <md-button class="md-raised" ng-show="loggedIn" ui-sref="account">
+            Edit Account
+        </md-button>
+        <md-button class="md-raised md-warn" ng-click="logout()">logout</md-button>
 
     </md-menu-content>
 </md-menu>
